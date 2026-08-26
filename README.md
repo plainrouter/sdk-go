@@ -43,7 +43,7 @@ Keep tokens out of source control; load them from your environment or secret man
 - API contract: signed OpenAPI `0.5.0`
 - Generator: OpenAPI Generator `7.25.0`, checksum-pinned by `scripts/generate.sh`
 - Module path: `github.com/plainrouter/sdk-go`
-- Documentation: [docs.plainrouter.com](https://docs.plainrouter.com)
+- Documentation: [plainrouter.com/docs](https://plainrouter.com/docs)
 
 Run `scripts/generate.sh` to regenerate the client and `scripts/check-generated.sh` to verify that committed output matches the signed contract.
 
