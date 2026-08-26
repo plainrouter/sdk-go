@@ -5,6 +5,8 @@ LICENSE
 scripts/**
 spec/**
 client_test.go
+doc.go
+example_test.go
 .gitignore
 .openapi-generator-ignore
 

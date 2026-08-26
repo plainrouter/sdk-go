@@ -5,7 +5,7 @@ The official Go SDK for the [PlainRouter](https://plainrouter.com) Signals Conve
 ## Install
 
 ```bash
-go get github.com/plainrouter/sdk-go@v0.5.0
+go get github.com/plainrouter/sdk-go@latest
 ```
 
 ## Authenticate
