@@ -36,8 +36,8 @@ PACKAGE_VERSION="$("$PYTHON_BIN" -c 'import json,sys; print(json.load(open(sys.a
   -g go \
   -i "$NORMALIZED_SPEC" \
   -o "$OUTPUT" \
-  --git-user-id wudaku \
-  --git-repo-id plainrouter-go \
+  --git-user-id plainrouter \
+  --git-repo-id sdk-go \
   --ignore-file-override "$ROOT/.openapi-generator-ignore" \
   --global-property=apiTests=false,modelTests=false \
   --additional-properties="packageName=plainrouter,packageVersion=$PACKAGE_VERSION,enumClassPrefix=true,enumUnknownDefaultCase=true,disallowAdditionalPropertiesIfNotPresent=false"

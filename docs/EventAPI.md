@@ -27,7 +27,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/wudaku/plainrouter-go"
+	openapiclient "github.com/plainrouter/sdk-go"
 )
 
 func main() {
@@ -95,7 +95,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/wudaku/plainrouter-go"
+	openapiclient "github.com/plainrouter/sdk-go"
 )
 
 func main() {
@@ -165,7 +165,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/wudaku/plainrouter-go"
+	openapiclient "github.com/plainrouter/sdk-go"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/wudaku/plainrouter-go
+module github.com/plainrouter/sdk-go
 
 go 1.23
 

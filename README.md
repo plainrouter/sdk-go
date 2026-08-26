@@ -5,7 +5,7 @@ The official Go SDK for the [PlainRouter](https://plainrouter.com) Signals Conve
 ## Install
 
 ```bash
-go get github.com/wudaku/plainrouter-go@v0.5.0
+go get github.com/plainrouter/sdk-go@v0.5.0
 ```
 
 ## Authenticate
@@ -19,7 +19,7 @@ import (
 	"context"
 	"log"
 
-	plainrouter "github.com/wudaku/plainrouter-go"
+	plainrouter "github.com/plainrouter/sdk-go"
 )
 
 func main() {
@@ -42,7 +42,7 @@ Keep tokens out of source control; load them from your environment or secret man
 
 - API contract: signed OpenAPI `0.5.0`
 - Generator: OpenAPI Generator `7.25.0`, checksum-pinned by `scripts/generate.sh`
-- Module path: `github.com/wudaku/plainrouter-go`
+- Module path: `github.com/plainrouter/sdk-go`
 - Documentation: [docs.plainrouter.com](https://docs.plainrouter.com)
 
 Run `scripts/generate.sh` to regenerate the client and `scripts/check-generated.sh` to verify that committed output matches the signed contract.
