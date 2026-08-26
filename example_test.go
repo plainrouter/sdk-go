@@ -10,15 +10,9 @@ import (
 )
 
 func Example() {
-	config := plainrouter.NewConfiguration()
-	client := plainrouter.NewAPIClient(config)
-	ctx := context.WithValue(
-		context.Background(),
-		plainrouter.ContextAccessToken,
-		os.Getenv("PLAINROUTER_TOKEN"),
-	)
+	client := plainrouter.New(os.Getenv("PLAINROUTER_TOKEN"))
 
-	report, response, err := client.OperationsAPI.GetEmqReport(ctx).Execute()
+	report, response, err := client.Operations.GetEmqReport(context.Background()).Execute()
 	if response != nil {
 		defer response.Body.Close()
 	}
