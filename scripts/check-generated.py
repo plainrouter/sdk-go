@@ -20,8 +20,10 @@ REPOSITORY_OWNED = {
 
 def manifest(root: Path) -> set[str]:
     return {
-        line.strip()
-        for line in (root / ".openapi-generator" / "FILES").read_text(encoding="utf-8").splitlines()
+        f"openapi/{line.strip()}"
+        for line in (root / "openapi" / ".openapi-generator" / "FILES")
+        .read_text(encoding="utf-8")
+        .splitlines()
         if line.strip() and line.strip() not in REPOSITORY_OWNED
     }
 

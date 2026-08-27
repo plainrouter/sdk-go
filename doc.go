@@ -3,18 +3,11 @@
 //
 // # Getting started
 //
-// Create one APIClient and reuse it. NewConfiguration targets the production
-// PlainRouter API by default. Account-scoped operations require a bearer token
-// in the request context:
+// Create one Client and reuse it. New targets the production PlainRouter API
+// by default and applies the bearer token to every request:
 //
-//	config := plainrouter.NewConfiguration()
-//	client := plainrouter.NewAPIClient(config)
-//	ctx := context.WithValue(
-//		context.Background(),
-//		plainrouter.ContextAccessToken,
-//		os.Getenv("PLAINROUTER_TOKEN"),
-//	)
-//	report, response, err := client.OperationsAPI.GetEmqReport(ctx).Execute()
+//	client := plainrouter.New(os.Getenv("PLAINROUTER_TOKEN"))
+//	report, response, err := client.Operations.GetEmqReport(context.Background()).Execute()
 //
 // Keep tokens out of source code and load them from an environment variable or
 // secret manager. Most methods return a decoded result, the underlying
@@ -23,14 +16,17 @@
 //
 // # API groups
 //
-// The client exposes three service groups:
+// Client exposes three service groups:
 //
-//   - APIClient.EventAPI submits conversion events and reads event delivery
+//   - Client.Events submits conversion events and reads event delivery
 //     state.
-//   - APIClient.OperationsAPI provides reporting, reconciliation, replay,
+//   - Client.Operations provides reporting, reconciliation, replay,
 //     deletion, and destination test operations.
-//   - APIClient.SandboxAPI discovers and validates isolated synthetic sandbox
+//   - Client.Sandbox discovers and validates isolated synthetic sandbox
 //     events without granting access to production data.
+//
+// The complete generated contract is available from the
+// [github.com/plainrouter/sdk-go/openapi] subpackage and through Client.OpenAPI.
 //
 // See the [PlainRouter documentation] for authentication, consent-aware event
 // shapes, sandbox usage, and operational guidance.

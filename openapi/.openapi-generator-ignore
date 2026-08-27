@@ -1,0 +1,17 @@
+# Repository-owned files. OpenAPI Generator must never overwrite these.
+README.md
+LICENSE
+.github/**
+scripts/**
+spec/**
+client_test.go
+doc.go
+example_test.go
+.gitignore
+.openapi-generator-ignore
+
+# Generator conveniences that are not part of the published module.
+.travis.yml
+git_push.sh
+api/openapi.yaml
+go.sum

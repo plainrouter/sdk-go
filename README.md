@@ -1,6 +1,6 @@
 # PlainRouter Go SDK
 
-The official Go SDK for the [PlainRouter](https://plainrouter.com) Signals Conversion API. It is generated from PlainRouter's signed OpenAPI contract and published as a standard Go module.
+The official Go SDK for the [PlainRouter](https://plainrouter.com) Signals Conversion API. The root package provides a compact, idiomatic entry point; the complete generated contract is available from [`github.com/plainrouter/sdk-go/openapi`](https://pkg.go.dev/github.com/plainrouter/sdk-go/openapi).
 
 ## Install
 
@@ -10,7 +10,7 @@ go get github.com/plainrouter/sdk-go@latest
 
 ## Authenticate
 
-Pass your PlainRouter bearer token through the request context:
+Create one client with your PlainRouter bearer token:
 
 ```go
 package main
@@ -23,11 +23,9 @@ import (
 )
 
 func main() {
-	config := plainrouter.NewConfiguration()
-	client := plainrouter.NewAPIClient(config)
-	ctx := context.WithValue(context.Background(), plainrouter.ContextAccessToken, "YOUR_TOKEN")
+	client := plainrouter.New("YOUR_TOKEN")
 
-	report, _, err := client.OperationsAPI.GetEmqReport(ctx).Execute()
+	report, _, err := client.Operations.GetEmqReport(context.Background()).Execute()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,6 +36,12 @@ func main() {
 
 Keep tokens out of source control; load them from your environment or secret manager.
 
+Pass an empty token to use zero-auth synthetic sandbox operations. Applications that need generated wire models, request builders, or low-level configuration can use `client.OpenAPI()` or import the `openapi` subpackage directly.
+
+## Migrating from v0.5
+
+The generated contract moved from the root package to `github.com/plainrouter/sdk-go/openapi`. Existing `NewConfiguration`, `NewAPIClient`, and `ContextAccessToken` calls remain as deprecated migration helpers. Code that names generated request or response types should import the `openapi` subpackage and change the qualifier from `plainrouter` to `openapi`.
+
 ## Contract and generation
 
 - API contract: signed OpenAPI `0.5.0`
@@ -45,7 +49,7 @@ Keep tokens out of source control; load them from your environment or secret man
 - Module path: `github.com/plainrouter/sdk-go`
 - Documentation: [plainrouter.com/docs](https://plainrouter.com/docs)
 
-Run `scripts/generate.sh` to regenerate the client and `scripts/check-generated.sh` to verify that committed output matches the signed contract.
+Run `scripts/generate.sh` to regenerate the `openapi` subpackage and `scripts/check-generated.sh` to verify that committed output matches the signed contract. The root package is repository-owned and intentionally small.
 
 ## License
 
