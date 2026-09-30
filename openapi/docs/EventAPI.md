@@ -31,8 +31,8 @@ import (
 )
 
 func main() {
-	createEventRequest := *openapiclient.NewCreateEventRequest("EventName_example", "ConsentBasis_example") // CreateEventRequest | 
-	idempotencyKey := "idempotencyKey_example" // string | Optional idempotency key. When event_id is omitted, PlainRouter uses this value as event_id. If both are supplied, they must match. (optional)
+	createEventRequest := *openapiclient.NewCreateEventRequest("EventName_example", "ConsentBasis_example") // CreateEventRequest | Authenticated callers using the Server secret may supply client_ip_address and client_user_agent in user_data; browser traffic using the Publishable key takes those fields only from the configured edge.
+	idempotencyKey := "idempotencyKey_example" // string | Optional idempotency key. When event_id is omitted, Plainrouter uses this value as event_id. If both are supplied, they must match. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -57,8 +57,8 @@ Other parameters are passed through a pointer to a apiCreateEventRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createEventRequest** | [**CreateEventRequest**](CreateEventRequest.md) |  | 
- **idempotencyKey** | **string** | Optional idempotency key. When event_id is omitted, PlainRouter uses this value as event_id. If both are supplied, they must match. | 
+ **createEventRequest** | [**CreateEventRequest**](CreateEventRequest.md) | Authenticated callers using the Server secret may supply client_ip_address and client_user_agent in user_data; browser traffic using the Publishable key takes those fields only from the configured edge. | 
+ **idempotencyKey** | **string** | Optional idempotency key. When event_id is omitted, Plainrouter uses this value as event_id. If both are supplied, they must match. | 
 
 ### Return type
 
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -136,7 +136,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -197,7 +197,7 @@ Other parameters are passed through a pointer to a apiVerifySignalIngestionReque
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 

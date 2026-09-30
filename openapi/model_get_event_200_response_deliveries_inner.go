@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,7 +20,10 @@ var _ MappedNullable = &GetEvent200ResponseDeliveriesInner{}
 
 // GetEvent200ResponseDeliveriesInner struct for GetEvent200ResponseDeliveriesInner
 type GetEvent200ResponseDeliveriesInner struct {
-	Id                   int32          `json:"id"`
+	Id          int32 `json:"id"`
+	WorkspaceId int32 `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
 	SignalTrackerId      string         `json:"signal_tracker_id"`
 	EventId              string         `json:"event_id"`
 	DestinationId        NullableString `json:"destination_id"`
@@ -43,9 +46,10 @@ type _GetEvent200ResponseDeliveriesInner GetEvent200ResponseDeliveriesInner
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetEvent200ResponseDeliveriesInner(id int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, createdAt string, updatedAt NullableString, explanation string) *GetEvent200ResponseDeliveriesInner {
+func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, createdAt string, updatedAt NullableString, explanation string) *GetEvent200ResponseDeliveriesInner {
 	this := GetEvent200ResponseDeliveriesInner{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.EventId = eventId
 	this.DestinationId = destinationId
@@ -94,7 +98,32 @@ func (o *GetEvent200ResponseDeliveriesInner) SetId(v int32) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *GetEvent200ResponseDeliveriesInner) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *GetEvent200ResponseDeliveriesInner) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *GetEvent200ResponseDeliveriesInner) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *GetEvent200ResponseDeliveriesInner) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -106,6 +135,7 @@ func (o *GetEvent200ResponseDeliveriesInner) GetSignalTrackerId() string {
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *GetEvent200ResponseDeliveriesInner) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -114,6 +144,7 @@ func (o *GetEvent200ResponseDeliveriesInner) GetSignalTrackerIdOk() (*string, bo
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *GetEvent200ResponseDeliveriesInner) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -429,6 +460,7 @@ func (o GetEvent200ResponseDeliveriesInner) MarshalJSON() ([]byte, error) {
 func (o GetEvent200ResponseDeliveriesInner) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["event_id"] = o.EventId
 	toSerialize["destination_id"] = o.DestinationId.Get()
@@ -460,6 +492,7 @@ func (o *GetEvent200ResponseDeliveriesInner) UnmarshalJSON(data []byte) (err err
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"event_id",
 		"destination_id",
@@ -503,6 +536,7 @@ func (o *GetEvent200ResponseDeliveriesInner) UnmarshalJSON(data []byte) (err err
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "event_id")
 		delete(additionalProperties, "destination_id")

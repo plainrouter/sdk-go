@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,31 +20,35 @@ var _ MappedNullable = &GetEvent200ResponseEvent{}
 
 // GetEvent200ResponseEvent struct for GetEvent200ResponseEvent
 type GetEvent200ResponseEvent struct {
-	Id                          string                                    `json:"id"`
-	SignalTrackerId             string                                    `json:"signal_tracker_id"`
-	ParentEventId               NullableString                            `json:"parent_event_id"`
-	EventName                   string                                    `json:"event_name"`
-	EventTime                   string                                    `json:"event_time"`
-	ActionSource                string                                    `json:"action_source"`
-	EventClass                  string                                    `json:"event_class"`
-	OrderId                     NullableString                            `json:"order_id"`
-	ValueAmount                 NullableInt32                             `json:"value_amount"`
-	ValueCurrency               NullableString                            `json:"value_currency"`
-	CreatedAt                   string                                    `json:"created_at"`
-	ConsentBasis                string                                    `json:"consent_basis"`
-	MeasurementClass            string                                    `json:"measurement_class"`
-	AttributionJoin             string                                    `json:"attribution_join"`
-	EnforcementScope            string                                    `json:"enforcement_scope"`
-	ConsentNormalizationVersion string                                    `json:"consent_normalization_version"`
-	Consent                     interface{}                               `json:"consent"`
-	UserDataHashed              interface{}                               `json:"user_data_hashed"`
-	ClickIds                    interface{}                               `json:"click_ids"`
-	Session                     interface{}                               `json:"session"`
-	ValueData                   interface{}                               `json:"value_data"`
-	EventSource                 NullableString                            `json:"event_source"`
-	PayloadExpired              bool                                      `json:"payload_expired"`
-	Deliveries                  []GetEvent200ResponseEventDeliveriesInner `json:"deliveries"`
-	AdditionalProperties        map[string]interface{}
+	Id          string `json:"id"`
+	WorkspaceId int32  `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
+	SignalTrackerId             string         `json:"signal_tracker_id"`
+	ParentEventId               NullableString `json:"parent_event_id"`
+	EventName                   string         `json:"event_name"`
+	EventTime                   string         `json:"event_time"`
+	ActionSource                string         `json:"action_source"`
+	EventClass                  string         `json:"event_class"`
+	OrderId                     NullableString `json:"order_id"`
+	ValueAmount                 NullableInt32  `json:"value_amount"`
+	ValueCurrency               NullableString `json:"value_currency"`
+	CreatedAt                   string         `json:"created_at"`
+	ConsentBasis                string         `json:"consent_basis"`
+	MeasurementClass            string         `json:"measurement_class"`
+	AttributionJoin             string         `json:"attribution_join"`
+	EnforcementScope            string         `json:"enforcement_scope"`
+	ConsentNormalizationVersion string         `json:"consent_normalization_version"`
+	Consent                     interface{}    `json:"consent"`
+	// Deprecated compatibility field. The value is always null; delivery identity is never returned.
+	UserDataHashed       interface{}                               `json:"user_data_hashed"`
+	ClickIds             interface{}                               `json:"click_ids"`
+	Session              interface{}                               `json:"session"`
+	ValueData            interface{}                               `json:"value_data"`
+	EventSource          NullableString                            `json:"event_source"`
+	PayloadExpired       bool                                      `json:"payload_expired"`
+	Deliveries           []GetEvent200ResponseEventDeliveriesInner `json:"deliveries"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GetEvent200ResponseEvent GetEvent200ResponseEvent
@@ -53,9 +57,10 @@ type _GetEvent200ResponseEvent GetEvent200ResponseEvent
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetEvent200ResponseEvent(id string, signalTrackerId string, parentEventId NullableString, eventName string, eventTime string, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt string, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, consent interface{}, userDataHashed interface{}, clickIds interface{}, session interface{}, valueData interface{}, eventSource NullableString, payloadExpired bool, deliveries []GetEvent200ResponseEventDeliveriesInner) *GetEvent200ResponseEvent {
+func NewGetEvent200ResponseEvent(id string, workspaceId int32, signalTrackerId string, parentEventId NullableString, eventName string, eventTime string, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt string, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, consent interface{}, userDataHashed interface{}, clickIds interface{}, session interface{}, valueData interface{}, eventSource NullableString, payloadExpired bool, deliveries []GetEvent200ResponseEventDeliveriesInner) *GetEvent200ResponseEvent {
 	this := GetEvent200ResponseEvent{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.ParentEventId = parentEventId
 	this.EventName = eventName
@@ -114,7 +119,32 @@ func (o *GetEvent200ResponseEvent) SetId(v string) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *GetEvent200ResponseEvent) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *GetEvent200ResponseEvent) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *GetEvent200ResponseEvent) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *GetEvent200ResponseEvent) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -126,6 +156,7 @@ func (o *GetEvent200ResponseEvent) GetSignalTrackerId() string {
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *GetEvent200ResponseEvent) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -134,6 +165,7 @@ func (o *GetEvent200ResponseEvent) GetSignalTrackerIdOk() (*string, bool) {
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *GetEvent200ResponseEvent) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -697,6 +729,7 @@ func (o GetEvent200ResponseEvent) MarshalJSON() ([]byte, error) {
 func (o GetEvent200ResponseEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["parent_event_id"] = o.ParentEventId.Get()
 	toSerialize["event_name"] = o.EventName
@@ -744,6 +777,7 @@ func (o *GetEvent200ResponseEvent) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"parent_event_id",
 		"event_name",
@@ -797,6 +831,7 @@ func (o *GetEvent200ResponseEvent) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "parent_event_id")
 		delete(additionalProperties, "event_name")

@@ -4,7 +4,7 @@ All URIs are relative to *https://plainrouter.com/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**DeleteUserData**](OperationsAPI.md#DeleteUserData) | **Delete** /user-data | Delete user data by hashed identifier
+[**DeleteUserData**](OperationsAPI.md#DeleteUserData) | **Delete** /user-data | Delete user data by verified identifier
 [**GetEmqReport**](OperationsAPI.md#GetEmqReport) | **Get** /reports/emq | Get Event Match Quality history
 [**GetReconciliationReport**](OperationsAPI.md#GetReconciliationReport) | **Get** /reports/reconciliation | Get a reconciliation report
 [**ListEvents**](OperationsAPI.md#ListEvents) | **Get** /dashboard/events | List recent events
@@ -19,7 +19,7 @@ Method | HTTP request | Description
 
 > DeleteUserData200Response DeleteUserData(ctx).DeleteUserDataRequest(deleteUserDataRequest).Execute()
 
-Delete user data by hashed identifier
+Delete user data by verified identifier
 
 
 
@@ -36,7 +36,7 @@ import (
 )
 
 func main() {
-	deleteUserDataRequest := *openapiclient.NewDeleteUserDataRequest("IdentifierType_example", "IdentifierHash_example") // DeleteUserDataRequest | 
+	deleteUserDataRequest := *openapiclient.NewDeleteUserDataRequest("IdentifierType_example") // DeleteUserDataRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -130,7 +130,7 @@ Other parameters are passed through a pointer to a apiGetEmqReportRequest struct
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -197,7 +197,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -263,7 +263,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -331,7 +331,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -397,7 +397,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -469,7 +469,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 
@@ -541,7 +541,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[signalTrackerSecret](../README.md#signalTrackerSecret)
+[workspaceSecret](../README.md#workspaceSecret)
 
 ### HTTP request headers
 

@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** |  | 
-**SignalTrackerId** | **string** |  | 
+**WorkspaceId** | **int32** |  | 
+**SignalTrackerId** | **string** | Deprecated alias of workspace_id; contains the workspace ID in decimal string form. | 
 **DestinationId** | **string** |  | 
 **ReportDate** | **string** |  | 
 **AcceptedCount** | **int32** |  | 
@@ -23,7 +24,7 @@ Name | Type | Description | Notes
 
 ### NewGetReconciliationReport200ResponseReportsInner
 
-`func NewGetReconciliationReport200ResponseReportsInner(id int32, signalTrackerId string, destinationId string, reportDate string, acceptedCount int32, metaCount int32, observedGap int32, eventCounts GetReconciliationReport200ResponseReportsInnerEventCounts, buckets map[string]GetReconciliationReport200ResponseReportsInnerBucketsValue, unexplainedResidual int32, status string, createdAt NullableString, updatedAt NullableString, destination SetDestinationTestMode200ResponseDestination, ) *GetReconciliationReport200ResponseReportsInner`
+`func NewGetReconciliationReport200ResponseReportsInner(id int32, workspaceId int32, signalTrackerId string, destinationId string, reportDate string, acceptedCount int32, metaCount int32, observedGap int32, eventCounts GetReconciliationReport200ResponseReportsInnerEventCounts, buckets map[string]GetReconciliationReport200ResponseReportsInnerBucketsValue, unexplainedResidual int32, status string, createdAt NullableString, updatedAt NullableString, destination SetDestinationTestMode200ResponseDestination, ) *GetReconciliationReport200ResponseReportsInner`
 
 NewGetReconciliationReport200ResponseReportsInner instantiates a new GetReconciliationReport200ResponseReportsInner object
 This constructor will assign default values to properties that have it defined,
@@ -56,6 +57,26 @@ and a boolean to check if the value has been set.
 `func (o *GetReconciliationReport200ResponseReportsInner) SetId(v int32)`
 
 SetId sets Id field to given value.
+
+
+### GetWorkspaceId
+
+`func (o *GetReconciliationReport200ResponseReportsInner) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *GetReconciliationReport200ResponseReportsInner) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *GetReconciliationReport200ResponseReportsInner) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
 
 
 ### GetSignalTrackerId

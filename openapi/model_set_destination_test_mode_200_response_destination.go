@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,7 +20,10 @@ var _ MappedNullable = &SetDestinationTestMode200ResponseDestination{}
 
 // SetDestinationTestMode200ResponseDestination struct for SetDestinationTestMode200ResponseDestination
 type SetDestinationTestMode200ResponseDestination struct {
-	Id                   string                      `json:"id"`
+	Id          string `json:"id"`
+	WorkspaceId int32  `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
 	SignalTrackerId      string                      `json:"signal_tracker_id"`
 	PlatformAdAccountId  NullableInt32               `json:"platform_ad_account_id"`
 	Type                 DestinationType             `json:"type"`
@@ -38,9 +41,10 @@ type _SetDestinationTestMode200ResponseDestination SetDestinationTestMode200Resp
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSetDestinationTestMode200ResponseDestination(id string, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config interface{}, status DestinationStatus, createdAt NullableString, updatedAt NullableString) *SetDestinationTestMode200ResponseDestination {
+func NewSetDestinationTestMode200ResponseDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config interface{}, status DestinationStatus, createdAt NullableString, updatedAt NullableString) *SetDestinationTestMode200ResponseDestination {
 	this := SetDestinationTestMode200ResponseDestination{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.PlatformAdAccountId = platformAdAccountId
 	this.Type = type_
@@ -84,7 +88,32 @@ func (o *SetDestinationTestMode200ResponseDestination) SetId(v string) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *SetDestinationTestMode200ResponseDestination) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *SetDestinationTestMode200ResponseDestination) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *SetDestinationTestMode200ResponseDestination) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *SetDestinationTestMode200ResponseDestination) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -96,6 +125,7 @@ func (o *SetDestinationTestMode200ResponseDestination) GetSignalTrackerId() stri
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *SetDestinationTestMode200ResponseDestination) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -104,6 +134,7 @@ func (o *SetDestinationTestMode200ResponseDestination) GetSignalTrackerIdOk() (*
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *SetDestinationTestMode200ResponseDestination) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -295,6 +326,7 @@ func (o SetDestinationTestMode200ResponseDestination) MarshalJSON() ([]byte, err
 func (o SetDestinationTestMode200ResponseDestination) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["platform_ad_account_id"] = o.PlatformAdAccountId.Get()
 	toSerialize["type"] = o.Type
@@ -319,6 +351,7 @@ func (o *SetDestinationTestMode200ResponseDestination) UnmarshalJSON(data []byte
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"platform_ad_account_id",
 		"type",
@@ -357,6 +390,7 @@ func (o *SetDestinationTestMode200ResponseDestination) UnmarshalJSON(data []byte
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "platform_ad_account_id")
 		delete(additionalProperties, "type")

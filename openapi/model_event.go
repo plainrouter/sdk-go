@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -22,7 +22,6 @@ var _ MappedNullable = &Event{}
 // Event struct for Event
 type Event struct {
 	Id                          string                  `json:"id"`
-	SignalTrackerId             string                  `json:"signal_tracker_id"`
 	ParentEventId               NullableString          `json:"parent_event_id"`
 	EventName                   string                  `json:"event_name"`
 	EventTime                   time.Time               `json:"event_time"`
@@ -39,15 +38,19 @@ type Event struct {
 	ConsentNormalizationVersion string                  `json:"consent_normalization_version"`
 	PolicyClass                 JurisdictionPolicyClass `json:"policy_class"`
 	TrafficClass                TrafficClass            `json:"traffic_class"`
+	WorkspaceId                 int32                   `json:"workspace_id"`
 	Consent                     string                  `json:"consent"`
-	UserDataHashed              string                  `json:"user_data_hashed"`
-	ClickIds                    string                  `json:"click_ids"`
-	Session                     string                  `json:"session"`
-	ValueData                   string                  `json:"value_data"`
-	EventSource                 string                  `json:"event_source"`
-	PayloadExpired              bool                    `json:"payload_expired"`
-	Deliveries                  []interface{}           `json:"deliveries"`
-	AdditionalProperties        map[string]interface{}
+	// Deprecated compatibility field. The value is always null; delivery identity is never returned.
+	UserDataHashed       interface{}   `json:"user_data_hashed"`
+	ClickIds             string        `json:"click_ids"`
+	Session              string        `json:"session"`
+	ValueData            string        `json:"value_data"`
+	EventSource          string        `json:"event_source"`
+	PayloadExpired       bool          `json:"payload_expired"`
+	ConsentSource        *string       `json:"consent_source,omitempty"`
+	ConsentUiVersion     *int32        `json:"consent_ui_version,omitempty"`
+	Deliveries           []interface{} `json:"deliveries"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Event Event
@@ -56,10 +59,9 @@ type _Event Event
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEvent(id string, signalTrackerId string, parentEventId NullableString, eventName string, eventTime time.Time, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt time.Time, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, policyClass JurisdictionPolicyClass, trafficClass TrafficClass, consent string, userDataHashed string, clickIds string, session string, valueData string, eventSource string, payloadExpired bool, deliveries []interface{}) *Event {
+func NewEvent(id string, parentEventId NullableString, eventName string, eventTime time.Time, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt time.Time, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, policyClass JurisdictionPolicyClass, trafficClass TrafficClass, workspaceId int32, consent string, userDataHashed interface{}, clickIds string, session string, valueData string, eventSource string, payloadExpired bool, deliveries []interface{}) *Event {
 	this := Event{}
 	this.Id = id
-	this.SignalTrackerId = signalTrackerId
 	this.ParentEventId = parentEventId
 	this.EventName = eventName
 	this.EventTime = eventTime
@@ -76,6 +78,7 @@ func NewEvent(id string, signalTrackerId string, parentEventId NullableString, e
 	this.ConsentNormalizationVersion = consentNormalizationVersion
 	this.PolicyClass = policyClass
 	this.TrafficClass = trafficClass
+	this.WorkspaceId = workspaceId
 	this.Consent = consent
 	this.UserDataHashed = userDataHashed
 	this.ClickIds = clickIds
@@ -117,30 +120,6 @@ func (o *Event) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *Event) SetId(v string) {
 	o.Id = v
-}
-
-// GetSignalTrackerId returns the SignalTrackerId field value
-func (o *Event) GetSignalTrackerId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.SignalTrackerId
-}
-
-// GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
-// and a boolean to check if the value has been set.
-func (o *Event) GetSignalTrackerIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SignalTrackerId, true
-}
-
-// SetSignalTrackerId sets field value
-func (o *Event) SetSignalTrackerId(v string) {
-	o.SignalTrackerId = v
 }
 
 // GetParentEventId returns the ParentEventId field value
@@ -535,6 +514,30 @@ func (o *Event) SetTrafficClass(v TrafficClass) {
 	o.TrafficClass = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *Event) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *Event) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *Event) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetConsent returns the Consent field value
 func (o *Event) GetConsent() string {
 	if o == nil {
@@ -560,9 +563,10 @@ func (o *Event) SetConsent(v string) {
 }
 
 // GetUserDataHashed returns the UserDataHashed field value
-func (o *Event) GetUserDataHashed() string {
+// If the value is explicit nil, the zero value for interface{} will be returned
+func (o *Event) GetUserDataHashed() interface{} {
 	if o == nil {
-		var ret string
+		var ret interface{}
 		return ret
 	}
 
@@ -571,15 +575,16 @@ func (o *Event) GetUserDataHashed() string {
 
 // GetUserDataHashedOk returns a tuple with the UserDataHashed field value
 // and a boolean to check if the value has been set.
-func (o *Event) GetUserDataHashedOk() (*string, bool) {
-	if o == nil {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Event) GetUserDataHashedOk() (*interface{}, bool) {
+	if o == nil || IsNil(o.UserDataHashed) {
 		return nil, false
 	}
 	return &o.UserDataHashed, true
 }
 
 // SetUserDataHashed sets field value
-func (o *Event) SetUserDataHashed(v string) {
+func (o *Event) SetUserDataHashed(v interface{}) {
 	o.UserDataHashed = v
 }
 
@@ -703,6 +708,70 @@ func (o *Event) SetPayloadExpired(v bool) {
 	o.PayloadExpired = v
 }
 
+// GetConsentSource returns the ConsentSource field value if set, zero value otherwise.
+func (o *Event) GetConsentSource() string {
+	if o == nil || IsNil(o.ConsentSource) {
+		var ret string
+		return ret
+	}
+	return *o.ConsentSource
+}
+
+// GetConsentSourceOk returns a tuple with the ConsentSource field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Event) GetConsentSourceOk() (*string, bool) {
+	if o == nil || IsNil(o.ConsentSource) {
+		return nil, false
+	}
+	return o.ConsentSource, true
+}
+
+// HasConsentSource returns a boolean if a field has been set.
+func (o *Event) HasConsentSource() bool {
+	if o != nil && !IsNil(o.ConsentSource) {
+		return true
+	}
+
+	return false
+}
+
+// SetConsentSource gets a reference to the given string and assigns it to the ConsentSource field.
+func (o *Event) SetConsentSource(v string) {
+	o.ConsentSource = &v
+}
+
+// GetConsentUiVersion returns the ConsentUiVersion field value if set, zero value otherwise.
+func (o *Event) GetConsentUiVersion() int32 {
+	if o == nil || IsNil(o.ConsentUiVersion) {
+		var ret int32
+		return ret
+	}
+	return *o.ConsentUiVersion
+}
+
+// GetConsentUiVersionOk returns a tuple with the ConsentUiVersion field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Event) GetConsentUiVersionOk() (*int32, bool) {
+	if o == nil || IsNil(o.ConsentUiVersion) {
+		return nil, false
+	}
+	return o.ConsentUiVersion, true
+}
+
+// HasConsentUiVersion returns a boolean if a field has been set.
+func (o *Event) HasConsentUiVersion() bool {
+	if o != nil && !IsNil(o.ConsentUiVersion) {
+		return true
+	}
+
+	return false
+}
+
+// SetConsentUiVersion gets a reference to the given int32 and assigns it to the ConsentUiVersion field.
+func (o *Event) SetConsentUiVersion(v int32) {
+	o.ConsentUiVersion = &v
+}
+
 // GetDeliveries returns the Deliveries field value
 func (o *Event) GetDeliveries() []interface{} {
 	if o == nil {
@@ -738,7 +807,6 @@ func (o Event) MarshalJSON() ([]byte, error) {
 func (o Event) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["parent_event_id"] = o.ParentEventId.Get()
 	toSerialize["event_name"] = o.EventName
 	toSerialize["event_time"] = o.EventTime
@@ -755,13 +823,22 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	toSerialize["consent_normalization_version"] = o.ConsentNormalizationVersion
 	toSerialize["policy_class"] = o.PolicyClass
 	toSerialize["traffic_class"] = o.TrafficClass
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["consent"] = o.Consent
-	toSerialize["user_data_hashed"] = o.UserDataHashed
+	if o.UserDataHashed != nil {
+		toSerialize["user_data_hashed"] = o.UserDataHashed
+	}
 	toSerialize["click_ids"] = o.ClickIds
 	toSerialize["session"] = o.Session
 	toSerialize["value_data"] = o.ValueData
 	toSerialize["event_source"] = o.EventSource
 	toSerialize["payload_expired"] = o.PayloadExpired
+	if !IsNil(o.ConsentSource) {
+		toSerialize["consent_source"] = o.ConsentSource
+	}
+	if !IsNil(o.ConsentUiVersion) {
+		toSerialize["consent_ui_version"] = o.ConsentUiVersion
+	}
 	toSerialize["deliveries"] = o.Deliveries
 
 	for key, value := range o.AdditionalProperties {
@@ -777,7 +854,6 @@ func (o *Event) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
-		"signal_tracker_id",
 		"parent_event_id",
 		"event_name",
 		"event_time",
@@ -794,6 +870,7 @@ func (o *Event) UnmarshalJSON(data []byte) (err error) {
 		"consent_normalization_version",
 		"policy_class",
 		"traffic_class",
+		"workspace_id",
 		"consent",
 		"user_data_hashed",
 		"click_ids",
@@ -832,7 +909,6 @@ func (o *Event) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
-		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "parent_event_id")
 		delete(additionalProperties, "event_name")
 		delete(additionalProperties, "event_time")
@@ -849,6 +925,7 @@ func (o *Event) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "consent_normalization_version")
 		delete(additionalProperties, "policy_class")
 		delete(additionalProperties, "traffic_class")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "consent")
 		delete(additionalProperties, "user_data_hashed")
 		delete(additionalProperties, "click_ids")
@@ -856,6 +933,8 @@ func (o *Event) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "value_data")
 		delete(additionalProperties, "event_source")
 		delete(additionalProperties, "payload_expired")
+		delete(additionalProperties, "consent_source")
+		delete(additionalProperties, "consent_ui_version")
 		delete(additionalProperties, "deliveries")
 		o.AdditionalProperties = additionalProperties
 	}

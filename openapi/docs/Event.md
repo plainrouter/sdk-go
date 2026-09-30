@@ -5,7 +5,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
-**SignalTrackerId** | **string** |  | 
 **ParentEventId** | **NullableString** |  | 
 **EventName** | **string** |  | 
 **EventTime** | **time.Time** |  | 
@@ -22,20 +21,23 @@ Name | Type | Description | Notes
 **ConsentNormalizationVersion** | **string** |  | 
 **PolicyClass** | [**JurisdictionPolicyClass**](JurisdictionPolicyClass.md) |  | 
 **TrafficClass** | [**TrafficClass**](TrafficClass.md) |  | 
+**WorkspaceId** | **int32** |  | 
 **Consent** | **string** |  | 
-**UserDataHashed** | **string** |  | 
+**UserDataHashed** | **interface{}** | Deprecated compatibility field. The value is always null; delivery identity is never returned. | 
 **ClickIds** | **string** |  | 
 **Session** | **string** |  | 
 **ValueData** | **string** |  | 
 **EventSource** | **string** |  | 
 **PayloadExpired** | **bool** |  | 
+**ConsentSource** | Pointer to **string** |  | [optional] 
+**ConsentUiVersion** | Pointer to **int32** |  | [optional] 
 **Deliveries** | **[]interface{}** |  | 
 
 ## Methods
 
 ### NewEvent
 
-`func NewEvent(id string, signalTrackerId string, parentEventId NullableString, eventName string, eventTime time.Time, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt time.Time, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, policyClass JurisdictionPolicyClass, trafficClass TrafficClass, consent string, userDataHashed string, clickIds string, session string, valueData string, eventSource string, payloadExpired bool, deliveries []interface{}, ) *Event`
+`func NewEvent(id string, parentEventId NullableString, eventName string, eventTime time.Time, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt time.Time, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, policyClass JurisdictionPolicyClass, trafficClass TrafficClass, workspaceId int32, consent string, userDataHashed interface{}, clickIds string, session string, valueData string, eventSource string, payloadExpired bool, deliveries []interface{}, ) *Event`
 
 NewEvent instantiates a new Event object
 This constructor will assign default values to properties that have it defined,
@@ -68,26 +70,6 @@ and a boolean to check if the value has been set.
 `func (o *Event) SetId(v string)`
 
 SetId sets Id field to given value.
-
-
-### GetSignalTrackerId
-
-`func (o *Event) GetSignalTrackerId() string`
-
-GetSignalTrackerId returns the SignalTrackerId field if non-nil, zero value otherwise.
-
-### GetSignalTrackerIdOk
-
-`func (o *Event) GetSignalTrackerIdOk() (*string, bool)`
-
-GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSignalTrackerId
-
-`func (o *Event) SetSignalTrackerId(v string)`
-
-SetSignalTrackerId sets SignalTrackerId field to given value.
 
 
 ### GetParentEventId
@@ -450,6 +432,26 @@ and a boolean to check if the value has been set.
 SetTrafficClass sets TrafficClass field to given value.
 
 
+### GetWorkspaceId
+
+`func (o *Event) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *Event) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *Event) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
+
+
 ### GetConsent
 
 `func (o *Event) GetConsent() string`
@@ -472,24 +474,34 @@ SetConsent sets Consent field to given value.
 
 ### GetUserDataHashed
 
-`func (o *Event) GetUserDataHashed() string`
+`func (o *Event) GetUserDataHashed() interface{}`
 
 GetUserDataHashed returns the UserDataHashed field if non-nil, zero value otherwise.
 
 ### GetUserDataHashedOk
 
-`func (o *Event) GetUserDataHashedOk() (*string, bool)`
+`func (o *Event) GetUserDataHashedOk() (*interface{}, bool)`
 
 GetUserDataHashedOk returns a tuple with the UserDataHashed field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetUserDataHashed
 
-`func (o *Event) SetUserDataHashed(v string)`
+`func (o *Event) SetUserDataHashed(v interface{})`
 
 SetUserDataHashed sets UserDataHashed field to given value.
 
 
+### SetUserDataHashedNil
+
+`func (o *Event) SetUserDataHashedNil(b bool)`
+
+ SetUserDataHashedNil sets the value for UserDataHashed to be an explicit nil
+
+### UnsetUserDataHashed
+`func (o *Event) UnsetUserDataHashed()`
+
+UnsetUserDataHashed ensures that no value is present for UserDataHashed, not even an explicit nil
 ### GetClickIds
 
 `func (o *Event) GetClickIds() string`
@@ -589,6 +601,56 @@ and a boolean to check if the value has been set.
 
 SetPayloadExpired sets PayloadExpired field to given value.
 
+
+### GetConsentSource
+
+`func (o *Event) GetConsentSource() string`
+
+GetConsentSource returns the ConsentSource field if non-nil, zero value otherwise.
+
+### GetConsentSourceOk
+
+`func (o *Event) GetConsentSourceOk() (*string, bool)`
+
+GetConsentSourceOk returns a tuple with the ConsentSource field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConsentSource
+
+`func (o *Event) SetConsentSource(v string)`
+
+SetConsentSource sets ConsentSource field to given value.
+
+### HasConsentSource
+
+`func (o *Event) HasConsentSource() bool`
+
+HasConsentSource returns a boolean if a field has been set.
+
+### GetConsentUiVersion
+
+`func (o *Event) GetConsentUiVersion() int32`
+
+GetConsentUiVersion returns the ConsentUiVersion field if non-nil, zero value otherwise.
+
+### GetConsentUiVersionOk
+
+`func (o *Event) GetConsentUiVersionOk() (*int32, bool)`
+
+GetConsentUiVersionOk returns a tuple with the ConsentUiVersion field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConsentUiVersion
+
+`func (o *Event) SetConsentUiVersion(v int32)`
+
+SetConsentUiVersion sets ConsentUiVersion field to given value.
+
+### HasConsentUiVersion
+
+`func (o *Event) HasConsentUiVersion() bool`
+
+HasConsentUiVersion returns a boolean if a field has been set.
 
 ### GetDeliveries
 

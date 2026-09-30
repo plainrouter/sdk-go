@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -40,13 +40,19 @@ var (
 	queryDescape    = strings.NewReplacer("%5B", "[", "%5D", "]")
 )
 
-// APIClient manages communication with the PlainRouter Conversion API API v0.5.0
+// APIClient manages communication with the Plainrouter Conversion API API v0.5.0
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// API Services
+
+	ActionDryRunApiAPI *ActionDryRunApiAPIService
+
+	ActionProposalApiAPI *ActionProposalApiAPIService
+
+	ActionReadApiAPI *ActionReadApiAPIService
 
 	EventAPI *EventAPIService
 
@@ -71,6 +77,9 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
+	c.ActionDryRunApiAPI = (*ActionDryRunApiAPIService)(&c.common)
+	c.ActionProposalApiAPI = (*ActionProposalApiAPIService)(&c.common)
+	c.ActionReadApiAPI = (*ActionReadApiAPIService)(&c.common)
 	c.EventAPI = (*EventAPIService)(&c.common)
 	c.OperationsAPI = (*OperationsAPIService)(&c.common)
 	c.SandboxAPI = (*SandboxAPIService)(&c.common)

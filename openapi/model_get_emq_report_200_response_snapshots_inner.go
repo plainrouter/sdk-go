@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,7 +20,10 @@ var _ MappedNullable = &GetEmqReport200ResponseSnapshotsInner{}
 
 // GetEmqReport200ResponseSnapshotsInner struct for GetEmqReport200ResponseSnapshotsInner
 type GetEmqReport200ResponseSnapshotsInner struct {
-	Id                   int32           `json:"id"`
+	Id          int32 `json:"id"`
+	WorkspaceId int32 `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
 	SignalTrackerId      string          `json:"signal_tracker_id"`
 	DestinationId        string          `json:"destination_id"`
 	Score                float32         `json:"score"`
@@ -39,9 +42,10 @@ type _GetEmqReport200ResponseSnapshotsInner GetEmqReport200ResponseSnapshotsInne
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetEmqReport200ResponseSnapshotsInner(id int32, signalTrackerId string, destinationId string, score float32, weekOverWeekChange NullableFloat32, alerted bool, platformResponse interface{}, measuredAt string, createdAt NullableString, updatedAt NullableString) *GetEmqReport200ResponseSnapshotsInner {
+func NewGetEmqReport200ResponseSnapshotsInner(id int32, workspaceId int32, signalTrackerId string, destinationId string, score float32, weekOverWeekChange NullableFloat32, alerted bool, platformResponse interface{}, measuredAt string, createdAt NullableString, updatedAt NullableString) *GetEmqReport200ResponseSnapshotsInner {
 	this := GetEmqReport200ResponseSnapshotsInner{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.DestinationId = destinationId
 	this.Score = score
@@ -86,7 +90,32 @@ func (o *GetEmqReport200ResponseSnapshotsInner) SetId(v int32) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *GetEmqReport200ResponseSnapshotsInner) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *GetEmqReport200ResponseSnapshotsInner) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *GetEmqReport200ResponseSnapshotsInner) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *GetEmqReport200ResponseSnapshotsInner) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -98,6 +127,7 @@ func (o *GetEmqReport200ResponseSnapshotsInner) GetSignalTrackerId() string {
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *GetEmqReport200ResponseSnapshotsInner) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -106,6 +136,7 @@ func (o *GetEmqReport200ResponseSnapshotsInner) GetSignalTrackerIdOk() (*string,
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *GetEmqReport200ResponseSnapshotsInner) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -321,6 +352,7 @@ func (o GetEmqReport200ResponseSnapshotsInner) MarshalJSON() ([]byte, error) {
 func (o GetEmqReport200ResponseSnapshotsInner) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["destination_id"] = o.DestinationId
 	toSerialize["score"] = o.Score
@@ -346,6 +378,7 @@ func (o *GetEmqReport200ResponseSnapshotsInner) UnmarshalJSON(data []byte) (err 
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"destination_id",
 		"score",
@@ -385,6 +418,7 @@ func (o *GetEmqReport200ResponseSnapshotsInner) UnmarshalJSON(data []byte) (err 
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "destination_id")
 		delete(additionalProperties, "score")

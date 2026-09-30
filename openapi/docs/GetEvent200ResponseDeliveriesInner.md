@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** |  | 
-**SignalTrackerId** | **string** |  | 
+**WorkspaceId** | **int32** |  | 
+**SignalTrackerId** | **string** | Deprecated alias of workspace_id; contains the workspace ID in decimal string form. | 
 **EventId** | **string** |  | 
 **DestinationId** | **NullableString** |  | 
 **Status** | [**DeliveryStatus**](DeliveryStatus.md) |  | 
@@ -23,7 +24,7 @@ Name | Type | Description | Notes
 
 ### NewGetEvent200ResponseDeliveriesInner
 
-`func NewGetEvent200ResponseDeliveriesInner(id int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, createdAt string, updatedAt NullableString, explanation string, ) *GetEvent200ResponseDeliveriesInner`
+`func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, createdAt string, updatedAt NullableString, explanation string, ) *GetEvent200ResponseDeliveriesInner`
 
 NewGetEvent200ResponseDeliveriesInner instantiates a new GetEvent200ResponseDeliveriesInner object
 This constructor will assign default values to properties that have it defined,
@@ -56,6 +57,26 @@ and a boolean to check if the value has been set.
 `func (o *GetEvent200ResponseDeliveriesInner) SetId(v int32)`
 
 SetId sets Id field to given value.
+
+
+### GetWorkspaceId
+
+`func (o *GetEvent200ResponseDeliveriesInner) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *GetEvent200ResponseDeliveriesInner) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *GetEvent200ResponseDeliveriesInner) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
 
 
 ### GetSignalTrackerId

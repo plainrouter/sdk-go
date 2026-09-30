@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,8 +20,9 @@ var _ MappedNullable = &DeleteUserDataRequest{}
 
 // DeleteUserDataRequest struct for DeleteUserDataRequest
 type DeleteUserDataRequest struct {
-	IdentifierType       string `json:"identifier_type"`
-	IdentifierHash       string `json:"identifier_hash" validate:"regexp=^[a-fA-F0-9]{64}$"`
+	IdentifierType       string
+	IdentifierHash       *string
+	Identifier           *string
 	AdditionalProperties map[string]interface{}
 }
 
@@ -31,10 +32,8 @@ type _DeleteUserDataRequest DeleteUserDataRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDeleteUserDataRequest(identifierType string, identifierHash string) *DeleteUserDataRequest {
+func NewDeleteUserDataRequest(identifierType string) *DeleteUserDataRequest {
 	this := DeleteUserDataRequest{}
-	this.IdentifierType = identifierType
-	this.IdentifierHash = identifierHash
 	return &this
 }
 
@@ -70,28 +69,68 @@ func (o *DeleteUserDataRequest) SetIdentifierType(v string) {
 	o.IdentifierType = v
 }
 
-// GetIdentifierHash returns the IdentifierHash field value
+// GetIdentifierHash returns the IdentifierHash field value if set, zero value otherwise.
 func (o *DeleteUserDataRequest) GetIdentifierHash() string {
-	if o == nil {
+	if o == nil || IsNil(o.IdentifierHash) {
 		var ret string
 		return ret
 	}
-
-	return o.IdentifierHash
+	return *o.IdentifierHash
 }
 
-// GetIdentifierHashOk returns a tuple with the IdentifierHash field value
+// GetIdentifierHashOk returns a tuple with the IdentifierHash field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DeleteUserDataRequest) GetIdentifierHashOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.IdentifierHash) {
 		return nil, false
 	}
-	return &o.IdentifierHash, true
+	return o.IdentifierHash, true
 }
 
-// SetIdentifierHash sets field value
+// HasIdentifierHash returns a boolean if a field has been set.
+func (o *DeleteUserDataRequest) HasIdentifierHash() bool {
+	if o != nil && !IsNil(o.IdentifierHash) {
+		return true
+	}
+
+	return false
+}
+
+// SetIdentifierHash gets a reference to the given string and assigns it to the IdentifierHash field.
 func (o *DeleteUserDataRequest) SetIdentifierHash(v string) {
-	o.IdentifierHash = v
+	o.IdentifierHash = &v
+}
+
+// GetIdentifier returns the Identifier field value if set, zero value otherwise.
+func (o *DeleteUserDataRequest) GetIdentifier() string {
+	if o == nil || IsNil(o.Identifier) {
+		var ret string
+		return ret
+	}
+	return *o.Identifier
+}
+
+// GetIdentifierOk returns a tuple with the Identifier field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DeleteUserDataRequest) GetIdentifierOk() (*string, bool) {
+	if o == nil || IsNil(o.Identifier) {
+		return nil, false
+	}
+	return o.Identifier, true
+}
+
+// HasIdentifier returns a boolean if a field has been set.
+func (o *DeleteUserDataRequest) HasIdentifier() bool {
+	if o != nil && !IsNil(o.Identifier) {
+		return true
+	}
+
+	return false
+}
+
+// SetIdentifier gets a reference to the given string and assigns it to the Identifier field.
+func (o *DeleteUserDataRequest) SetIdentifier(v string) {
+	o.Identifier = &v
 }
 
 func (o DeleteUserDataRequest) MarshalJSON() ([]byte, error) {
@@ -105,7 +144,12 @@ func (o DeleteUserDataRequest) MarshalJSON() ([]byte, error) {
 func (o DeleteUserDataRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["identifier_type"] = o.IdentifierType
-	toSerialize["identifier_hash"] = o.IdentifierHash
+	if !IsNil(o.IdentifierHash) {
+		toSerialize["identifier_hash"] = o.IdentifierHash
+	}
+	if !IsNil(o.Identifier) {
+		toSerialize["identifier"] = o.Identifier
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -120,7 +164,6 @@ func (o *DeleteUserDataRequest) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"identifier_type",
-		"identifier_hash",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -152,6 +195,7 @@ func (o *DeleteUserDataRequest) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "identifier_type")
 		delete(additionalProperties, "identifier_hash")
+		delete(additionalProperties, "identifier")
 		o.AdditionalProperties = additionalProperties
 	}
 

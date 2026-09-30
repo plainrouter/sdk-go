@@ -1,6 +1,6 @@
-sha256: 5da05be3eadbf983d186f742f19833d61063723e0a1fa9777c93e9caa1f0d275
+sha256: 394847d4db6518049425a7d414701bc8c2106f0b1951ab85c376d28377e30870
 info.version: 0.5.0
 x-signed: true
 source: https://plainrouter.com/openapi.json
-source_commit: 5c859f788b78b0615fc421287c95209b7ef61c2e
-verified_at: 2026-08-26
+source_commit: 757696e99ce4a23e1d6049e759f509a49dc7a432
+verified_at: 2026-09-30

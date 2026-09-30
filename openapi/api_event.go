@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -29,12 +29,13 @@ type ApiCreateEventRequest struct {
 	idempotencyKey     *string
 }
 
+// Authenticated callers using the Server secret may supply client_ip_address and client_user_agent in user_data; browser traffic using the Publishable key takes those fields only from the configured edge.
 func (r ApiCreateEventRequest) CreateEventRequest(createEventRequest CreateEventRequest) ApiCreateEventRequest {
 	r.createEventRequest = &createEventRequest
 	return r
 }
 
-// Optional idempotency key. When event_id is omitted, PlainRouter uses this value as event_id. If both are supplied, they must match.
+// Optional idempotency key. When event_id is omitted, Plainrouter uses this value as event_id. If both are supplied, they must match.
 func (r ApiCreateEventRequest) IdempotencyKey(idempotencyKey string) ApiCreateEventRequest {
 	r.idempotencyKey = &idempotencyKey
 	return r
@@ -47,7 +48,7 @@ func (r ApiCreateEventRequest) Execute() (*CreateEvent200Response, *http.Respons
 /*
 CreateEvent Submit a conversion event
 
-Accepts a consent-aware server-side conversion event. Supply either event_id in the JSON body or Idempotency-Key in the request headers to make retries idempotent.
+Accepts a consent-aware server-side conversion event and uses event_id or Idempotency-Key to make retries idempotent.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiCreateEventRequest
@@ -177,7 +178,7 @@ func (r ApiGetEventRequest) Execute() (*GetEvent200Response, *http.Response, err
 /*
 GetEvent Get an event and delivery trace
 
-Returns one retained customer-readable event with lineage and destination delivery state.
+Returns one retained customer-readable event with lineage and destination delivery state for scoped troubleshooting and acceptance checks.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param event
@@ -301,7 +302,7 @@ func (r ApiVerifySignalIngestionRequest) Execute() (*CreateEvent200Response, *ht
 /*
 VerifySignalIngestion Verify server-side Signal ingestion
 
-Writes one identity-free verification event for onboarding and returns the existing event on retry.
+Records one idempotent, identity-free modeled event to confirm workspace-scoped ingestion. It does not count as real arrival evidence or complete onboarding.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiVerifySignalIngestionRequest

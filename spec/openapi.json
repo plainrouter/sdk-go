@@ -1,9 +1,23 @@
 {
+    "x-signed": true,
+    "x-action-types": [
+        "increase_budget",
+        "decrease_budget",
+        "pause",
+        "resume",
+        "replace_creative",
+        "shift_spend",
+        "rollback",
+        "create_campaign",
+        "create_ad_set",
+        "create_ad",
+        "upload_asset"
+    ],
     "openapi": "3.1.0",
     "info": {
-        "title": "PlainRouter Conversion API",
+        "title": "Plainrouter Conversion API",
         "version": "0.5.0",
-        "description": "PlainRouter public Signals Conversion API."
+        "description": "Plainrouter public Signals Conversion API."
     },
     "servers": [
         {
@@ -13,14 +27,686 @@
     ],
     "security": [
         {
-            "signalTrackerSecret": []
+            "workspaceSecret": []
         }
     ],
     "paths": {
+        "/agent/workspaces/{workspace}/actions/dry-run": {
+            "post": {
+                "operationId": "actions.api.dry-run",
+                "description": "Evaluate a governed proposal for the approved account and preview each policy decision and execution diff without creating a batch or action.",
+                "summary": "Preview actions",
+                "tags": [
+                    "ActionDryRunApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActionProposalInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Evaluated dry-run preview.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionDryRunRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            }
+        },
+        "/agent/workspaces/{workspace}/actions": {
+            "post": {
+                "operationId": "actions.api.propose",
+                "description": "Submit a governed proposal for an advertising account available to this workspace key. A matching idempotency key returns the saved batch.",
+                "summary": "Propose actions",
+                "tags": [
+                    "ActionProposalApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ActionProposalInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Saved idempotent proposal.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionProposalRead"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "New proposal created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionProposalRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "actions.api.index",
+                "description": "Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.",
+                "summary": "List actions",
+                "tags": [
+                    "ActionReadApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved_without_execution",
+                                "rejected",
+                                "executing",
+                                "executed_pending_verification",
+                                "compensating",
+                                "measuring",
+                                "verified",
+                                "failed",
+                                "execution_uncertain",
+                                "rolled_back",
+                                "blocked"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authorized Actions resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionListRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            }
+        },
+        "/agent/workspaces/{workspace}/actions/policy": {
+            "get": {
+                "operationId": "actions.api.policy",
+                "description": "Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.",
+                "summary": "Get action policy",
+                "tags": [
+                    "ActionReadApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authorized Actions resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionPolicyRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            }
+        },
+        "/agent/workspaces/{workspace}/actions/{action}/decision-receipt": {
+            "get": {
+                "operationId": "actions.api.decision-receipt",
+                "description": "Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.",
+                "summary": "Get decision receipt",
+                "tags": [
+                    "ActionReadApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authorized Actions resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionDecisionReceiptRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found. A visible action without an execution receipt returns error.code receipt_not_available and error.message \"No execution receipt exists for this action because it was not executed.\"",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            }
+        },
+        "/agent/workspaces/{workspace}/actions/{action}": {
+            "get": {
+                "operationId": "actions.api.show",
+                "description": "Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.",
+                "summary": "Get action",
+                "tags": [
+                    "ActionReadApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authorized Actions resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionDetailRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            }
+        },
+        "/agent/workspaces/{workspace}/action-batches/{actionBatch}": {
+            "get": {
+                "operationId": "actions.api.batch",
+                "description": "Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.",
+                "summary": "Get action batch",
+                "tags": [
+                    "ActionReadApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "workspace",
+                        "in": "path",
+                        "required": true,
+                        "description": "The workspace ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "actionBatch",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authorized Actions resource.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionBatchRead"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing, invalid, or expired workspace key.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The key lacks the propose-actions grant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Workspace, account, or Actions resource not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorMessage"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Request validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "workspaceActionKey": []
+                    }
+                ]
+            }
+        },
         "/events": {
             "post": {
                 "operationId": "createEvent",
-                "description": "Accepts a consent-aware server-side conversion event. Supply either event_id in the JSON body or Idempotency-Key in the request headers to make retries idempotent.",
+                "description": "Accepts a consent-aware server-side conversion event and uses event_id or Idempotency-Key to make retries idempotent.",
                 "summary": "Submit a conversion event",
                 "tags": [
                     "Event"
@@ -29,13 +715,14 @@
                     {
                         "name": "Idempotency-Key",
                         "in": "header",
-                        "description": "Optional idempotency key. When event_id is omitted, PlainRouter uses this value as event_id. If both are supplied, they must match.",
+                        "description": "Optional idempotency key. When event_id is omitted, Plainrouter uses this value as event_id. If both are supplied, they must match.",
                         "schema": {
                             "type": "string"
                         }
                     }
                 ],
                 "requestBody": {
+                    "description": "Authenticated callers using the Server secret may supply client_ip_address and client_user_agent in user_data; browser traffic using the Publishable key takes those fields only from the configured edge.",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -294,11 +981,35 @@
                                         },
                                         "duplicate": {
                                             "type": "boolean"
+                                        },
+                                        "warnings": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "code": {
+                                                        "$ref": "#/components/schemas/IngestionWarningCode"
+                                                    },
+                                                    "field": {
+                                                        "type": "string",
+                                                        "const": "consent.captured_at"
+                                                    },
+                                                    "message": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "code",
+                                                    "field",
+                                                    "message"
+                                                ]
+                                            }
                                         }
                                     },
                                     "required": [
                                         "event_id",
-                                        "duplicate"
+                                        "duplicate",
+                                        "warnings"
                                     ]
                                 }
                             }
@@ -320,7 +1031,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -345,7 +1056,7 @@
         "/verification-events": {
             "post": {
                 "operationId": "verifySignalIngestion",
-                "description": "Writes one identity-free verification event for onboarding and returns the existing event on retry.",
+                "description": "Records one idempotent, identity-free modeled event to confirm workspace-scoped ingestion. It does not count as real arrival evidence or complete onboarding.",
                 "summary": "Verify server-side Signal ingestion",
                 "tags": [
                     "Event"
@@ -414,7 +1125,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -429,7 +1140,7 @@
         "/events/{event}": {
             "get": {
                 "operationId": "getEvent",
-                "description": "Returns one retained customer-readable event with lineage and destination delivery state.",
+                "description": "Returns one retained customer-readable event with lineage and destination delivery state for scoped troubleshooting and acceptance checks.",
                 "summary": "Get an event and delivery trace",
                 "tags": [
                     "Event"
@@ -458,8 +1169,13 @@
                                                 "id": {
                                                     "type": "string"
                                                 },
+                                                "workspace_id": {
+                                                    "type": "integer"
+                                                },
                                                 "signal_tracker_id": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                    "deprecated": true
                                                 },
                                                 "parent_event_id": {
                                                     "type": [
@@ -531,6 +1247,7 @@
                                                     ]
                                                 },
                                                 "user_data_hashed": {
+                                                    "description": "Deprecated compatibility field. The value is always null; delivery identity is never returned.",
                                                     "anyOf": [
                                                         {
                                                             "type": "object",
@@ -607,8 +1324,13 @@
                                                             "id": {
                                                                 "type": "integer"
                                                             },
+                                                            "workspace_id": {
+                                                                "type": "integer"
+                                                            },
                                                             "signal_tracker_id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                "deprecated": true
                                                             },
                                                             "event_id": {
                                                                 "type": "string"
@@ -682,6 +1404,7 @@
                                                         },
                                                         "required": [
                                                             "id",
+                                                            "workspace_id",
                                                             "signal_tracker_id",
                                                             "event_id",
                                                             "destination_id",
@@ -700,6 +1423,7 @@
                                             },
                                             "required": [
                                                 "id",
+                                                "workspace_id",
                                                 "signal_tracker_id",
                                                 "parent_event_id",
                                                 "event_name",
@@ -737,8 +1461,13 @@
                                                         "id": {
                                                             "type": "string"
                                                         },
+                                                        "workspace_id": {
+                                                            "type": "integer"
+                                                        },
                                                         "signal_tracker_id": {
-                                                            "type": "string"
+                                                            "type": "string",
+                                                            "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                            "deprecated": true
                                                         },
                                                         "parent_event_id": {
                                                             "type": [
@@ -810,6 +1539,7 @@
                                                             ]
                                                         },
                                                         "user_data_hashed": {
+                                                            "description": "Deprecated compatibility field. The value is always null; delivery identity is never returned.",
                                                             "anyOf": [
                                                                 {
                                                                     "type": "object",
@@ -881,6 +1611,7 @@
                                                     },
                                                     "required": [
                                                         "id",
+                                                        "workspace_id",
                                                         "signal_tracker_id",
                                                         "parent_event_id",
                                                         "event_name",
@@ -913,8 +1644,13 @@
                                                             "id": {
                                                                 "type": "string"
                                                             },
+                                                            "workspace_id": {
+                                                                "type": "integer"
+                                                            },
                                                             "signal_tracker_id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                "deprecated": true
                                                             },
                                                             "parent_event_id": {
                                                                 "type": [
@@ -986,6 +1722,7 @@
                                                                 ]
                                                             },
                                                             "user_data_hashed": {
+                                                                "description": "Deprecated compatibility field. The value is always null; delivery identity is never returned.",
                                                                 "anyOf": [
                                                                     {
                                                                         "type": "object",
@@ -1057,6 +1794,7 @@
                                                         },
                                                         "required": [
                                                             "id",
+                                                            "workspace_id",
                                                             "signal_tracker_id",
                                                             "parent_event_id",
                                                             "event_name",
@@ -1098,8 +1836,13 @@
                                                             "id": {
                                                                 "type": "integer"
                                                             },
+                                                            "workspace_id": {
+                                                                "type": "integer"
+                                                            },
                                                             "signal_tracker_id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                "deprecated": true
                                                             },
                                                             "event_id": {
                                                                 "type": "string"
@@ -1173,6 +1916,7 @@
                                                         },
                                                         "required": [
                                                             "id",
+                                                            "workspace_id",
                                                             "signal_tracker_id",
                                                             "event_id",
                                                             "destination_id",
@@ -1212,7 +1956,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1237,7 +1981,7 @@
         "/dashboard/events": {
             "get": {
                 "operationId": "listEvents",
-                "description": "Returns retained customer-readable events and aggregate destination-delivery acceptance metrics.",
+                "description": "Returns retained customer-readable events with stable pagination and aggregate destination-delivery acceptance metrics for the workspace.",
                 "summary": "List recent events",
                 "tags": [
                     "Operations"
@@ -1275,8 +2019,13 @@
                                                             "id": {
                                                                 "type": "string"
                                                             },
+                                                            "workspace_id": {
+                                                                "type": "integer"
+                                                            },
                                                             "signal_tracker_id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                "deprecated": true
                                                             },
                                                             "parent_event_id": {
                                                                 "type": [
@@ -1348,6 +2097,7 @@
                                                                 ]
                                                             },
                                                             "user_data_hashed": {
+                                                                "description": "Deprecated compatibility field. The value is always null; delivery identity is never returned.",
                                                                 "anyOf": [
                                                                     {
                                                                         "type": "object",
@@ -1424,8 +2174,13 @@
                                                                         "id": {
                                                                             "type": "integer"
                                                                         },
+                                                                        "workspace_id": {
+                                                                            "type": "integer"
+                                                                        },
                                                                         "signal_tracker_id": {
-                                                                            "type": "string"
+                                                                            "type": "string",
+                                                                            "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                            "deprecated": true
                                                                         },
                                                                         "event_id": {
                                                                             "type": "string"
@@ -1499,6 +2254,7 @@
                                                                     },
                                                                     "required": [
                                                                         "id",
+                                                                        "workspace_id",
                                                                         "signal_tracker_id",
                                                                         "event_id",
                                                                         "destination_id",
@@ -1517,6 +2273,7 @@
                                                         },
                                                         "required": [
                                                             "id",
+                                                            "workspace_id",
                                                             "signal_tracker_id",
                                                             "parent_event_id",
                                                             "event_name",
@@ -1672,7 +2429,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1730,8 +2487,13 @@
                                                             "id": {
                                                                 "type": "string"
                                                             },
+                                                            "workspace_id": {
+                                                                "type": "integer"
+                                                            },
                                                             "signal_tracker_id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                "deprecated": true
                                                             },
                                                             "parent_event_id": {
                                                                 "type": [
@@ -1803,6 +2565,7 @@
                                                                 ]
                                                             },
                                                             "user_data_hashed": {
+                                                                "description": "Deprecated compatibility field. The value is always null; delivery identity is never returned.",
                                                                 "anyOf": [
                                                                     {
                                                                         "type": "object",
@@ -1879,8 +2642,13 @@
                                                                         "id": {
                                                                             "type": "integer"
                                                                         },
+                                                                        "workspace_id": {
+                                                                            "type": "integer"
+                                                                        },
                                                                         "signal_tracker_id": {
-                                                                            "type": "string"
+                                                                            "type": "string",
+                                                                            "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                            "deprecated": true
                                                                         },
                                                                         "event_id": {
                                                                             "type": "string"
@@ -1954,6 +2722,7 @@
                                                                     },
                                                                     "required": [
                                                                         "id",
+                                                                        "workspace_id",
                                                                         "signal_tracker_id",
                                                                         "event_id",
                                                                         "destination_id",
@@ -1972,6 +2741,7 @@
                                                         },
                                                         "required": [
                                                             "id",
+                                                            "workspace_id",
                                                             "signal_tracker_id",
                                                             "parent_event_id",
                                                             "event_name",
@@ -2078,7 +2848,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2093,7 +2863,7 @@
         "/destinations/{destination}/test-mode": {
             "patch": {
                 "operationId": "setDestinationTestMode",
-                "description": "Enables or disables Meta Test Events mode for a destination owned by the authenticated Signal tracker.",
+                "description": "Enables or disables Meta Test Events mode for a destination owned by the authenticated Signals workspace.",
                 "summary": "Configure destination test mode",
                 "tags": [
                     "Operations"
@@ -2148,8 +2918,13 @@
                                                 "id": {
                                                     "type": "string"
                                                 },
+                                                "workspace_id": {
+                                                    "type": "integer"
+                                                },
                                                 "signal_tracker_id": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                    "deprecated": true
                                                 },
                                                 "platform_ad_account_id": {
                                                     "type": [
@@ -2196,6 +2971,7 @@
                                             },
                                             "required": [
                                                 "id",
+                                                "workspace_id",
                                                 "signal_tracker_id",
                                                 "platform_ad_account_id",
                                                 "type",
@@ -2219,7 +2995,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2363,7 +3139,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2405,7 +3181,7 @@
         "/deliveries/replay": {
             "post": {
                 "operationId": "replayDeliveries",
-                "description": "Evaluates retained failed deliveries and queues the eligible subset for another delivery attempt.",
+                "description": "Evaluates retained failed deliveries, queues the eligible subset for another delivery attempt, and reports which records were accepted or rejected.",
                 "summary": "Replay eligible deliveries",
                 "tags": [
                     "Operations"
@@ -2482,7 +3258,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2507,7 +3283,7 @@
         "/reports/reconciliation": {
             "get": {
                 "operationId": "getReconciliationReport",
-                "description": "Returns stored delivery-versus-platform reconciliation results for one calendar date.",
+                "description": "Returns stored delivery-versus-platform reconciliation results for one date. Dates before the workspace read bound return 422.",
                 "summary": "Get a reconciliation report",
                 "tags": [
                     "Operations"
@@ -2542,8 +3318,13 @@
                                                     "id": {
                                                         "type": "integer"
                                                     },
+                                                    "workspace_id": {
+                                                        "type": "integer"
+                                                    },
                                                     "signal_tracker_id": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                        "deprecated": true
                                                     },
                                                     "destination_id": {
                                                         "type": "string"
@@ -2643,8 +3424,13 @@
                                                             "id": {
                                                                 "type": "string"
                                                             },
+                                                            "workspace_id": {
+                                                                "type": "integer"
+                                                            },
                                                             "signal_tracker_id": {
-                                                                "type": "string"
+                                                                "type": "string",
+                                                                "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                                "deprecated": true
                                                             },
                                                             "platform_ad_account_id": {
                                                                 "type": [
@@ -2691,6 +3477,7 @@
                                                         },
                                                         "required": [
                                                             "id",
+                                                            "workspace_id",
                                                             "signal_tracker_id",
                                                             "platform_ad_account_id",
                                                             "type",
@@ -2704,6 +3491,7 @@
                                                 },
                                                 "required": [
                                                     "id",
+                                                    "workspace_id",
                                                     "signal_tracker_id",
                                                     "destination_id",
                                                     "report_date",
@@ -2730,7 +3518,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2755,7 +3543,7 @@
         "/reports/emq": {
             "get": {
                 "operationId": "getEmqReport",
-                "description": "Returns recent Meta Event Match Quality snapshots for the authenticated Signal tracker.",
+                "description": "Returns recent Meta Event Match Quality snapshots for the authenticated Signals workspace so callers can inspect measured quality changes over time.",
                 "summary": "Get Event Match Quality history",
                 "tags": [
                     "Operations"
@@ -2776,8 +3564,13 @@
                                                     "id": {
                                                         "type": "integer"
                                                     },
+                                                    "workspace_id": {
+                                                        "type": "integer"
+                                                    },
                                                     "signal_tracker_id": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                                                        "deprecated": true
                                                     },
                                                     "destination_id": {
                                                         "type": "string"
@@ -2827,6 +3620,7 @@
                                                 },
                                                 "required": [
                                                     "id",
+                                                    "workspace_id",
                                                     "signal_tracker_id",
                                                     "destination_id",
                                                     "score",
@@ -2848,7 +3642,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2863,8 +3657,8 @@
         "/user-data": {
             "delete": {
                 "operationId": "deleteUserData",
-                "description": "Idempotently removes retained user data matching one caller-supplied SHA-256 identifier digest.",
-                "summary": "Delete user data by hashed identifier",
+                "description": "Idempotently removes retained user data using a verified raw identifier or legacy SHA-256 digest, scoped and keyed to the authenticated workspace.",
+                "summary": "Delete user data by verified identifier",
                 "tags": [
                     "Operations"
                 ],
@@ -2886,11 +3680,26 @@
                                     "identifier_hash": {
                                         "type": "string",
                                         "pattern": "^[a-fA-F0-9]{64}$"
+                                    },
+                                    "identifier": {
+                                        "type": "string",
+                                        "maxLength": 512
                                     }
                                 },
                                 "required": [
-                                    "identifier_type",
-                                    "identifier_hash"
+                                    "identifier_type"
+                                ],
+                                "oneOf": [
+                                    {
+                                        "required": [
+                                            "identifier_hash"
+                                        ]
+                                    },
+                                    {
+                                        "required": [
+                                            "identifier"
+                                        ]
+                                    }
                                 ]
                             }
                         }
@@ -2932,7 +3741,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid or missing Signal tracker secret.",
+                        "description": "Invalid or missing Server secret.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2957,7 +3766,7 @@
         "/sandbox": {
             "get": {
                 "operationId": "getSandbox",
-                "description": "Returns a ready-to-run synthetic event example. The sandbox requires no account or API key and cannot read production data, persist events, or contact an advertising provider.",
+                "description": "Returns a ready-to-run synthetic event example that needs no account or key and cannot persist data or contact an advertising provider.",
                 "summary": "Discover the zero-auth sandbox",
                 "tags": [
                     "Sandbox"
@@ -3005,13 +3814,65 @@
                                                 },
                                                 "description": {
                                                     "type": "string"
+                                                },
+                                                "issued_key": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "api_key": {
+                                                            "type": "string"
+                                                        },
+                                                        "token_type": {
+                                                            "type": "string"
+                                                        },
+                                                        "expires_in": {
+                                                            "type": "integer"
+                                                        },
+                                                        "expires_at": {
+                                                            "type": "string"
+                                                        },
+                                                        "scope": {
+                                                            "type": "string"
+                                                        },
+                                                        "production_access": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "use": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "method": {
+                                                                    "type": "string"
+                                                                },
+                                                                "url": {
+                                                                    "type": "string"
+                                                                },
+                                                                "authorization": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "method",
+                                                                "url",
+                                                                "authorization"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "api_key",
+                                                        "token_type",
+                                                        "expires_in",
+                                                        "expires_at",
+                                                        "scope",
+                                                        "production_access",
+                                                        "use"
+                                                    ]
                                                 }
                                             },
                                             "required": [
                                                 "method",
                                                 "url",
                                                 "authentication_required",
-                                                "description"
+                                                "description",
+                                                "issued_key"
                                             ]
                                         },
                                         "try": {
@@ -3114,16 +3975,105 @@
             }
         },
         "/sandbox/keys": {
+            "get": {
+                "operationId": "getSandboxKey",
+                "description": "Returns a short-lived Sandbox key over GET so a read-only agent can obtain working credentials without issuing a write request.",
+                "summary": "Get a Sandbox key",
+                "tags": [
+                    "Sandbox"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Short-lived Sandbox key issued.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "api_key": {
+                                            "type": "string"
+                                        },
+                                        "token_type": {
+                                            "type": "string"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer"
+                                        },
+                                        "expires_at": {
+                                            "type": "string"
+                                        },
+                                        "scope": {
+                                            "type": "string"
+                                        },
+                                        "production_access": {
+                                            "type": "boolean"
+                                        },
+                                        "use": {
+                                            "type": "object",
+                                            "properties": {
+                                                "method": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "authorization": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "method",
+                                                "url",
+                                                "authorization"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "api_key",
+                                        "token_type",
+                                        "expires_in",
+                                        "expires_at",
+                                        "scope",
+                                        "production_access",
+                                        "use"
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "schema": {
+                                    "type": "string",
+                                    "const": "*"
+                                }
+                            },
+                            "Cache-Control": {
+                                "schema": {
+                                    "type": "string",
+                                    "const": "no-store, private"
+                                }
+                            },
+                            "X-Content-Type-Options": {
+                                "schema": {
+                                    "type": "string",
+                                    "const": "nosniff"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": []
+            },
             "post": {
                 "operationId": "createSandboxKey",
-                "description": "Issues a short-lived sandbox-only bearer key without an account, human approval, or production access.",
-                "summary": "Create a sandbox API key",
+                "description": "Issues a short-lived Sandbox key without an account, human approval, or production access. It is valid for synthetic events only.",
+                "summary": "Create a Sandbox key",
                 "tags": [
                     "Sandbox"
                 ],
                 "responses": {
                     "201": {
-                        "description": "Short-lived sandbox API key issued.",
+                        "description": "Short-lived Sandbox key issued.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3207,7 +4157,7 @@
         "/sandbox/events": {
             "post": {
                 "operationId": "validateSandboxEvent",
-                "description": "Validates and immediately discards one identity-free synthetic event. It requires no account or API key and never writes to the ledger or contacts Meta.",
+                "description": "Validates and immediately discards one identity-free synthetic event. It requires no account or key and never writes to the ledger or contacts Meta.",
                 "summary": "Validate a synthetic event",
                 "tags": [
                     "Sandbox"
@@ -3337,8 +4287,8 @@
         "/sandbox/keyed-events": {
             "post": {
                 "operationId": "validateSandboxEventWithKey",
-                "description": "Validates a synthetic event using the short-lived key returned by the self-serve sandbox key endpoint. It never persists data or contacts an advertising provider.",
-                "summary": "Validate a synthetic event with a sandbox key",
+                "description": "Validates a synthetic event with a short-lived Sandbox key, then discards it without persisting data or contacting an advertising provider.",
+                "summary": "Validate a synthetic event with a Sandbox key",
                 "tags": [
                     "Sandbox"
                 ],
@@ -3389,7 +4339,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Synthetic event validated with a sandbox key and discarded.",
+                        "description": "Synthetic event validated with a Sandbox key and discarded.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3461,18 +4411,1941 @@
     },
     "components": {
         "securitySchemes": {
-            "signalTrackerSecret": {
+            "workspaceSecret": {
                 "type": "http",
-                "description": "Per-tracker bearer secret. It authenticates only the Signal tracker represented by the credential.",
+                "description": "Per-workspace Server secret. It authenticates only the Signals workspace represented by the credential.",
                 "scheme": "bearer"
             },
             "sandboxCredential": {
                 "type": "http",
-                "description": "Short-lived sandbox-only key issued by POST /sandbox/keys.",
+                "description": "Short-lived Sandbox key issued by POST /sandbox/keys.",
+                "scheme": "bearer"
+            },
+            "workspaceActionKey": {
+                "type": "http",
+                "description": "Workspace execution key with the propose-actions grant. Unbound keys select an available advertising account with account_id.",
                 "scheme": "bearer"
             }
         },
         "schemas": {
+            "ActionBatchRead": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "workspace_id": {
+                                "type": "integer"
+                            },
+                            "platform_ad_account_id": {
+                                "type": "integer"
+                            },
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "pending",
+                                    "approved",
+                                    "approved_without_execution",
+                                    "auto_approved",
+                                    "rejected",
+                                    "executing",
+                                    "executed_pending_verification",
+                                    "compensating",
+                                    "measuring",
+                                    "completed",
+                                    "failed",
+                                    "rolled_back",
+                                    "rollback_incomplete",
+                                    "blocked",
+                                    "halted"
+                                ]
+                            },
+                            "batch_status": {
+                                "type": "string",
+                                "enum": [
+                                    "pending",
+                                    "approved",
+                                    "approved_without_execution",
+                                    "auto_approved",
+                                    "rejected",
+                                    "executing",
+                                    "executed_pending_verification",
+                                    "compensating",
+                                    "measuring",
+                                    "completed",
+                                    "failed",
+                                    "rolled_back",
+                                    "rollback_incomplete",
+                                    "blocked",
+                                    "halted"
+                                ]
+                            },
+                            "restoration_summary": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "enum": [
+                                    "all_receipts_compensated_late",
+                                    null
+                                ]
+                            },
+                            "policy_decision": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "enum": [
+                                    "allow",
+                                    "require_approval",
+                                    "block",
+                                    null
+                                ]
+                            },
+                            "policy_reasons": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "rationale": {
+                                "type": "string"
+                            },
+                            "idempotency_key": {
+                                "type": "string"
+                            },
+                            "actions": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ActionReadItem"
+                                }
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "workspace_id",
+                            "platform_ad_account_id",
+                            "status",
+                            "batch_status",
+                            "restoration_summary",
+                            "policy_decision",
+                            "policy_reasons",
+                            "rationale",
+                            "idempotency_key",
+                            "actions"
+                        ]
+                    }
+                },
+                "required": [
+                    "data"
+                ],
+                "title": "ActionBatchRead"
+            },
+            "ActionCurrentDisposition": {
+                "type": "object",
+                "properties": {
+                    "receipt_status": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "pending",
+                            "attempting",
+                            "reconciliation_required",
+                            "committed",
+                            "executed_pending_verification",
+                            "measuring",
+                            "verified",
+                            "compensating",
+                            "compensated",
+                            "compensation_failed",
+                            "irreversible",
+                            "failed",
+                            "reconciliation_exhausted",
+                            null
+                        ]
+                    },
+                    "outcome_status": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "measurable",
+                            "not_measurable",
+                            "unavailable",
+                            null
+                        ]
+                    },
+                    "outcome_reason_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "outcome_checked_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "compensation_reason_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "recovery_disposition": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "no_compensation",
+                            "restored",
+                            "unrestored",
+                            "contradictory",
+                            "irreversible",
+                            "uncertain",
+                            null
+                        ]
+                    },
+                    "late_restored": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "receipt_status",
+                    "outcome_status",
+                    "outcome_reason_code",
+                    "outcome_checked_at",
+                    "compensation_reason_code",
+                    "recovery_disposition",
+                    "late_restored"
+                ],
+                "title": "ActionCurrentDisposition"
+            },
+            "ActionDecisionReceiptRead": {
+                "type": "object",
+                "properties": {
+                    "document": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    },
+                    "document_sha256": {
+                        "type": "string"
+                    },
+                    "chain_entry": {
+                        "type": "object",
+                        "properties": {
+                            "sequence": {
+                                "type": "integer"
+                            },
+                            "hash": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "sequence",
+                            "hash"
+                        ]
+                    },
+                    "disposition": {
+                        "$ref": "#/components/schemas/ActionCurrentDisposition"
+                    }
+                },
+                "required": [
+                    "document",
+                    "document_sha256",
+                    "chain_entry",
+                    "disposition"
+                ],
+                "title": "ActionDecisionReceiptRead"
+            },
+            "ActionDetailRead": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/ActionReadItem"
+                    }
+                },
+                "required": [
+                    "data"
+                ],
+                "title": "ActionDetailRead"
+            },
+            "ActionDryRunRead": {
+                "type": "object",
+                "properties": {
+                    "dry_run": {
+                        "type": "object",
+                        "properties": {
+                            "actions": {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "increase_budget",
+                                                        "decrease_budget",
+                                                        "pause",
+                                                        "resume",
+                                                        "replace_creative",
+                                                        "shift_spend",
+                                                        "rollback",
+                                                        "create_campaign",
+                                                        "create_ad_set",
+                                                        "create_ad",
+                                                        "upload_asset",
+                                                        "adjust_budget",
+                                                        "set_status",
+                                                        "duplicate_ad_with_creative",
+                                                        "duplicate_adset",
+                                                        "duplicate_ad_with_creative_v2"
+                                                    ]
+                                                },
+                                                "target_entity": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "type": {
+                                                            "type": "string"
+                                                        },
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "type",
+                                                        "id"
+                                                    ]
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "evaluated"
+                                                    ]
+                                                },
+                                                "policy_decision": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "allow",
+                                                        "require_approval",
+                                                        "block"
+                                                    ]
+                                                },
+                                                "policy_reasons": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "approval_required": {
+                                                    "type": "boolean"
+                                                },
+                                                "would_auto_execute": {
+                                                    "type": "boolean"
+                                                },
+                                                "diff": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "before": {},
+                                                        "proposed": {}
+                                                    },
+                                                    "required": [
+                                                        "before",
+                                                        "proposed"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "type",
+                                                "target_entity",
+                                                "status",
+                                                "policy_decision",
+                                                "policy_reasons",
+                                                "approval_required",
+                                                "would_auto_execute",
+                                                "diff"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "increase_budget",
+                                                        "decrease_budget",
+                                                        "pause",
+                                                        "resume",
+                                                        "replace_creative",
+                                                        "shift_spend",
+                                                        "rollback",
+                                                        "create_campaign",
+                                                        "create_ad_set",
+                                                        "create_ad",
+                                                        "upload_asset",
+                                                        "adjust_budget",
+                                                        "set_status",
+                                                        "duplicate_ad_with_creative",
+                                                        "duplicate_adset",
+                                                        "duplicate_ad_with_creative_v2"
+                                                    ]
+                                                },
+                                                "target_entity": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "type": {
+                                                            "type": "string"
+                                                        },
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "type",
+                                                        "id"
+                                                    ]
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "dry_run_unavailable"
+                                                    ]
+                                                },
+                                                "reason": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "type",
+                                                "target_entity",
+                                                "status",
+                                                "reason"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "required": [
+                            "actions"
+                        ]
+                    }
+                },
+                "required": [
+                    "dry_run"
+                ],
+                "title": "ActionDryRunRead"
+            },
+            "ActionListRead": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ActionReadItem"
+                        }
+                    },
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "last_page": {
+                                "type": "integer"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "current_page",
+                            "last_page",
+                            "per_page",
+                            "total"
+                        ]
+                    }
+                },
+                "required": [
+                    "data",
+                    "meta"
+                ],
+                "title": "ActionListRead"
+            },
+            "ActionPolicyRead": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "workspace_id": {
+                                "type": "integer"
+                            },
+                            "execution_mode": {
+                                "type": "string",
+                                "enum": [
+                                    "ask",
+                                    "full",
+                                    "suggest_only",
+                                    "auto_with_limits",
+                                    "full_auto"
+                                ]
+                            },
+                            "max_spend_delta_percent": {
+                                "type": "string"
+                            },
+                            "hard_account_daily_cap_minor": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "protected_entities": {
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
+                                "items": {}
+                            },
+                            "quiet_hours_start": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "quiet_hours_end": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "protect_learning_phase": {
+                                "type": "boolean"
+                            },
+                            "outcome_check_after_hours": {
+                                "type": "integer"
+                            },
+                            "anomaly_threshold_percent": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "workspace_id",
+                            "execution_mode",
+                            "max_spend_delta_percent",
+                            "hard_account_daily_cap_minor",
+                            "protected_entities",
+                            "quiet_hours_start",
+                            "quiet_hours_end",
+                            "protect_learning_phase",
+                            "outcome_check_after_hours",
+                            "anomaly_threshold_percent"
+                        ]
+                    }
+                },
+                "required": [
+                    "data"
+                ],
+                "title": "ActionPolicyRead"
+            },
+            "ActionProposalInput": {
+                "properties": {
+                    "actions": {
+                        "minItems": 1,
+                        "maxItems": 25,
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "increase_budget"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "pattern": "^[0-9]+$",
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "new_daily_budget_minor": {
+                                                    "minimum": 1,
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "new_daily_budget_minor"
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "decrease_budget"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "pattern": "^[0-9]+$",
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "new_daily_budget_minor": {
+                                                    "minimum": 1,
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "new_daily_budget_minor"
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "pause"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "pattern": "^[0-9]+$",
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "additionalProperties": false,
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "resume"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "pattern": "^[0-9]+$",
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "additionalProperties": false,
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "replace_creative"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "shift_spend"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "rollback"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "create_campaign"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "create_ad_set"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "create_ad"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "type": "object"
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "upload_asset"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "properties": {
+                                                "staged_asset_id": {
+                                                    "maxLength": 255,
+                                                    "pattern": "^stage_[a-f0-9]{40}$",
+                                                    "type": "string"
+                                                },
+                                                "asset_type": {
+                                                    "enum": [
+                                                        "image"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "filename": {
+                                                    "maxLength": 255,
+                                                    "type": "string"
+                                                },
+                                                "content_sha256": {
+                                                    "pattern": "^[a-f0-9]{64}$",
+                                                    "type": "string"
+                                                },
+                                                "mime_type": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "size_bytes": {
+                                                    "minimum": 1,
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "staged_asset_id",
+                                                "asset_type",
+                                                "filename",
+                                                "content_sha256"
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "adjust_budget"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "properties": {
+                                                "new_daily_budget_minor": {
+                                                    "minimum": 1,
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "new_daily_budget_minor"
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "set_status"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "properties": {
+                                                "status": {
+                                                    "enum": [
+                                                        "active",
+                                                        "paused"
+                                                    ],
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "status"
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "enum": [
+                                                "duplicate_ad_with_creative"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "target_entity": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "type": {
+                                                    "enum": [
+                                                        "ad_account",
+                                                        "campaign",
+                                                        "ad_set",
+                                                        "ad"
+                                                    ],
+                                                    "maxLength": 64,
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "maxLength": 128,
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "maxLength": 255,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "type",
+                                                "id"
+                                            ]
+                                        },
+                                        "params": {
+                                            "properties": {
+                                                "asset_id": {
+                                                    "maxLength": 255,
+                                                    "pattern": "^(image|video):.+$",
+                                                    "type": "string"
+                                                },
+                                                "status": {
+                                                    "enum": [
+                                                        "paused"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "name_suffix": {
+                                                    "maxLength": 100,
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object",
+                                            "required": [
+                                                "asset_id",
+                                                "status"
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                        },
+                                        "idempotency_key": {
+                                            "maxLength": 255,
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale"
+                                    ]
+                                }
+                            ]
+                        },
+                        "type": "array"
+                    },
+                    "rationale": {
+                        "maxLength": 4000,
+                        "type": "string"
+                    },
+                    "idempotency_key": {
+                        "maxLength": 64,
+                        "type": "string"
+                    },
+                    "evidence": {
+                        "minItems": 1,
+                        "maxItems": 3,
+                        "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "source_tool": {
+                                    "enum": [
+                                        "get_account_state",
+                                        "get_signal_health",
+                                        "get_performance",
+                                        "get-creative-library",
+                                        "staged-asset-manifest"
+                                    ],
+                                    "type": "string"
+                                },
+                                "fields_used": {
+                                    "minItems": 1,
+                                    "maxItems": 50,
+                                    "items": {
+                                        "maxLength": 255,
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "action_index": {
+                                    "minimum": 0,
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object",
+                            "required": [
+                                "source_tool",
+                                "fields_used"
+                            ]
+                        },
+                        "type": "array"
+                    },
+                    "target_source": {
+                        "enum": [
+                            "human_supplied"
+                        ],
+                        "type": "string"
+                    },
+                    "account_id": {
+                        "minimum": 1,
+                        "type": "integer"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "actions",
+                    "rationale",
+                    "idempotency_key",
+                    "evidence",
+                    "target_source"
+                ],
+                "title": "ActionProposalInput"
+            },
+            "ActionProposalRead": {
+                "type": "object",
+                "properties": {
+                    "proposal": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "scope": {},
+                            "evidence_provenance": {},
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "pending",
+                                    "approved",
+                                    "approved_without_execution",
+                                    "auto_approved",
+                                    "rejected",
+                                    "executing",
+                                    "executed_pending_verification",
+                                    "compensating",
+                                    "measuring",
+                                    "completed",
+                                    "failed",
+                                    "rolled_back",
+                                    "rollback_incomplete",
+                                    "blocked",
+                                    "halted"
+                                ]
+                            },
+                            "policy_decision": {
+                                "type": "string",
+                                "enum": [
+                                    "allow",
+                                    "require_approval",
+                                    "block"
+                                ]
+                            },
+                            "policy_reasons": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "approval_required": {
+                                "type": "boolean"
+                            },
+                            "inbox_url": {
+                                "type": "string"
+                            },
+                            "approval_queue_url": {
+                                "type": "string"
+                            },
+                            "rationale": {
+                                "type": "string"
+                            },
+                            "proposed_by": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "type",
+                                    "id",
+                                    "name"
+                                ]
+                            },
+                            "actions": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "enum": [
+                                                "increase_budget",
+                                                "decrease_budget",
+                                                "pause",
+                                                "resume",
+                                                "replace_creative",
+                                                "shift_spend",
+                                                "rollback",
+                                                "create_campaign",
+                                                "create_ad_set",
+                                                "create_ad",
+                                                "upload_asset",
+                                                "adjust_budget",
+                                                "set_status",
+                                                "duplicate_ad_with_creative",
+                                                "duplicate_adset",
+                                                "duplicate_ad_with_creative_v2"
+                                            ]
+                                        },
+                                        "target_entity": {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "type",
+                                                "id",
+                                                "name"
+                                            ]
+                                        },
+                                        "params": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "object",
+                                                    "additionalProperties": {}
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {}
+                                                }
+                                            ]
+                                        },
+                                        "rationale": {
+                                            "type": "string"
+                                        },
+                                        "proposed_by": {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "type",
+                                                "id",
+                                                "name"
+                                            ]
+                                        },
+                                        "policy_decision": {
+                                            "type": "string",
+                                            "enum": [
+                                                "allow",
+                                                "require_approval",
+                                                "block"
+                                            ]
+                                        },
+                                        "policy_reasons": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "policy_evidence": {}
+                                    },
+                                    "required": [
+                                        "id",
+                                        "type",
+                                        "target_entity",
+                                        "params",
+                                        "rationale",
+                                        "proposed_by",
+                                        "policy_decision",
+                                        "policy_reasons",
+                                        "policy_evidence"
+                                    ]
+                                }
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "scope",
+                            "evidence_provenance",
+                            "status",
+                            "policy_decision",
+                            "policy_reasons",
+                            "approval_required",
+                            "inbox_url",
+                            "approval_queue_url",
+                            "rationale",
+                            "proposed_by",
+                            "actions"
+                        ]
+                    }
+                },
+                "required": [
+                    "proposal"
+                ],
+                "title": "ActionProposalRead"
+            },
+            "ActionReadItem": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "batch_id": {
+                        "type": "string"
+                    },
+                    "workspace_id": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "increase_budget",
+                            "decrease_budget",
+                            "pause",
+                            "resume",
+                            "replace_creative",
+                            "shift_spend",
+                            "rollback",
+                            "create_campaign",
+                            "create_ad_set",
+                            "create_ad",
+                            "upload_asset",
+                            "adjust_budget",
+                            "set_status",
+                            "duplicate_ad_with_creative",
+                            "duplicate_adset",
+                            "duplicate_ad_with_creative_v2"
+                        ]
+                    },
+                    "target_entity_type": {
+                        "type": "string"
+                    },
+                    "target_entity_id": {
+                        "type": "string"
+                    },
+                    "target_entity_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "params": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "additionalProperties": {}
+                            },
+                            {
+                                "type": "array",
+                                "items": {}
+                            }
+                        ]
+                    },
+                    "rationale": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "approved_without_execution",
+                            "rejected",
+                            "executing",
+                            "executed_pending_verification",
+                            "compensating",
+                            "measuring",
+                            "verified",
+                            "failed",
+                            "execution_uncertain",
+                            "rolled_back",
+                            "blocked"
+                        ]
+                    },
+                    "batch_status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "approved",
+                            "approved_without_execution",
+                            "auto_approved",
+                            "rejected",
+                            "executing",
+                            "executed_pending_verification",
+                            "compensating",
+                            "measuring",
+                            "completed",
+                            "failed",
+                            "rolled_back",
+                            "rollback_incomplete",
+                            "blocked",
+                            "halted"
+                        ]
+                    },
+                    "disposition": {
+                        "$ref": "#/components/schemas/ActionCurrentDisposition"
+                    },
+                    "policy_decision": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "allow",
+                            "require_approval",
+                            "block",
+                            null
+                        ]
+                    },
+                    "policy_reasons": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "id",
+                    "batch_id",
+                    "workspace_id",
+                    "type",
+                    "target_entity_type",
+                    "target_entity_id",
+                    "target_entity_name",
+                    "params",
+                    "rationale",
+                    "status",
+                    "batch_status",
+                    "disposition",
+                    "policy_decision",
+                    "policy_reasons"
+                ],
+                "title": "ActionReadItem"
+            },
             "DeliveryStatus": {
                 "type": "string",
                 "enum": [
@@ -3496,8 +6369,13 @@
                     "id": {
                         "type": "string"
                     },
+                    "workspace_id": {
+                        "type": "integer"
+                    },
                     "signal_tracker_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                        "deprecated": true
                     },
                     "platform_ad_account_id": {
                         "type": [
@@ -3535,6 +6413,7 @@
                 },
                 "required": [
                     "id",
+                    "workspace_id",
                     "signal_tracker_id",
                     "platform_ad_account_id",
                     "type",
@@ -3549,8 +6428,7 @@
             "DestinationCredentialSource": {
                 "type": "string",
                 "enum": [
-                    "oauth_connection",
-                    "managed_token"
+                    "oauth_connection"
                 ],
                 "title": "DestinationCredentialSource"
             },
@@ -3575,8 +6453,13 @@
                     "id": {
                         "type": "integer"
                     },
+                    "workspace_id": {
+                        "type": "integer"
+                    },
                     "signal_tracker_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                        "deprecated": true
                     },
                     "destination_id": {
                         "type": "string"
@@ -3621,6 +6504,7 @@
                 },
                 "required": [
                     "id",
+                    "workspace_id",
                     "signal_tracker_id",
                     "destination_id",
                     "score",
@@ -3649,9 +6533,6 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "string"
-                    },
-                    "signal_tracker_id": {
                         "type": "string"
                     },
                     "parent_event_id": {
@@ -3716,11 +6597,27 @@
                     "traffic_class": {
                         "$ref": "#/components/schemas/TrafficClass"
                     },
+                    "workspace_id": {
+                        "type": "integer"
+                    },
                     "consent": {
                         "type": "string"
                     },
                     "user_data_hashed": {
-                        "type": "string"
+                        "description": "Deprecated compatibility field. The value is always null; delivery identity is never returned.",
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "additionalProperties": {}
+                            },
+                            {
+                                "type": "array",
+                                "items": {}
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
                     },
                     "click_ids": {
                         "type": "string"
@@ -3737,6 +6634,25 @@
                     "payload_expired": {
                         "type": "boolean"
                     },
+                    "consent_source": {
+                        "type": "string",
+                        "enum": [
+                            "explicit",
+                            "tcf",
+                            "consent_mode",
+                            "plainrouter",
+                            "cmp:cookiebot",
+                            "cmp:usercentrics",
+                            "cmp:cookieyes",
+                            "cmp:consentstack",
+                            "cmp:iubenda"
+                        ]
+                    },
+                    "consent_ui_version": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 999999
+                    },
                     "deliveries": {
                         "type": "array",
                         "items": {}
@@ -3744,7 +6660,6 @@
                 },
                 "required": [
                     "id",
-                    "signal_tracker_id",
                     "parent_event_id",
                     "event_name",
                     "event_time",
@@ -3761,6 +6676,7 @@
                     "consent_normalization_version",
                     "policy_class",
                     "traffic_class",
+                    "workspace_id",
                     "consent",
                     "user_data_hashed",
                     "click_ids",
@@ -3771,6 +6687,14 @@
                     "deliveries"
                 ],
                 "title": "Event"
+            },
+            "IngestionWarningCode": {
+                "type": "string",
+                "description": "The closed set of non-rejection warnings returned by authenticated ingestion.\n",
+                "enum": [
+                    "consent_captured_at_invalid"
+                ],
+                "title": "IngestionWarningCode"
             },
             "JurisdictionPolicyClass": {
                 "type": "string",
@@ -3787,8 +6711,13 @@
                     "id": {
                         "type": "integer"
                     },
+                    "workspace_id": {
+                        "type": "integer"
+                    },
                     "signal_tracker_id": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Deprecated alias of workspace_id; contains the workspace ID in decimal string form.",
+                        "deprecated": true
                     },
                     "destination_id": {
                         "type": "string"
@@ -3838,11 +6767,13 @@
                         "type": [
                             "integer",
                             "null"
-                        ]
+                        ],
+                        "description": "Meta outbound clicks. Days before 2026-06-29, or not re-read by the daily sync since 2026-09-27, may still hold Meta link clicks or all clicks."
                     }
                 },
                 "required": [
                     "id",
+                    "workspace_id",
                     "signal_tracker_id",
                     "destination_id",
                     "report_date",
@@ -3891,6 +6822,5 @@
                 "title": "ValidationError"
             }
         }
-    },
-    "x-signed": true
+    }
 }

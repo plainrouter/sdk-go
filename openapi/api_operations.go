@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -38,9 +38,9 @@ func (r ApiDeleteUserDataRequest) Execute() (*DeleteUserData200Response, *http.R
 }
 
 /*
-DeleteUserData Delete user data by hashed identifier
+DeleteUserData Delete user data by verified identifier
 
-Idempotently removes retained user data matching one caller-supplied SHA-256 identifier digest.
+Idempotently removes retained user data using a verified raw identifier or legacy SHA-256 digest, scoped and keyed to the authenticated workspace.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiDeleteUserDataRequest
@@ -166,7 +166,7 @@ func (r ApiGetEmqReportRequest) Execute() (*GetEmqReport200Response, *http.Respo
 /*
 GetEmqReport Get Event Match Quality history
 
-Returns recent Meta Event Match Quality snapshots for the authenticated Signal tracker.
+Returns recent Meta Event Match Quality snapshots for the authenticated Signals workspace so callers can inspect measured quality changes over time.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetEmqReportRequest
@@ -282,7 +282,7 @@ func (r ApiGetReconciliationReportRequest) Execute() (*GetReconciliationReport20
 /*
 GetReconciliationReport Get a reconciliation report
 
-Returns stored delivery-versus-platform reconciliation results for one calendar date.
+Returns stored delivery-versus-platform reconciliation results for one date. Dates before the workspace read bound return 422.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetReconciliationReportRequest
@@ -414,7 +414,7 @@ func (r ApiListEventsRequest) Execute() (*ListEvents200Response, *http.Response,
 /*
 ListEvents List recent events
 
-Returns retained customer-readable events and aggregate destination-delivery acceptance metrics.
+Returns retained customer-readable events with stable pagination and aggregate destination-delivery acceptance metrics for the workspace.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiListEventsRequest
@@ -671,7 +671,7 @@ func (r ApiReplayDeliveriesRequest) Execute() (*ReplayDeliveries202Response, *ht
 /*
 ReplayDeliveries Replay eligible deliveries
 
-Evaluates retained failed deliveries and queues the eligible subset for another delivery attempt.
+Evaluates retained failed deliveries, queues the eligible subset for another delivery attempt, and reports which records were accepted or rejected.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiReplayDeliveriesRequest
@@ -956,7 +956,7 @@ func (r ApiSetDestinationTestModeRequest) Execute() (*SetDestinationTestMode200R
 /*
 SetDestinationTestMode Configure destination test mode
 
-Enables or disables Meta Test Events mode for a destination owned by the authenticated Signal tracker.
+Enables or disables Meta Test Events mode for a destination owned by the authenticated Signals workspace.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param destination The destination ID

@@ -4,18 +4,19 @@ All URIs are relative to *https://plainrouter.com/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateSandboxKey**](SandboxAPI.md#CreateSandboxKey) | **Post** /sandbox/keys | Create a sandbox API key
+[**CreateSandboxKey**](SandboxAPI.md#CreateSandboxKey) | **Post** /sandbox/keys | Create a Sandbox key
 [**GetSandbox**](SandboxAPI.md#GetSandbox) | **Get** /sandbox | Discover the zero-auth sandbox
+[**GetSandboxKey**](SandboxAPI.md#GetSandboxKey) | **Get** /sandbox/keys | Get a Sandbox key
 [**ValidateSandboxEvent**](SandboxAPI.md#ValidateSandboxEvent) | **Post** /sandbox/events | Validate a synthetic event
-[**ValidateSandboxEventWithKey**](SandboxAPI.md#ValidateSandboxEventWithKey) | **Post** /sandbox/keyed-events | Validate a synthetic event with a sandbox key
+[**ValidateSandboxEventWithKey**](SandboxAPI.md#ValidateSandboxEventWithKey) | **Post** /sandbox/keyed-events | Validate a synthetic event with a Sandbox key
 
 
 
 ## CreateSandboxKey
 
-> CreateSandboxKey201Response CreateSandboxKey(ctx).Execute()
+> GetSandbox200ResponseSelfServeKeyIssuedKey CreateSandboxKey(ctx).Execute()
 
-Create a sandbox API key
+Create a Sandbox key
 
 
 
@@ -40,7 +41,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `SandboxAPI.CreateSandboxKey``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateSandboxKey`: CreateSandboxKey201Response
+	// response from `CreateSandboxKey`: GetSandbox200ResponseSelfServeKeyIssuedKey
 	fmt.Fprintf(os.Stdout, "Response from `SandboxAPI.CreateSandboxKey`: %v\n", resp)
 }
 ```
@@ -56,7 +57,7 @@ Other parameters are passed through a pointer to a apiCreateSandboxKeyRequest st
 
 ### Return type
 
-[**CreateSandboxKey201Response**](CreateSandboxKey201Response.md)
+[**GetSandbox200ResponseSelfServeKeyIssuedKey**](GetSandbox200ResponseSelfServeKeyIssuedKey.md)
 
 ### Authorization
 
@@ -118,6 +119,67 @@ Other parameters are passed through a pointer to a apiGetSandboxRequest struct v
 ### Return type
 
 [**GetSandbox200Response**](GetSandbox200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetSandboxKey
+
+> GetSandbox200ResponseSelfServeKeyIssuedKey GetSandboxKey(ctx).Execute()
+
+Get a Sandbox key
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/plainrouter/sdk-go/openapi"
+)
+
+func main() {
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.SandboxAPI.GetSandboxKey(context.Background()).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `SandboxAPI.GetSandboxKey``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetSandboxKey`: GetSandbox200ResponseSelfServeKeyIssuedKey
+	fmt.Fprintf(os.Stdout, "Response from `SandboxAPI.GetSandboxKey`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetSandboxKeyRequest struct via the builder pattern
+
+
+### Return type
+
+[**GetSandbox200ResponseSelfServeKeyIssuedKey**](GetSandbox200ResponseSelfServeKeyIssuedKey.md)
 
 ### Authorization
 
@@ -203,7 +265,7 @@ No authorization required
 
 > ValidateSandboxEvent200Response ValidateSandboxEventWithKey(ctx).ValidateSandboxEventRequest(validateSandboxEventRequest).Execute()
 
-Validate a synthetic event with a sandbox key
+Validate a synthetic event with a Sandbox key
 
 
 

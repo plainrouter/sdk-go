@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
-**SignalTrackerId** | **string** |  | 
+**WorkspaceId** | **int32** |  | 
+**SignalTrackerId** | **string** | Deprecated alias of workspace_id; contains the workspace ID in decimal string form. | 
 **ParentEventId** | **NullableString** |  | 
 **EventName** | **string** |  | 
 **EventTime** | **string** |  | 
@@ -21,7 +22,7 @@ Name | Type | Description | Notes
 **EnforcementScope** | **string** |  | 
 **ConsentNormalizationVersion** | **string** |  | 
 **Consent** | **interface{}** |  | 
-**UserDataHashed** | **interface{}** |  | 
+**UserDataHashed** | **interface{}** | Deprecated compatibility field. The value is always null; delivery identity is never returned. | 
 **ClickIds** | **interface{}** |  | 
 **Session** | **interface{}** |  | 
 **ValueData** | **interface{}** |  | 
@@ -33,7 +34,7 @@ Name | Type | Description | Notes
 
 ### NewGetEvent200ResponseEvent
 
-`func NewGetEvent200ResponseEvent(id string, signalTrackerId string, parentEventId NullableString, eventName string, eventTime string, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt string, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, consent interface{}, userDataHashed interface{}, clickIds interface{}, session interface{}, valueData interface{}, eventSource NullableString, payloadExpired bool, deliveries []GetEvent200ResponseEventDeliveriesInner, ) *GetEvent200ResponseEvent`
+`func NewGetEvent200ResponseEvent(id string, workspaceId int32, signalTrackerId string, parentEventId NullableString, eventName string, eventTime string, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt string, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, consent interface{}, userDataHashed interface{}, clickIds interface{}, session interface{}, valueData interface{}, eventSource NullableString, payloadExpired bool, deliveries []GetEvent200ResponseEventDeliveriesInner, ) *GetEvent200ResponseEvent`
 
 NewGetEvent200ResponseEvent instantiates a new GetEvent200ResponseEvent object
 This constructor will assign default values to properties that have it defined,
@@ -66,6 +67,26 @@ and a boolean to check if the value has been set.
 `func (o *GetEvent200ResponseEvent) SetId(v string)`
 
 SetId sets Id field to given value.
+
+
+### GetWorkspaceId
+
+`func (o *GetEvent200ResponseEvent) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *GetEvent200ResponseEvent) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *GetEvent200ResponseEvent) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
 
 
 ### GetSignalTrackerId

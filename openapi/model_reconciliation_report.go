@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -21,19 +21,23 @@ var _ MappedNullable = &ReconciliationReport{}
 
 // ReconciliationReport struct for ReconciliationReport
 type ReconciliationReport struct {
-	Id                   int32         `json:"id"`
-	SignalTrackerId      string        `json:"signal_tracker_id"`
-	DestinationId        string        `json:"destination_id"`
-	ReportDate           time.Time     `json:"report_date"`
-	AcceptedCount        int32         `json:"accepted_count"`
-	MetaCount            int32         `json:"meta_count"`
-	ObservedGap          int32         `json:"observed_gap"`
-	EventCounts          []interface{} `json:"event_counts"`
-	Buckets              []interface{} `json:"buckets"`
-	UnexplainedResidual  int32         `json:"unexplained_residual"`
-	Status               string        `json:"status"`
-	CreatedAt            NullableTime  `json:"created_at"`
-	UpdatedAt            NullableTime  `json:"updated_at"`
+	Id          int32 `json:"id"`
+	WorkspaceId int32 `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
+	SignalTrackerId     string        `json:"signal_tracker_id"`
+	DestinationId       string        `json:"destination_id"`
+	ReportDate          time.Time     `json:"report_date"`
+	AcceptedCount       int32         `json:"accepted_count"`
+	MetaCount           int32         `json:"meta_count"`
+	ObservedGap         int32         `json:"observed_gap"`
+	EventCounts         []interface{} `json:"event_counts"`
+	Buckets             []interface{} `json:"buckets"`
+	UnexplainedResidual int32         `json:"unexplained_residual"`
+	Status              string        `json:"status"`
+	CreatedAt           NullableTime  `json:"created_at"`
+	UpdatedAt           NullableTime  `json:"updated_at"`
+	// Meta outbound clicks. Days before 2026-06-29, or not re-read by the daily sync since 2026-09-27, may still hold Meta link clicks or all clicks.
 	ClaimedClicks        NullableInt32 `json:"claimed_clicks"`
 	AdditionalProperties map[string]interface{}
 }
@@ -44,9 +48,10 @@ type _ReconciliationReport ReconciliationReport
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewReconciliationReport(id int32, signalTrackerId string, destinationId string, reportDate time.Time, acceptedCount int32, metaCount int32, observedGap int32, eventCounts []interface{}, buckets []interface{}, unexplainedResidual int32, status string, createdAt NullableTime, updatedAt NullableTime, claimedClicks NullableInt32) *ReconciliationReport {
+func NewReconciliationReport(id int32, workspaceId int32, signalTrackerId string, destinationId string, reportDate time.Time, acceptedCount int32, metaCount int32, observedGap int32, eventCounts []interface{}, buckets []interface{}, unexplainedResidual int32, status string, createdAt NullableTime, updatedAt NullableTime, claimedClicks NullableInt32) *ReconciliationReport {
 	this := ReconciliationReport{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.DestinationId = destinationId
 	this.ReportDate = reportDate
@@ -95,7 +100,32 @@ func (o *ReconciliationReport) SetId(v int32) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *ReconciliationReport) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *ReconciliationReport) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *ReconciliationReport) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *ReconciliationReport) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -107,6 +137,7 @@ func (o *ReconciliationReport) GetSignalTrackerId() string {
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *ReconciliationReport) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -115,6 +146,7 @@ func (o *ReconciliationReport) GetSignalTrackerIdOk() (*string, bool) {
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *ReconciliationReport) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -424,6 +456,7 @@ func (o ReconciliationReport) MarshalJSON() ([]byte, error) {
 func (o ReconciliationReport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["destination_id"] = o.DestinationId
 	toSerialize["report_date"] = o.ReportDate
@@ -451,6 +484,7 @@ func (o *ReconciliationReport) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"destination_id",
 		"report_date",
@@ -494,6 +528,7 @@ func (o *ReconciliationReport) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "destination_id")
 		delete(additionalProperties, "report_date")
