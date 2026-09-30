@@ -1,6 +1,6 @@
-# PlainRouter Go SDK
+# Plainrouter Go SDK
 
-The official Go SDK for the [PlainRouter](https://plainrouter.com) Signals Conversion API. The root package provides a compact, idiomatic entry point; the complete generated contract is available from [`github.com/plainrouter/sdk-go/openapi`](https://pkg.go.dev/github.com/plainrouter/sdk-go/openapi).
+The official Go SDK for the [Plainrouter](https://plainrouter.com) Signals Conversion API. The root package provides a compact, idiomatic entry point; the complete generated contract is available from [`github.com/plainrouter/sdk-go/openapi`](https://pkg.go.dev/github.com/plainrouter/sdk-go/openapi).
 
 ## Install
 
@@ -10,7 +10,7 @@ go get github.com/plainrouter/sdk-go@latest
 
 ## Authenticate
 
-Create one client with your PlainRouter bearer token:
+Create one client with your Plainrouter bearer token:
 
 ```go
 package main
