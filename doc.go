@@ -1,9 +1,9 @@
-// Package plainrouter provides the official Go client for the PlainRouter
+// Package plainrouter provides the official Go client for the Plainrouter
 // Signals Conversion API.
 //
 // # Getting started
 //
-// Create one Client and reuse it. New targets the production PlainRouter API
+// Create one Client and reuse it. New targets the production Plainrouter API
 // by default and applies the bearer token to every request:
 //
 //	client := plainrouter.New(os.Getenv("PLAINROUTER_TOKEN"))
@@ -28,8 +28,8 @@
 // The complete generated contract is available from the
 // [github.com/plainrouter/sdk-go/openapi] subpackage and through Client.OpenAPI.
 //
-// See the [PlainRouter documentation] for authentication, consent-aware event
+// See the [Plainrouter documentation] for authentication, consent-aware event
 // shapes, sandbox usage, and operational guidance.
 //
-// [PlainRouter documentation]: https://plainrouter.com/docs
+// [Plainrouter documentation]: https://plainrouter.com/docs
 package plainrouter

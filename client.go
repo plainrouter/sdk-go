@@ -7,7 +7,7 @@ import (
 	"github.com/plainrouter/sdk-go/openapi"
 )
 
-// Client is the curated entry point for the PlainRouter API.
+// Client is the curated entry point for the Plainrouter API.
 //
 // Events, Operations, and Sandbox expose the generated service groups without
 // placing every generated model and accessor in the root package index.
@@ -28,7 +28,7 @@ type Option func(*openapi.Configuration)
 // every request automatically.
 var ContextAccessToken = openapi.ContextAccessToken
 
-// New creates a PlainRouter client. Pass an empty token for the zero-auth
+// New creates a Plainrouter client. Pass an empty token for the zero-auth
 // synthetic sandbox operations.
 func New(token string, options ...Option) *Client {
 	configuration := openapi.NewConfiguration()
@@ -69,7 +69,7 @@ func (client *Client) OpenAPI() *openapi.APIClient {
 	return client.openapi
 }
 
-// WithBaseURL overrides the default PlainRouter API base URL. It is intended
+// WithBaseURL overrides the default Plainrouter API base URL. It is intended
 // for tests, proxies, and self-hosted compatible endpoints.
 func WithBaseURL(baseURL string) Option {
 	return func(configuration *openapi.Configuration) {

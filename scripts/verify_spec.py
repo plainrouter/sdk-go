@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the vendored PlainRouter contract against its provenance record."""
+"""Verify the vendored Plainrouter contract against its provenance record."""
 
 from __future__ import annotations
 
