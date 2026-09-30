@@ -5,8 +5,6 @@
 
 * `OAUTH_CONNECTION` (value: `"oauth_connection"`)
 
-* `MANAGED_TOKEN` (value: `"managed_token"`)
-
 * `UNKNOWN_DEFAULT_OPEN_API` (value: `"unknown_default_open_api"`)
 
 

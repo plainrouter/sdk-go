@@ -8,12 +8,13 @@ Name | Type | Description | Notes
 **Url** | **string** |  | 
 **AuthenticationRequired** | **bool** |  | 
 **Description** | **string** |  | 
+**IssuedKey** | [**GetSandbox200ResponseSelfServeKeyIssuedKey**](GetSandbox200ResponseSelfServeKeyIssuedKey.md) |  | 
 
 ## Methods
 
 ### NewGetSandbox200ResponseSelfServeKey
 
-`func NewGetSandbox200ResponseSelfServeKey(method string, url string, authenticationRequired bool, description string, ) *GetSandbox200ResponseSelfServeKey`
+`func NewGetSandbox200ResponseSelfServeKey(method string, url string, authenticationRequired bool, description string, issuedKey GetSandbox200ResponseSelfServeKeyIssuedKey, ) *GetSandbox200ResponseSelfServeKey`
 
 NewGetSandbox200ResponseSelfServeKey instantiates a new GetSandbox200ResponseSelfServeKey object
 This constructor will assign default values to properties that have it defined,
@@ -106,6 +107,26 @@ and a boolean to check if the value has been set.
 `func (o *GetSandbox200ResponseSelfServeKey) SetDescription(v string)`
 
 SetDescription sets Description field to given value.
+
+
+### GetIssuedKey
+
+`func (o *GetSandbox200ResponseSelfServeKey) GetIssuedKey() GetSandbox200ResponseSelfServeKeyIssuedKey`
+
+GetIssuedKey returns the IssuedKey field if non-nil, zero value otherwise.
+
+### GetIssuedKeyOk
+
+`func (o *GetSandbox200ResponseSelfServeKey) GetIssuedKeyOk() (*GetSandbox200ResponseSelfServeKeyIssuedKey, bool)`
+
+GetIssuedKeyOk returns a tuple with the IssuedKey field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIssuedKey
+
+`func (o *GetSandbox200ResponseSelfServeKey) SetIssuedKey(v GetSandbox200ResponseSelfServeKeyIssuedKey)`
+
+SetIssuedKey sets IssuedKey field to given value.
 
 
 

@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -26,14 +26,14 @@ type ApiCreateSandboxKeyRequest struct {
 	ApiService *SandboxAPIService
 }
 
-func (r ApiCreateSandboxKeyRequest) Execute() (*CreateSandboxKey201Response, *http.Response, error) {
+func (r ApiCreateSandboxKeyRequest) Execute() (*GetSandbox200ResponseSelfServeKeyIssuedKey, *http.Response, error) {
 	return r.ApiService.CreateSandboxKeyExecute(r)
 }
 
 /*
-CreateSandboxKey Create a sandbox API key
+CreateSandboxKey Create a Sandbox key
 
-Issues a short-lived sandbox-only bearer key without an account, human approval, or production access.
+Issues a short-lived Sandbox key without an account, human approval, or production access. It is valid for synthetic events only.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiCreateSandboxKeyRequest
@@ -47,13 +47,13 @@ func (a *SandboxAPIService) CreateSandboxKey(ctx context.Context) ApiCreateSandb
 
 // Execute executes the request
 //
-//	@return CreateSandboxKey201Response
-func (a *SandboxAPIService) CreateSandboxKeyExecute(r ApiCreateSandboxKeyRequest) (*CreateSandboxKey201Response, *http.Response, error) {
+//	@return GetSandbox200ResponseSelfServeKeyIssuedKey
+func (a *SandboxAPIService) CreateSandboxKeyExecute(r ApiCreateSandboxKeyRequest) (*GetSandbox200ResponseSelfServeKeyIssuedKey, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *CreateSandboxKey201Response
+		localVarReturnValue *GetSandbox200ResponseSelfServeKeyIssuedKey
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SandboxAPIService.CreateSandboxKey")
@@ -133,7 +133,7 @@ func (r ApiGetSandboxRequest) Execute() (*GetSandbox200Response, *http.Response,
 /*
 GetSandbox Discover the zero-auth sandbox
 
-Returns a ready-to-run synthetic event example. The sandbox requires no account or API key and cannot read production data, persist events, or contact an advertising provider.
+Returns a ready-to-run synthetic event example that needs no account or key and cannot persist data or contact an advertising provider.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetSandboxRequest
@@ -221,6 +221,106 @@ func (a *SandboxAPIService) GetSandboxExecute(r ApiGetSandboxRequest) (*GetSandb
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetSandboxKeyRequest struct {
+	ctx        context.Context
+	ApiService *SandboxAPIService
+}
+
+func (r ApiGetSandboxKeyRequest) Execute() (*GetSandbox200ResponseSelfServeKeyIssuedKey, *http.Response, error) {
+	return r.ApiService.GetSandboxKeyExecute(r)
+}
+
+/*
+GetSandboxKey Get a Sandbox key
+
+Returns a short-lived Sandbox key over GET so a read-only agent can obtain working credentials without issuing a write request.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGetSandboxKeyRequest
+*/
+func (a *SandboxAPIService) GetSandboxKey(ctx context.Context) ApiGetSandboxKeyRequest {
+	return ApiGetSandboxKeyRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+// Execute executes the request
+//
+//	@return GetSandbox200ResponseSelfServeKeyIssuedKey
+func (a *SandboxAPIService) GetSandboxKeyExecute(r ApiGetSandboxKeyRequest) (*GetSandbox200ResponseSelfServeKeyIssuedKey, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetSandbox200ResponseSelfServeKeyIssuedKey
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SandboxAPIService.GetSandboxKey")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/sandbox/keys"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiValidateSandboxEventRequest struct {
 	ctx                         context.Context
 	ApiService                  *SandboxAPIService
@@ -239,7 +339,7 @@ func (r ApiValidateSandboxEventRequest) Execute() (*ValidateSandboxEvent200Respo
 /*
 ValidateSandboxEvent Validate a synthetic event
 
-Validates and immediately discards one identity-free synthetic event. It requires no account or API key and never writes to the ledger or contacts Meta.
+Validates and immediately discards one identity-free synthetic event. It requires no account or key and never writes to the ledger or contacts Meta.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiValidateSandboxEventRequest
@@ -358,9 +458,9 @@ func (r ApiValidateSandboxEventWithKeyRequest) Execute() (*ValidateSandboxEvent2
 }
 
 /*
-ValidateSandboxEventWithKey Validate a synthetic event with a sandbox key
+ValidateSandboxEventWithKey Validate a synthetic event with a Sandbox key
 
-Validates a synthetic event using the short-lived key returned by the self-serve sandbox key endpoint. It never persists data or contacts an advertising provider.
+Validates a synthetic event with a short-lived Sandbox key, then discards it without persisting data or contacting an advertising provider.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiValidateSandboxEventWithKeyRequest

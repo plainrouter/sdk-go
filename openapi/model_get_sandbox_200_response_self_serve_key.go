@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,10 +20,11 @@ var _ MappedNullable = &GetSandbox200ResponseSelfServeKey{}
 
 // GetSandbox200ResponseSelfServeKey struct for GetSandbox200ResponseSelfServeKey
 type GetSandbox200ResponseSelfServeKey struct {
-	Method                 string `json:"method"`
-	Url                    string `json:"url"`
-	AuthenticationRequired bool   `json:"authentication_required"`
-	Description            string `json:"description"`
+	Method                 string                                     `json:"method"`
+	Url                    string                                     `json:"url"`
+	AuthenticationRequired bool                                       `json:"authentication_required"`
+	Description            string                                     `json:"description"`
+	IssuedKey              GetSandbox200ResponseSelfServeKeyIssuedKey `json:"issued_key"`
 	AdditionalProperties   map[string]interface{}
 }
 
@@ -33,12 +34,13 @@ type _GetSandbox200ResponseSelfServeKey GetSandbox200ResponseSelfServeKey
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetSandbox200ResponseSelfServeKey(method string, url string, authenticationRequired bool, description string) *GetSandbox200ResponseSelfServeKey {
+func NewGetSandbox200ResponseSelfServeKey(method string, url string, authenticationRequired bool, description string, issuedKey GetSandbox200ResponseSelfServeKeyIssuedKey) *GetSandbox200ResponseSelfServeKey {
 	this := GetSandbox200ResponseSelfServeKey{}
 	this.Method = method
 	this.Url = url
 	this.AuthenticationRequired = authenticationRequired
 	this.Description = description
+	this.IssuedKey = issuedKey
 	return &this
 }
 
@@ -146,6 +148,30 @@ func (o *GetSandbox200ResponseSelfServeKey) SetDescription(v string) {
 	o.Description = v
 }
 
+// GetIssuedKey returns the IssuedKey field value
+func (o *GetSandbox200ResponseSelfServeKey) GetIssuedKey() GetSandbox200ResponseSelfServeKeyIssuedKey {
+	if o == nil {
+		var ret GetSandbox200ResponseSelfServeKeyIssuedKey
+		return ret
+	}
+
+	return o.IssuedKey
+}
+
+// GetIssuedKeyOk returns a tuple with the IssuedKey field value
+// and a boolean to check if the value has been set.
+func (o *GetSandbox200ResponseSelfServeKey) GetIssuedKeyOk() (*GetSandbox200ResponseSelfServeKeyIssuedKey, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IssuedKey, true
+}
+
+// SetIssuedKey sets field value
+func (o *GetSandbox200ResponseSelfServeKey) SetIssuedKey(v GetSandbox200ResponseSelfServeKeyIssuedKey) {
+	o.IssuedKey = v
+}
+
 func (o GetSandbox200ResponseSelfServeKey) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -160,6 +186,7 @@ func (o GetSandbox200ResponseSelfServeKey) ToMap() (map[string]interface{}, erro
 	toSerialize["url"] = o.Url
 	toSerialize["authentication_required"] = o.AuthenticationRequired
 	toSerialize["description"] = o.Description
+	toSerialize["issued_key"] = o.IssuedKey
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -177,6 +204,7 @@ func (o *GetSandbox200ResponseSelfServeKey) UnmarshalJSON(data []byte) (err erro
 		"url",
 		"authentication_required",
 		"description",
+		"issued_key",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -210,6 +238,7 @@ func (o *GetSandbox200ResponseSelfServeKey) UnmarshalJSON(data []byte) (err erro
 		delete(additionalProperties, "url")
 		delete(additionalProperties, "authentication_required")
 		delete(additionalProperties, "description")
+		delete(additionalProperties, "issued_key")
 		o.AdditionalProperties = additionalProperties
 	}
 

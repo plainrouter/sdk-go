@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,7 +20,10 @@ var _ MappedNullable = &GetEvent200ResponseLineageChildrenInner{}
 
 // GetEvent200ResponseLineageChildrenInner struct for GetEvent200ResponseLineageChildrenInner
 type GetEvent200ResponseLineageChildrenInner struct {
-	Id                          string         `json:"id"`
+	Id          string `json:"id"`
+	WorkspaceId int32  `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
 	SignalTrackerId             string         `json:"signal_tracker_id"`
 	ParentEventId               NullableString `json:"parent_event_id"`
 	EventName                   string         `json:"event_name"`
@@ -37,13 +40,14 @@ type GetEvent200ResponseLineageChildrenInner struct {
 	EnforcementScope            string         `json:"enforcement_scope"`
 	ConsentNormalizationVersion string         `json:"consent_normalization_version"`
 	Consent                     interface{}    `json:"consent"`
-	UserDataHashed              interface{}    `json:"user_data_hashed"`
-	ClickIds                    interface{}    `json:"click_ids"`
-	Session                     interface{}    `json:"session"`
-	ValueData                   interface{}    `json:"value_data"`
-	EventSource                 NullableString `json:"event_source"`
-	PayloadExpired              bool           `json:"payload_expired"`
-	AdditionalProperties        map[string]interface{}
+	// Deprecated compatibility field. The value is always null; delivery identity is never returned.
+	UserDataHashed       interface{}    `json:"user_data_hashed"`
+	ClickIds             interface{}    `json:"click_ids"`
+	Session              interface{}    `json:"session"`
+	ValueData            interface{}    `json:"value_data"`
+	EventSource          NullableString `json:"event_source"`
+	PayloadExpired       bool           `json:"payload_expired"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GetEvent200ResponseLineageChildrenInner GetEvent200ResponseLineageChildrenInner
@@ -52,9 +56,10 @@ type _GetEvent200ResponseLineageChildrenInner GetEvent200ResponseLineageChildren
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetEvent200ResponseLineageChildrenInner(id string, signalTrackerId string, parentEventId NullableString, eventName string, eventTime string, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt string, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, consent interface{}, userDataHashed interface{}, clickIds interface{}, session interface{}, valueData interface{}, eventSource NullableString, payloadExpired bool) *GetEvent200ResponseLineageChildrenInner {
+func NewGetEvent200ResponseLineageChildrenInner(id string, workspaceId int32, signalTrackerId string, parentEventId NullableString, eventName string, eventTime string, actionSource string, eventClass string, orderId NullableString, valueAmount NullableInt32, valueCurrency NullableString, createdAt string, consentBasis string, measurementClass string, attributionJoin string, enforcementScope string, consentNormalizationVersion string, consent interface{}, userDataHashed interface{}, clickIds interface{}, session interface{}, valueData interface{}, eventSource NullableString, payloadExpired bool) *GetEvent200ResponseLineageChildrenInner {
 	this := GetEvent200ResponseLineageChildrenInner{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.ParentEventId = parentEventId
 	this.EventName = eventName
@@ -112,7 +117,32 @@ func (o *GetEvent200ResponseLineageChildrenInner) SetId(v string) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *GetEvent200ResponseLineageChildrenInner) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *GetEvent200ResponseLineageChildrenInner) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *GetEvent200ResponseLineageChildrenInner) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *GetEvent200ResponseLineageChildrenInner) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -124,6 +154,7 @@ func (o *GetEvent200ResponseLineageChildrenInner) GetSignalTrackerId() string {
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *GetEvent200ResponseLineageChildrenInner) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -132,6 +163,7 @@ func (o *GetEvent200ResponseLineageChildrenInner) GetSignalTrackerIdOk() (*strin
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *GetEvent200ResponseLineageChildrenInner) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -671,6 +703,7 @@ func (o GetEvent200ResponseLineageChildrenInner) MarshalJSON() ([]byte, error) {
 func (o GetEvent200ResponseLineageChildrenInner) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["parent_event_id"] = o.ParentEventId.Get()
 	toSerialize["event_name"] = o.EventName
@@ -717,6 +750,7 @@ func (o *GetEvent200ResponseLineageChildrenInner) UnmarshalJSON(data []byte) (er
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"parent_event_id",
 		"event_name",
@@ -769,6 +803,7 @@ func (o *GetEvent200ResponseLineageChildrenInner) UnmarshalJSON(data []byte) (er
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "parent_event_id")
 		delete(additionalProperties, "event_name")

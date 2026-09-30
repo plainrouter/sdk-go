@@ -5,13 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **IdentifierType** | **string** |  | 
-**IdentifierHash** | **string** |  | 
+**IdentifierHash** | Pointer to **string** |  | [optional] 
+**Identifier** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
 ### NewDeleteUserDataRequest
 
-`func NewDeleteUserDataRequest(identifierType string, identifierHash string, ) *DeleteUserDataRequest`
+`func NewDeleteUserDataRequest(identifierType string, ) *DeleteUserDataRequest`
 
 NewDeleteUserDataRequest instantiates a new DeleteUserDataRequest object
 This constructor will assign default values to properties that have it defined,
@@ -65,6 +66,36 @@ and a boolean to check if the value has been set.
 
 SetIdentifierHash sets IdentifierHash field to given value.
 
+### HasIdentifierHash
+
+`func (o *DeleteUserDataRequest) HasIdentifierHash() bool`
+
+HasIdentifierHash returns a boolean if a field has been set.
+
+### GetIdentifier
+
+`func (o *DeleteUserDataRequest) GetIdentifier() string`
+
+GetIdentifier returns the Identifier field if non-nil, zero value otherwise.
+
+### GetIdentifierOk
+
+`func (o *DeleteUserDataRequest) GetIdentifierOk() (*string, bool)`
+
+GetIdentifierOk returns a tuple with the Identifier field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIdentifier
+
+`func (o *DeleteUserDataRequest) SetIdentifier(v string)`
+
+SetIdentifier sets Identifier field to given value.
+
+### HasIdentifier
+
+`func (o *DeleteUserDataRequest) HasIdentifier() bool`
+
+HasIdentifier returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

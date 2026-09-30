@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -21,7 +21,10 @@ var _ MappedNullable = &Destination{}
 
 // Destination struct for Destination
 type Destination struct {
-	Id                   string                      `json:"id"`
+	Id          string `json:"id"`
+	WorkspaceId int32  `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
 	SignalTrackerId      string                      `json:"signal_tracker_id"`
 	PlatformAdAccountId  NullableInt32               `json:"platform_ad_account_id"`
 	Type                 DestinationType             `json:"type"`
@@ -39,9 +42,10 @@ type _Destination Destination
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDestination(id string, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config []interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime) *Destination {
+func NewDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config []interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime) *Destination {
 	this := Destination{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.PlatformAdAccountId = platformAdAccountId
 	this.Type = type_
@@ -85,7 +89,32 @@ func (o *Destination) SetId(v string) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *Destination) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *Destination) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *Destination) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *Destination) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -97,6 +126,7 @@ func (o *Destination) GetSignalTrackerId() string {
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *Destination) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -105,6 +135,7 @@ func (o *Destination) GetSignalTrackerIdOk() (*string, bool) {
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *Destination) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -294,6 +325,7 @@ func (o Destination) MarshalJSON() ([]byte, error) {
 func (o Destination) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["platform_ad_account_id"] = o.PlatformAdAccountId.Get()
 	toSerialize["type"] = o.Type
@@ -316,6 +348,7 @@ func (o *Destination) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"platform_ad_account_id",
 		"type",
@@ -354,6 +387,7 @@ func (o *Destination) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "platform_ad_account_id")
 		delete(additionalProperties, "type")

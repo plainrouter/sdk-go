@@ -2,9 +2,10 @@
 """Normalize free-form JSON unions for OpenAPI Generator's Go client.
 
 OpenAPI Generator 7.25.0 emits invalid Go identifiers for OAS 3.1 schemas whose
-value may be an object, an array, or null. Those fields intentionally represent
-arbitrary provider JSON. Replacing only that exact union with an unconstrained
-schema makes the generated type `interface{}` without narrowing accepted input.
+value may be an object, an array, or null, and for free-form object-or-array
+unions. Those fields intentionally represent arbitrary JSON. Replacing only those
+exact unions with an unconstrained schema makes the generated type `interface{}`
+without narrowing accepted input.
 The signed source contract remains byte-for-byte unchanged in spec/openapi.json.
 """
 
@@ -14,6 +15,21 @@ import argparse
 import json
 from pathlib import Path
 from typing import Any
+
+
+def is_free_form_container(variants: list[Any]) -> bool:
+    """An object with arbitrary members or an array with arbitrary items."""
+    if len(variants) != 2 or not all(isinstance(variant, dict) for variant in variants):
+        return False
+    by_type = {variant.get("type"): variant for variant in variants}
+    if set(by_type) != {"object", "array"}:
+        return False
+    return (
+        by_type["object"].get("additionalProperties") in ({}, True)
+        and set(by_type["object"]) <= {"type", "additionalProperties"}
+        and by_type["array"].get("items", {}) == {}
+        and set(by_type["array"]) <= {"type", "items"}
+    )
 
 
 def normalize(value: Any) -> int:
@@ -26,7 +42,7 @@ def normalize(value: Any) -> int:
                 for variant in variants
                 if isinstance(variant, dict) and isinstance(variant.get("type"), str)
             }
-            if types == {"object", "array", "null"} and len(variants) == 3:
+            if (types == {"object", "array", "null"} and len(variants) == 3) or is_free_form_container(variants):
                 description = value.get("description")
                 value.clear()
                 if description is not None:

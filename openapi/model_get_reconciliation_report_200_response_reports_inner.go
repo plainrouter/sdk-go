@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -20,7 +20,10 @@ var _ MappedNullable = &GetReconciliationReport200ResponseReportsInner{}
 
 // GetReconciliationReport200ResponseReportsInner struct for GetReconciliationReport200ResponseReportsInner
 type GetReconciliationReport200ResponseReportsInner struct {
-	Id                   int32                                                                 `json:"id"`
+	Id          int32 `json:"id"`
+	WorkspaceId int32 `json:"workspace_id"`
+	// Deprecated alias of workspace_id; contains the workspace ID in decimal string form.
+	// Deprecated
 	SignalTrackerId      string                                                                `json:"signal_tracker_id"`
 	DestinationId        string                                                                `json:"destination_id"`
 	ReportDate           string                                                                `json:"report_date"`
@@ -43,9 +46,10 @@ type _GetReconciliationReport200ResponseReportsInner GetReconciliationReport200R
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetReconciliationReport200ResponseReportsInner(id int32, signalTrackerId string, destinationId string, reportDate string, acceptedCount int32, metaCount int32, observedGap int32, eventCounts GetReconciliationReport200ResponseReportsInnerEventCounts, buckets map[string]GetReconciliationReport200ResponseReportsInnerBucketsValue, unexplainedResidual int32, status string, createdAt NullableString, updatedAt NullableString, destination SetDestinationTestMode200ResponseDestination) *GetReconciliationReport200ResponseReportsInner {
+func NewGetReconciliationReport200ResponseReportsInner(id int32, workspaceId int32, signalTrackerId string, destinationId string, reportDate string, acceptedCount int32, metaCount int32, observedGap int32, eventCounts GetReconciliationReport200ResponseReportsInnerEventCounts, buckets map[string]GetReconciliationReport200ResponseReportsInnerBucketsValue, unexplainedResidual int32, status string, createdAt NullableString, updatedAt NullableString, destination SetDestinationTestMode200ResponseDestination) *GetReconciliationReport200ResponseReportsInner {
 	this := GetReconciliationReport200ResponseReportsInner{}
 	this.Id = id
+	this.WorkspaceId = workspaceId
 	this.SignalTrackerId = signalTrackerId
 	this.DestinationId = destinationId
 	this.ReportDate = reportDate
@@ -94,7 +98,32 @@ func (o *GetReconciliationReport200ResponseReportsInner) SetId(v int32) {
 	o.Id = v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value
+func (o *GetReconciliationReport200ResponseReportsInner) GetWorkspaceId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value
+// and a boolean to check if the value has been set.
+func (o *GetReconciliationReport200ResponseReportsInner) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.WorkspaceId, true
+}
+
+// SetWorkspaceId sets field value
+func (o *GetReconciliationReport200ResponseReportsInner) SetWorkspaceId(v int32) {
+	o.WorkspaceId = v
+}
+
 // GetSignalTrackerId returns the SignalTrackerId field value
+// Deprecated
 func (o *GetReconciliationReport200ResponseReportsInner) GetSignalTrackerId() string {
 	if o == nil {
 		var ret string
@@ -106,6 +135,7 @@ func (o *GetReconciliationReport200ResponseReportsInner) GetSignalTrackerId() st
 
 // GetSignalTrackerIdOk returns a tuple with the SignalTrackerId field value
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *GetReconciliationReport200ResponseReportsInner) GetSignalTrackerIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
@@ -114,6 +144,7 @@ func (o *GetReconciliationReport200ResponseReportsInner) GetSignalTrackerIdOk() 
 }
 
 // SetSignalTrackerId sets field value
+// Deprecated
 func (o *GetReconciliationReport200ResponseReportsInner) SetSignalTrackerId(v string) {
 	o.SignalTrackerId = v
 }
@@ -421,6 +452,7 @@ func (o GetReconciliationReport200ResponseReportsInner) MarshalJSON() ([]byte, e
 func (o GetReconciliationReport200ResponseReportsInner) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["signal_tracker_id"] = o.SignalTrackerId
 	toSerialize["destination_id"] = o.DestinationId
 	toSerialize["report_date"] = o.ReportDate
@@ -448,6 +480,7 @@ func (o *GetReconciliationReport200ResponseReportsInner) UnmarshalJSON(data []by
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
+		"workspace_id",
 		"signal_tracker_id",
 		"destination_id",
 		"report_date",
@@ -491,6 +524,7 @@ func (o *GetReconciliationReport200ResponseReportsInner) UnmarshalJSON(data []by
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "signal_tracker_id")
 		delete(additionalProperties, "destination_id")
 		delete(additionalProperties, "report_date")

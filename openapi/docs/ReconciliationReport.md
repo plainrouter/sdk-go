@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** |  | 
-**SignalTrackerId** | **string** |  | 
+**WorkspaceId** | **int32** |  | 
+**SignalTrackerId** | **string** | Deprecated alias of workspace_id; contains the workspace ID in decimal string form. | 
 **DestinationId** | **string** |  | 
 **ReportDate** | **time.Time** |  | 
 **AcceptedCount** | **int32** |  | 
@@ -17,13 +18,13 @@ Name | Type | Description | Notes
 **Status** | **string** |  | 
 **CreatedAt** | **NullableTime** |  | 
 **UpdatedAt** | **NullableTime** |  | 
-**ClaimedClicks** | **NullableInt32** |  | 
+**ClaimedClicks** | **NullableInt32** | Meta outbound clicks. Days before 2026-06-29, or not re-read by the daily sync since 2026-09-27, may still hold Meta link clicks or all clicks. | 
 
 ## Methods
 
 ### NewReconciliationReport
 
-`func NewReconciliationReport(id int32, signalTrackerId string, destinationId string, reportDate time.Time, acceptedCount int32, metaCount int32, observedGap int32, eventCounts []interface{}, buckets []interface{}, unexplainedResidual int32, status string, createdAt NullableTime, updatedAt NullableTime, claimedClicks NullableInt32, ) *ReconciliationReport`
+`func NewReconciliationReport(id int32, workspaceId int32, signalTrackerId string, destinationId string, reportDate time.Time, acceptedCount int32, metaCount int32, observedGap int32, eventCounts []interface{}, buckets []interface{}, unexplainedResidual int32, status string, createdAt NullableTime, updatedAt NullableTime, claimedClicks NullableInt32, ) *ReconciliationReport`
 
 NewReconciliationReport instantiates a new ReconciliationReport object
 This constructor will assign default values to properties that have it defined,
@@ -56,6 +57,26 @@ and a boolean to check if the value has been set.
 `func (o *ReconciliationReport) SetId(v int32)`
 
 SetId sets Id field to given value.
+
+
+### GetWorkspaceId
+
+`func (o *ReconciliationReport) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *ReconciliationReport) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *ReconciliationReport) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
 
 
 ### GetSignalTrackerId

@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** |  | 
-**SignalTrackerId** | **string** |  | 
+**WorkspaceId** | **int32** |  | 
+**SignalTrackerId** | **string** | Deprecated alias of workspace_id; contains the workspace ID in decimal string form. | 
 **DestinationId** | **string** |  | 
 **Score** | **float32** |  | 
 **WeekOverWeekChange** | **NullableFloat32** |  | 
@@ -19,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewEmqSnapshot
 
-`func NewEmqSnapshot(id int32, signalTrackerId string, destinationId string, score float32, weekOverWeekChange NullableFloat32, alerted bool, platformResponse []interface{}, measuredAt time.Time, createdAt NullableTime, updatedAt NullableTime, ) *EmqSnapshot`
+`func NewEmqSnapshot(id int32, workspaceId int32, signalTrackerId string, destinationId string, score float32, weekOverWeekChange NullableFloat32, alerted bool, platformResponse []interface{}, measuredAt time.Time, createdAt NullableTime, updatedAt NullableTime, ) *EmqSnapshot`
 
 NewEmqSnapshot instantiates a new EmqSnapshot object
 This constructor will assign default values to properties that have it defined,
@@ -52,6 +53,26 @@ and a boolean to check if the value has been set.
 `func (o *EmqSnapshot) SetId(v int32)`
 
 SetId sets Id field to given value.
+
+
+### GetWorkspaceId
+
+`func (o *EmqSnapshot) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *EmqSnapshot) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *EmqSnapshot) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
 
 
 ### GetSignalTrackerId

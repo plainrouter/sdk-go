@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
-**SignalTrackerId** | **string** |  | 
+**WorkspaceId** | **int32** |  | 
+**SignalTrackerId** | **string** | Deprecated alias of workspace_id; contains the workspace ID in decimal string form. | 
 **PlatformAdAccountId** | **NullableInt32** |  | 
 **Type** | [**DestinationType**](DestinationType.md) |  | 
 **CredentialSource** | [**DestinationCredentialSource**](DestinationCredentialSource.md) |  | 
@@ -18,7 +19,7 @@ Name | Type | Description | Notes
 
 ### NewDestination
 
-`func NewDestination(id string, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config []interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime, ) *Destination`
+`func NewDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config []interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime, ) *Destination`
 
 NewDestination instantiates a new Destination object
 This constructor will assign default values to properties that have it defined,
@@ -51,6 +52,26 @@ and a boolean to check if the value has been set.
 `func (o *Destination) SetId(v string)`
 
 SetId sets Id field to given value.
+
+
+### GetWorkspaceId
+
+`func (o *Destination) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *Destination) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *Destination) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
 
 
 ### GetSignalTrackerId

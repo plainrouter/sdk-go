@@ -1,7 +1,7 @@
 /*
-PlainRouter Conversion API
+Plainrouter Conversion API
 
-PlainRouter public Signals Conversion API.
+Plainrouter public Signals Conversion API.
 
 API version: 0.5.0
 */
@@ -21,14 +21,12 @@ type DestinationCredentialSource string
 // List of DestinationCredentialSource
 const (
 	DESTINATIONCREDENTIALSOURCE_OAUTH_CONNECTION         DestinationCredentialSource = "oauth_connection"
-	DESTINATIONCREDENTIALSOURCE_MANAGED_TOKEN            DestinationCredentialSource = "managed_token"
 	DESTINATIONCREDENTIALSOURCE_UNKNOWN_DEFAULT_OPEN_API DestinationCredentialSource = "unknown_default_open_api"
 )
 
 // All allowed values of DestinationCredentialSource enum
 var AllowedDestinationCredentialSourceEnumValues = []DestinationCredentialSource{
 	"oauth_connection",
-	"managed_token",
 	"unknown_default_open_api",
 }
 
