@@ -1,0 +1,25 @@
+name: Live smoke
+
+on:
+  pull_request:
+  schedule:
+    - cron: "47 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    name: Go SDK against the live API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
+        with:
+          go-version: "1.27.x"
+          cache: true
+      - name: Smoke test against the live API
+        env:
+          PLAINROUTER_SMOKE_SECRET: ${{ secrets.PLAINROUTER_SMOKE_SECRET }}
+        run: go test -tags live -run TestLive -v .
