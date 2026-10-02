@@ -54,6 +54,8 @@ type APIClient struct {
 
 	ActionReadApiAPI *ActionReadApiAPIService
 
+	DeploymentPlanAPI *DeploymentPlanAPIService
+
 	EventAPI *EventAPIService
 
 	OperationsAPI *OperationsAPIService
@@ -80,6 +82,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.ActionDryRunApiAPI = (*ActionDryRunApiAPIService)(&c.common)
 	c.ActionProposalApiAPI = (*ActionProposalApiAPIService)(&c.common)
 	c.ActionReadApiAPI = (*ActionReadApiAPIService)(&c.common)
+	c.DeploymentPlanAPI = (*DeploymentPlanAPIService)(&c.common)
 	c.EventAPI = (*EventAPIService)(&c.common)
 	c.OperationsAPI = (*OperationsAPIService)(&c.common)
 	c.SandboxAPI = (*SandboxAPIService)(&c.common)

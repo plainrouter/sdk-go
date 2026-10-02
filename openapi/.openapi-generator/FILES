@@ -1,6 +1,7 @@
 api_action_dry_run_api.go
 api_action_proposal_api.go
 api_action_read_api.go
+api_deployment_plan.go
 api_event.go
 api_operations.go
 api_sandbox.go
@@ -66,6 +67,7 @@ docs/CreateEventRequestAnyOfValueData.md
 docs/DeleteUserData200Response.md
 docs/DeleteUserDataRequest.md
 docs/DeliveryStatus.md
+docs/DeploymentPlanAPI.md
 docs/Destination.md
 docs/DestinationCredentialSource.md
 docs/DestinationStatus.md
@@ -97,6 +99,7 @@ docs/GetSandbox200ResponseTryBody.md
 docs/GetSandbox200ResponseTryBodyValueData.md
 docs/IngestionWarningCode.md
 docs/JurisdictionPolicyClass.md
+docs/LaunchIntentStatus.md
 docs/ListEvents200Response.md
 docs/ListEvents200ResponseEvents.md
 docs/ListEvents200ResponseEventsLinksInner.md
@@ -104,6 +107,10 @@ docs/ListEvents200ResponseMetrics.md
 docs/ListEventsByCursor200Response.md
 docs/ListEventsByCursor200ResponseEvents.md
 docs/OperationsAPI.md
+docs/PlanCopyError.md
+docs/PlanCopyErrorError.md
+docs/PlanCopyRead.md
+docs/PlanCopyReadPlan.md
 docs/ReconciliationReport.md
 docs/ReplayDeliveries202Response.md
 docs/ReplayDeliveriesRequest.md
@@ -206,12 +213,17 @@ model_get_sandbox_200_response_try_body.go
 model_get_sandbox_200_response_try_body_value_data.go
 model_ingestion_warning_code.go
 model_jurisdiction_policy_class.go
+model_launch_intent_status.go
 model_list_events_200_response.go
 model_list_events_200_response_events.go
 model_list_events_200_response_events_links_inner.go
 model_list_events_200_response_metrics.go
 model_list_events_by_cursor_200_response.go
 model_list_events_by_cursor_200_response_events.go
+model_plan_copy_error.go
+model_plan_copy_error_error.go
+model_plan_copy_read.go
+model_plan_copy_read_plan.go
 model_reconciliation_report.go
 model_replay_deliveries_202_response.go
 model_replay_deliveries_request.go
