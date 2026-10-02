@@ -20,18 +20,12 @@ var _ MappedNullable = &ActionPolicyReadData{}
 
 // ActionPolicyReadData struct for ActionPolicyReadData
 type ActionPolicyReadData struct {
-	Id                       NullableInt32  `json:"id"`
-	WorkspaceId              int32          `json:"workspace_id"`
-	ExecutionMode            string         `json:"execution_mode"`
-	MaxSpendDeltaPercent     string         `json:"max_spend_delta_percent"`
-	HardAccountDailyCapMinor NullableInt32  `json:"hard_account_daily_cap_minor"`
-	ProtectedEntities        []interface{}  `json:"protected_entities"`
-	QuietHoursStart          NullableString `json:"quiet_hours_start"`
-	QuietHoursEnd            NullableString `json:"quiet_hours_end"`
-	ProtectLearningPhase     bool           `json:"protect_learning_phase"`
-	OutcomeCheckAfterHours   int32          `json:"outcome_check_after_hours"`
-	AnomalyThresholdPercent  string         `json:"anomaly_threshold_percent"`
-	AdditionalProperties     map[string]interface{}
+	Id                      NullableInt32 `json:"id"`
+	WorkspaceId             int32         `json:"workspace_id"`
+	ExecutionMode           string        `json:"execution_mode"`
+	OutcomeCheckAfterHours  int32         `json:"outcome_check_after_hours"`
+	AnomalyThresholdPercent string        `json:"anomaly_threshold_percent"`
+	AdditionalProperties    map[string]interface{}
 }
 
 type _ActionPolicyReadData ActionPolicyReadData
@@ -40,17 +34,11 @@ type _ActionPolicyReadData ActionPolicyReadData
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActionPolicyReadData(id NullableInt32, workspaceId int32, executionMode string, maxSpendDeltaPercent string, hardAccountDailyCapMinor NullableInt32, protectedEntities []interface{}, quietHoursStart NullableString, quietHoursEnd NullableString, protectLearningPhase bool, outcomeCheckAfterHours int32, anomalyThresholdPercent string) *ActionPolicyReadData {
+func NewActionPolicyReadData(id NullableInt32, workspaceId int32, executionMode string, outcomeCheckAfterHours int32, anomalyThresholdPercent string) *ActionPolicyReadData {
 	this := ActionPolicyReadData{}
 	this.Id = id
 	this.WorkspaceId = workspaceId
 	this.ExecutionMode = executionMode
-	this.MaxSpendDeltaPercent = maxSpendDeltaPercent
-	this.HardAccountDailyCapMinor = hardAccountDailyCapMinor
-	this.ProtectedEntities = protectedEntities
-	this.QuietHoursStart = quietHoursStart
-	this.QuietHoursEnd = quietHoursEnd
-	this.ProtectLearningPhase = protectLearningPhase
 	this.OutcomeCheckAfterHours = outcomeCheckAfterHours
 	this.AnomalyThresholdPercent = anomalyThresholdPercent
 	return &this
@@ -138,158 +126,6 @@ func (o *ActionPolicyReadData) SetExecutionMode(v string) {
 	o.ExecutionMode = v
 }
 
-// GetMaxSpendDeltaPercent returns the MaxSpendDeltaPercent field value
-func (o *ActionPolicyReadData) GetMaxSpendDeltaPercent() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.MaxSpendDeltaPercent
-}
-
-// GetMaxSpendDeltaPercentOk returns a tuple with the MaxSpendDeltaPercent field value
-// and a boolean to check if the value has been set.
-func (o *ActionPolicyReadData) GetMaxSpendDeltaPercentOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.MaxSpendDeltaPercent, true
-}
-
-// SetMaxSpendDeltaPercent sets field value
-func (o *ActionPolicyReadData) SetMaxSpendDeltaPercent(v string) {
-	o.MaxSpendDeltaPercent = v
-}
-
-// GetHardAccountDailyCapMinor returns the HardAccountDailyCapMinor field value
-// If the value is explicit nil, the zero value for int32 will be returned
-func (o *ActionPolicyReadData) GetHardAccountDailyCapMinor() int32 {
-	if o == nil || o.HardAccountDailyCapMinor.Get() == nil {
-		var ret int32
-		return ret
-	}
-
-	return *o.HardAccountDailyCapMinor.Get()
-}
-
-// GetHardAccountDailyCapMinorOk returns a tuple with the HardAccountDailyCapMinor field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ActionPolicyReadData) GetHardAccountDailyCapMinorOk() (*int32, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.HardAccountDailyCapMinor.Get(), o.HardAccountDailyCapMinor.IsSet()
-}
-
-// SetHardAccountDailyCapMinor sets field value
-func (o *ActionPolicyReadData) SetHardAccountDailyCapMinor(v int32) {
-	o.HardAccountDailyCapMinor.Set(&v)
-}
-
-// GetProtectedEntities returns the ProtectedEntities field value
-// If the value is explicit nil, the zero value for []interface{} will be returned
-func (o *ActionPolicyReadData) GetProtectedEntities() []interface{} {
-	if o == nil {
-		var ret []interface{}
-		return ret
-	}
-
-	return o.ProtectedEntities
-}
-
-// GetProtectedEntitiesOk returns a tuple with the ProtectedEntities field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ActionPolicyReadData) GetProtectedEntitiesOk() ([]interface{}, bool) {
-	if o == nil || IsNil(o.ProtectedEntities) {
-		return nil, false
-	}
-	return o.ProtectedEntities, true
-}
-
-// SetProtectedEntities sets field value
-func (o *ActionPolicyReadData) SetProtectedEntities(v []interface{}) {
-	o.ProtectedEntities = v
-}
-
-// GetQuietHoursStart returns the QuietHoursStart field value
-// If the value is explicit nil, the zero value for string will be returned
-func (o *ActionPolicyReadData) GetQuietHoursStart() string {
-	if o == nil || o.QuietHoursStart.Get() == nil {
-		var ret string
-		return ret
-	}
-
-	return *o.QuietHoursStart.Get()
-}
-
-// GetQuietHoursStartOk returns a tuple with the QuietHoursStart field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ActionPolicyReadData) GetQuietHoursStartOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.QuietHoursStart.Get(), o.QuietHoursStart.IsSet()
-}
-
-// SetQuietHoursStart sets field value
-func (o *ActionPolicyReadData) SetQuietHoursStart(v string) {
-	o.QuietHoursStart.Set(&v)
-}
-
-// GetQuietHoursEnd returns the QuietHoursEnd field value
-// If the value is explicit nil, the zero value for string will be returned
-func (o *ActionPolicyReadData) GetQuietHoursEnd() string {
-	if o == nil || o.QuietHoursEnd.Get() == nil {
-		var ret string
-		return ret
-	}
-
-	return *o.QuietHoursEnd.Get()
-}
-
-// GetQuietHoursEndOk returns a tuple with the QuietHoursEnd field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ActionPolicyReadData) GetQuietHoursEndOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.QuietHoursEnd.Get(), o.QuietHoursEnd.IsSet()
-}
-
-// SetQuietHoursEnd sets field value
-func (o *ActionPolicyReadData) SetQuietHoursEnd(v string) {
-	o.QuietHoursEnd.Set(&v)
-}
-
-// GetProtectLearningPhase returns the ProtectLearningPhase field value
-func (o *ActionPolicyReadData) GetProtectLearningPhase() bool {
-	if o == nil {
-		var ret bool
-		return ret
-	}
-
-	return o.ProtectLearningPhase
-}
-
-// GetProtectLearningPhaseOk returns a tuple with the ProtectLearningPhase field value
-// and a boolean to check if the value has been set.
-func (o *ActionPolicyReadData) GetProtectLearningPhaseOk() (*bool, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ProtectLearningPhase, true
-}
-
-// SetProtectLearningPhase sets field value
-func (o *ActionPolicyReadData) SetProtectLearningPhase(v bool) {
-	o.ProtectLearningPhase = v
-}
-
 // GetOutcomeCheckAfterHours returns the OutcomeCheckAfterHours field value
 func (o *ActionPolicyReadData) GetOutcomeCheckAfterHours() int32 {
 	if o == nil {
@@ -351,14 +187,6 @@ func (o ActionPolicyReadData) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id.Get()
 	toSerialize["workspace_id"] = o.WorkspaceId
 	toSerialize["execution_mode"] = o.ExecutionMode
-	toSerialize["max_spend_delta_percent"] = o.MaxSpendDeltaPercent
-	toSerialize["hard_account_daily_cap_minor"] = o.HardAccountDailyCapMinor.Get()
-	if o.ProtectedEntities != nil {
-		toSerialize["protected_entities"] = o.ProtectedEntities
-	}
-	toSerialize["quiet_hours_start"] = o.QuietHoursStart.Get()
-	toSerialize["quiet_hours_end"] = o.QuietHoursEnd.Get()
-	toSerialize["protect_learning_phase"] = o.ProtectLearningPhase
 	toSerialize["outcome_check_after_hours"] = o.OutcomeCheckAfterHours
 	toSerialize["anomaly_threshold_percent"] = o.AnomalyThresholdPercent
 
@@ -377,12 +205,6 @@ func (o *ActionPolicyReadData) UnmarshalJSON(data []byte) (err error) {
 		"id",
 		"workspace_id",
 		"execution_mode",
-		"max_spend_delta_percent",
-		"hard_account_daily_cap_minor",
-		"protected_entities",
-		"quiet_hours_start",
-		"quiet_hours_end",
-		"protect_learning_phase",
 		"outcome_check_after_hours",
 		"anomaly_threshold_percent",
 	}
@@ -417,12 +239,6 @@ func (o *ActionPolicyReadData) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "workspace_id")
 		delete(additionalProperties, "execution_mode")
-		delete(additionalProperties, "max_spend_delta_percent")
-		delete(additionalProperties, "hard_account_daily_cap_minor")
-		delete(additionalProperties, "protected_entities")
-		delete(additionalProperties, "quiet_hours_start")
-		delete(additionalProperties, "quiet_hours_end")
-		delete(additionalProperties, "protect_learning_phase")
 		delete(additionalProperties, "outcome_check_after_hours")
 		delete(additionalProperties, "anomaly_threshold_percent")
 		o.AdditionalProperties = additionalProperties

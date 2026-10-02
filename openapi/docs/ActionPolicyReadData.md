@@ -7,12 +7,6 @@ Name | Type | Description | Notes
 **Id** | **NullableInt32** |  | 
 **WorkspaceId** | **int32** |  | 
 **ExecutionMode** | **string** |  | 
-**MaxSpendDeltaPercent** | **string** |  | 
-**HardAccountDailyCapMinor** | **NullableInt32** |  | 
-**ProtectedEntities** | **[]interface{}** |  | 
-**QuietHoursStart** | **NullableString** |  | 
-**QuietHoursEnd** | **NullableString** |  | 
-**ProtectLearningPhase** | **bool** |  | 
 **OutcomeCheckAfterHours** | **int32** |  | 
 **AnomalyThresholdPercent** | **string** |  | 
 
@@ -20,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewActionPolicyReadData
 
-`func NewActionPolicyReadData(id NullableInt32, workspaceId int32, executionMode string, maxSpendDeltaPercent string, hardAccountDailyCapMinor NullableInt32, protectedEntities []interface{}, quietHoursStart NullableString, quietHoursEnd NullableString, protectLearningPhase bool, outcomeCheckAfterHours int32, anomalyThresholdPercent string, ) *ActionPolicyReadData`
+`func NewActionPolicyReadData(id NullableInt32, workspaceId int32, executionMode string, outcomeCheckAfterHours int32, anomalyThresholdPercent string, ) *ActionPolicyReadData`
 
 NewActionPolicyReadData instantiates a new ActionPolicyReadData object
 This constructor will assign default values to properties that have it defined,
@@ -103,166 +97,6 @@ and a boolean to check if the value has been set.
 `func (o *ActionPolicyReadData) SetExecutionMode(v string)`
 
 SetExecutionMode sets ExecutionMode field to given value.
-
-
-### GetMaxSpendDeltaPercent
-
-`func (o *ActionPolicyReadData) GetMaxSpendDeltaPercent() string`
-
-GetMaxSpendDeltaPercent returns the MaxSpendDeltaPercent field if non-nil, zero value otherwise.
-
-### GetMaxSpendDeltaPercentOk
-
-`func (o *ActionPolicyReadData) GetMaxSpendDeltaPercentOk() (*string, bool)`
-
-GetMaxSpendDeltaPercentOk returns a tuple with the MaxSpendDeltaPercent field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetMaxSpendDeltaPercent
-
-`func (o *ActionPolicyReadData) SetMaxSpendDeltaPercent(v string)`
-
-SetMaxSpendDeltaPercent sets MaxSpendDeltaPercent field to given value.
-
-
-### GetHardAccountDailyCapMinor
-
-`func (o *ActionPolicyReadData) GetHardAccountDailyCapMinor() int32`
-
-GetHardAccountDailyCapMinor returns the HardAccountDailyCapMinor field if non-nil, zero value otherwise.
-
-### GetHardAccountDailyCapMinorOk
-
-`func (o *ActionPolicyReadData) GetHardAccountDailyCapMinorOk() (*int32, bool)`
-
-GetHardAccountDailyCapMinorOk returns a tuple with the HardAccountDailyCapMinor field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetHardAccountDailyCapMinor
-
-`func (o *ActionPolicyReadData) SetHardAccountDailyCapMinor(v int32)`
-
-SetHardAccountDailyCapMinor sets HardAccountDailyCapMinor field to given value.
-
-
-### SetHardAccountDailyCapMinorNil
-
-`func (o *ActionPolicyReadData) SetHardAccountDailyCapMinorNil(b bool)`
-
- SetHardAccountDailyCapMinorNil sets the value for HardAccountDailyCapMinor to be an explicit nil
-
-### UnsetHardAccountDailyCapMinor
-`func (o *ActionPolicyReadData) UnsetHardAccountDailyCapMinor()`
-
-UnsetHardAccountDailyCapMinor ensures that no value is present for HardAccountDailyCapMinor, not even an explicit nil
-### GetProtectedEntities
-
-`func (o *ActionPolicyReadData) GetProtectedEntities() []interface{}`
-
-GetProtectedEntities returns the ProtectedEntities field if non-nil, zero value otherwise.
-
-### GetProtectedEntitiesOk
-
-`func (o *ActionPolicyReadData) GetProtectedEntitiesOk() (*[]interface{}, bool)`
-
-GetProtectedEntitiesOk returns a tuple with the ProtectedEntities field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProtectedEntities
-
-`func (o *ActionPolicyReadData) SetProtectedEntities(v []interface{})`
-
-SetProtectedEntities sets ProtectedEntities field to given value.
-
-
-### SetProtectedEntitiesNil
-
-`func (o *ActionPolicyReadData) SetProtectedEntitiesNil(b bool)`
-
- SetProtectedEntitiesNil sets the value for ProtectedEntities to be an explicit nil
-
-### UnsetProtectedEntities
-`func (o *ActionPolicyReadData) UnsetProtectedEntities()`
-
-UnsetProtectedEntities ensures that no value is present for ProtectedEntities, not even an explicit nil
-### GetQuietHoursStart
-
-`func (o *ActionPolicyReadData) GetQuietHoursStart() string`
-
-GetQuietHoursStart returns the QuietHoursStart field if non-nil, zero value otherwise.
-
-### GetQuietHoursStartOk
-
-`func (o *ActionPolicyReadData) GetQuietHoursStartOk() (*string, bool)`
-
-GetQuietHoursStartOk returns a tuple with the QuietHoursStart field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetQuietHoursStart
-
-`func (o *ActionPolicyReadData) SetQuietHoursStart(v string)`
-
-SetQuietHoursStart sets QuietHoursStart field to given value.
-
-
-### SetQuietHoursStartNil
-
-`func (o *ActionPolicyReadData) SetQuietHoursStartNil(b bool)`
-
- SetQuietHoursStartNil sets the value for QuietHoursStart to be an explicit nil
-
-### UnsetQuietHoursStart
-`func (o *ActionPolicyReadData) UnsetQuietHoursStart()`
-
-UnsetQuietHoursStart ensures that no value is present for QuietHoursStart, not even an explicit nil
-### GetQuietHoursEnd
-
-`func (o *ActionPolicyReadData) GetQuietHoursEnd() string`
-
-GetQuietHoursEnd returns the QuietHoursEnd field if non-nil, zero value otherwise.
-
-### GetQuietHoursEndOk
-
-`func (o *ActionPolicyReadData) GetQuietHoursEndOk() (*string, bool)`
-
-GetQuietHoursEndOk returns a tuple with the QuietHoursEnd field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetQuietHoursEnd
-
-`func (o *ActionPolicyReadData) SetQuietHoursEnd(v string)`
-
-SetQuietHoursEnd sets QuietHoursEnd field to given value.
-
-
-### SetQuietHoursEndNil
-
-`func (o *ActionPolicyReadData) SetQuietHoursEndNil(b bool)`
-
- SetQuietHoursEndNil sets the value for QuietHoursEnd to be an explicit nil
-
-### UnsetQuietHoursEnd
-`func (o *ActionPolicyReadData) UnsetQuietHoursEnd()`
-
-UnsetQuietHoursEnd ensures that no value is present for QuietHoursEnd, not even an explicit nil
-### GetProtectLearningPhase
-
-`func (o *ActionPolicyReadData) GetProtectLearningPhase() bool`
-
-GetProtectLearningPhase returns the ProtectLearningPhase field if non-nil, zero value otherwise.
-
-### GetProtectLearningPhaseOk
-
-`func (o *ActionPolicyReadData) GetProtectLearningPhaseOk() (*bool, bool)`
-
-GetProtectLearningPhaseOk returns a tuple with the ProtectLearningPhase field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProtectLearningPhase
-
-`func (o *ActionPolicyReadData) SetProtectLearningPhase(v bool)`
-
-SetProtectLearningPhase sets ProtectLearningPhase field to given value.
 
 
 ### GetOutcomeCheckAfterHours

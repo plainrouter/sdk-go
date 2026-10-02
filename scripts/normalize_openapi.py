@@ -5,7 +5,8 @@ OpenAPI Generator 7.25.0 emits invalid Go identifiers for OAS 3.1 schemas whose
 value may be an object, an array, or null, and for free-form object-or-array
 unions. Those fields intentionally represent arbitrary JSON. Replacing only those
 exact unions with an unconstrained schema makes the generated type `interface{}`
-without narrowing accepted input.
+without narrowing accepted input. It also emits the invalid type `nil` for a
+schema that is only ever null, which receives the same replacement.
 The signed source contract remains byte-for-byte unchanged in spec/openapi.json.
 """
 
@@ -48,6 +49,9 @@ def normalize(value: Any) -> int:
                 if description is not None:
                     value["description"] = description
                 changed += 1
+        if value.get("type") == "null" and set(value) <= {"type", "description"}:
+            del value["type"]
+            changed += 1
         for child in value.values():
             changed += normalize(child)
     elif isinstance(value, list):
