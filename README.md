@@ -2,6 +2,8 @@
 
 The official Go SDK for the [Plainrouter](https://plainrouter.com) Signals Conversion API. The root package provides a compact, idiomatic entry point; the complete generated contract is available from [`github.com/plainrouter/sdk-go/openapi`](https://pkg.go.dev/github.com/plainrouter/sdk-go/openapi).
 
+Plainrouter is the paid ads platform for developers and agents. Its hosted [Meta Ads MCP server](https://plainrouter.com/solutions/meta-ads-mcp) lets Claude, ChatGPT, Codex, Cursor and other MCP clients read a Meta ad account and propose changes that pass policy checks. MCP setup, Agent Skills and the other SDKs live in [plainrouter/sdk](https://github.com/plainrouter/sdk).
+
 ## Install
 
 ```bash
