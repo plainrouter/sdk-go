@@ -34,6 +34,8 @@ type GetEvent200ResponseDeliveriesInner struct {
 	PlatformResponse     interface{}    `json:"platform_response"`
 	PlatformTraceId      NullableString `json:"platform_trace_id"`
 	NextAttemptAt        NullableString `json:"next_attempt_at"`
+	UploadDeadlineAt     NullableString `json:"upload_deadline_at"`
+	FreshnessBasis       NullableString `json:"freshness_basis"`
 	CreatedAt            string         `json:"created_at"`
 	UpdatedAt            NullableString `json:"updated_at"`
 	Explanation          string         `json:"explanation"`
@@ -46,7 +48,7 @@ type _GetEvent200ResponseDeliveriesInner GetEvent200ResponseDeliveriesInner
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, createdAt string, updatedAt NullableString, explanation string) *GetEvent200ResponseDeliveriesInner {
+func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, uploadDeadlineAt NullableString, freshnessBasis NullableString, createdAt string, updatedAt NullableString, explanation string) *GetEvent200ResponseDeliveriesInner {
 	this := GetEvent200ResponseDeliveriesInner{}
 	this.Id = id
 	this.WorkspaceId = workspaceId
@@ -60,6 +62,8 @@ func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTr
 	this.PlatformResponse = platformResponse
 	this.PlatformTraceId = platformTraceId
 	this.NextAttemptAt = nextAttemptAt
+	this.UploadDeadlineAt = uploadDeadlineAt
+	this.FreshnessBasis = freshnessBasis
 	this.CreatedAt = createdAt
 	this.UpdatedAt = updatedAt
 	this.Explanation = explanation
@@ -375,6 +379,58 @@ func (o *GetEvent200ResponseDeliveriesInner) SetNextAttemptAt(v string) {
 	o.NextAttemptAt.Set(&v)
 }
 
+// GetUploadDeadlineAt returns the UploadDeadlineAt field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *GetEvent200ResponseDeliveriesInner) GetUploadDeadlineAt() string {
+	if o == nil || o.UploadDeadlineAt.Get() == nil {
+		var ret string
+		return ret
+	}
+
+	return *o.UploadDeadlineAt.Get()
+}
+
+// GetUploadDeadlineAtOk returns a tuple with the UploadDeadlineAt field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *GetEvent200ResponseDeliveriesInner) GetUploadDeadlineAtOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.UploadDeadlineAt.Get(), o.UploadDeadlineAt.IsSet()
+}
+
+// SetUploadDeadlineAt sets field value
+func (o *GetEvent200ResponseDeliveriesInner) SetUploadDeadlineAt(v string) {
+	o.UploadDeadlineAt.Set(&v)
+}
+
+// GetFreshnessBasis returns the FreshnessBasis field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *GetEvent200ResponseDeliveriesInner) GetFreshnessBasis() string {
+	if o == nil || o.FreshnessBasis.Get() == nil {
+		var ret string
+		return ret
+	}
+
+	return *o.FreshnessBasis.Get()
+}
+
+// GetFreshnessBasisOk returns a tuple with the FreshnessBasis field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *GetEvent200ResponseDeliveriesInner) GetFreshnessBasisOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.FreshnessBasis.Get(), o.FreshnessBasis.IsSet()
+}
+
+// SetFreshnessBasis sets field value
+func (o *GetEvent200ResponseDeliveriesInner) SetFreshnessBasis(v string) {
+	o.FreshnessBasis.Set(&v)
+}
+
 // GetCreatedAt returns the CreatedAt field value
 func (o *GetEvent200ResponseDeliveriesInner) GetCreatedAt() string {
 	if o == nil {
@@ -475,6 +531,8 @@ func (o GetEvent200ResponseDeliveriesInner) ToMap() (map[string]interface{}, err
 	}
 	toSerialize["platform_trace_id"] = o.PlatformTraceId.Get()
 	toSerialize["next_attempt_at"] = o.NextAttemptAt.Get()
+	toSerialize["upload_deadline_at"] = o.UploadDeadlineAt.Get()
+	toSerialize["freshness_basis"] = o.FreshnessBasis.Get()
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["updated_at"] = o.UpdatedAt.Get()
 	toSerialize["explanation"] = o.Explanation
@@ -503,6 +561,8 @@ func (o *GetEvent200ResponseDeliveriesInner) UnmarshalJSON(data []byte) (err err
 		"platform_response",
 		"platform_trace_id",
 		"next_attempt_at",
+		"upload_deadline_at",
+		"freshness_basis",
 		"created_at",
 		"updated_at",
 		"explanation",
@@ -547,6 +607,8 @@ func (o *GetEvent200ResponseDeliveriesInner) UnmarshalJSON(data []byte) (err err
 		delete(additionalProperties, "platform_response")
 		delete(additionalProperties, "platform_trace_id")
 		delete(additionalProperties, "next_attempt_at")
+		delete(additionalProperties, "upload_deadline_at")
+		delete(additionalProperties, "freshness_basis")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
 		delete(additionalProperties, "explanation")

@@ -10,16 +10,19 @@ Name | Type | Description | Notes
 **PlatformAdAccountId** | **NullableInt32** |  | 
 **Type** | [**DestinationType**](DestinationType.md) |  | 
 **CredentialSource** | [**DestinationCredentialSource**](DestinationCredentialSource.md) |  | 
-**Config** | **[]interface{}** |  | 
+**Config** | **interface{}** |  | 
 **Status** | [**DestinationStatus**](DestinationStatus.md) |  | 
 **CreatedAt** | **NullableTime** |  | 
 **UpdatedAt** | **NullableTime** |  | 
+**AttentionReason** | **interface{}** |  | 
+**HeldCount** | **int32** |  | 
+**Notices** | **[]map[string]*interface{}** |  | 
 
 ## Methods
 
 ### NewDestination
 
-`func NewDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config []interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime, ) *Destination`
+`func NewDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime, attentionReason interface{}, heldCount int32, notices []map[string]*interface{}, ) *Destination`
 
 NewDestination instantiates a new Destination object
 This constructor will assign default values to properties that have it defined,
@@ -166,24 +169,34 @@ SetCredentialSource sets CredentialSource field to given value.
 
 ### GetConfig
 
-`func (o *Destination) GetConfig() []interface{}`
+`func (o *Destination) GetConfig() interface{}`
 
 GetConfig returns the Config field if non-nil, zero value otherwise.
 
 ### GetConfigOk
 
-`func (o *Destination) GetConfigOk() (*[]interface{}, bool)`
+`func (o *Destination) GetConfigOk() (*interface{}, bool)`
 
 GetConfigOk returns a tuple with the Config field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetConfig
 
-`func (o *Destination) SetConfig(v []interface{})`
+`func (o *Destination) SetConfig(v interface{})`
 
 SetConfig sets Config field to given value.
 
 
+### SetConfigNil
+
+`func (o *Destination) SetConfigNil(b bool)`
+
+ SetConfigNil sets the value for Config to be an explicit nil
+
+### UnsetConfig
+`func (o *Destination) UnsetConfig()`
+
+UnsetConfig ensures that no value is present for Config, not even an explicit nil
 ### GetStatus
 
 `func (o *Destination) GetStatus() DestinationStatus`
@@ -264,6 +277,76 @@ SetUpdatedAt sets UpdatedAt field to given value.
 `func (o *Destination) UnsetUpdatedAt()`
 
 UnsetUpdatedAt ensures that no value is present for UpdatedAt, not even an explicit nil
+### GetAttentionReason
+
+`func (o *Destination) GetAttentionReason() interface{}`
+
+GetAttentionReason returns the AttentionReason field if non-nil, zero value otherwise.
+
+### GetAttentionReasonOk
+
+`func (o *Destination) GetAttentionReasonOk() (*interface{}, bool)`
+
+GetAttentionReasonOk returns a tuple with the AttentionReason field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttentionReason
+
+`func (o *Destination) SetAttentionReason(v interface{})`
+
+SetAttentionReason sets AttentionReason field to given value.
+
+
+### SetAttentionReasonNil
+
+`func (o *Destination) SetAttentionReasonNil(b bool)`
+
+ SetAttentionReasonNil sets the value for AttentionReason to be an explicit nil
+
+### UnsetAttentionReason
+`func (o *Destination) UnsetAttentionReason()`
+
+UnsetAttentionReason ensures that no value is present for AttentionReason, not even an explicit nil
+### GetHeldCount
+
+`func (o *Destination) GetHeldCount() int32`
+
+GetHeldCount returns the HeldCount field if non-nil, zero value otherwise.
+
+### GetHeldCountOk
+
+`func (o *Destination) GetHeldCountOk() (*int32, bool)`
+
+GetHeldCountOk returns a tuple with the HeldCount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHeldCount
+
+`func (o *Destination) SetHeldCount(v int32)`
+
+SetHeldCount sets HeldCount field to given value.
+
+
+### GetNotices
+
+`func (o *Destination) GetNotices() []map[string]*interface{}`
+
+GetNotices returns the Notices field if non-nil, zero value otherwise.
+
+### GetNoticesOk
+
+`func (o *Destination) GetNoticesOk() (*[]map[string]*interface{}, bool)`
+
+GetNoticesOk returns a tuple with the Notices field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNotices
+
+`func (o *Destination) SetNotices(v []map[string]*interface{})`
+
+SetNotices sets Notices field to given value.
+
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

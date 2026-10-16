@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## ActionsApiBatch
 
-> ActionBatchRead ActionsApiBatch(ctx, workspace, actionBatch).AccountId(accountId).Execute()
+> ActionBatchRead ActionsApiBatch(ctx, workspace, actionBatch).AccountId(accountId).Cursor(cursor).Limit(limit).Execute()
 
 Get action batch
 
@@ -35,11 +35,13 @@ import (
 func main() {
 	workspace := int32(56) // int32 | The workspace ID
 	actionBatch := "actionBatch_example" // string | 
-	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. (optional)
+	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. (optional)
+	cursor := int32(56) // int32 | Continue using next_cursor with the same filters; rule lists use an immutable rule ID, other lists an offset or object ID. (optional)
+	limit := int32(56) // int32 | Maximum complete rows; the byte budget may return fewer. Defaults to 25. (optional) (default to 25)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ActionReadApiAPI.ActionsApiBatch(context.Background(), workspace, actionBatch).AccountId(accountId).Execute()
+	resp, r, err := apiClient.ActionReadApiAPI.ActionsApiBatch(context.Background(), workspace, actionBatch).AccountId(accountId).Cursor(cursor).Limit(limit).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ActionReadApiAPI.ActionsApiBatch``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -67,7 +69,9 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. | 
+ **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. | 
+ **cursor** | **int32** | Continue using next_cursor with the same filters; rule lists use an immutable rule ID, other lists an offset or object ID. | 
+ **limit** | **int32** | Maximum complete rows; the byte budget may return fewer. Defaults to 25. | [default to 25]
 
 ### Return type
 
@@ -110,7 +114,7 @@ import (
 func main() {
 	workspace := int32(56) // int32 | The workspace ID
 	action := "action_example" // string | 
-	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. (optional)
+	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -142,7 +146,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. | 
+ **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. | 
 
 ### Return type
 
@@ -164,7 +168,7 @@ Name | Type | Description  | Notes
 
 ## ActionsApiIndex
 
-> ActionListRead ActionsApiIndex(ctx, workspace).Status(status).Page(page).AccountId(accountId).Execute()
+> ActionListRead ActionsApiIndex(ctx, workspace).Status(status).AccountId(accountId).Cursor(cursor).Limit(limit).Page(page).Execute()
 
 List actions
 
@@ -185,12 +189,14 @@ import (
 func main() {
 	workspace := int32(56) // int32 | The workspace ID
 	status := "status_example" // string |  (optional)
-	page := int32(56) // int32 |  (optional)
-	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. (optional)
+	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. (optional)
+	cursor := int32(56) // int32 | Continue using next_cursor with the same filters; rule lists use an immutable rule ID, other lists an offset or object ID. (optional)
+	limit := int32(56) // int32 | Maximum complete rows; the byte budget may return fewer. Defaults to 25. (optional) (default to 25)
+	page := int64(789) // int64 | Integer page from 1 through 10000000000000000; integer strings are accepted. Zero, negatives, fractions, non-numeric strings and booleans return 422 with a page field validation error. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ActionReadApiAPI.ActionsApiIndex(context.Background(), workspace).Status(status).Page(page).AccountId(accountId).Execute()
+	resp, r, err := apiClient.ActionReadApiAPI.ActionsApiIndex(context.Background(), workspace).Status(status).AccountId(accountId).Cursor(cursor).Limit(limit).Page(page).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ActionReadApiAPI.ActionsApiIndex``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -217,8 +223,10 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **status** | **string** |  | 
- **page** | **int32** |  | 
- **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. | 
+ **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. | 
+ **cursor** | **int32** | Continue using next_cursor with the same filters; rule lists use an immutable rule ID, other lists an offset or object ID. | 
+ **limit** | **int32** | Maximum complete rows; the byte budget may return fewer. Defaults to 25. | [default to 25]
+ **page** | **int64** | Integer page from 1 through 10000000000000000; integer strings are accepted. Zero, negatives, fractions, non-numeric strings and booleans return 422 with a page field validation error. | 
 
 ### Return type
 
@@ -260,7 +268,7 @@ import (
 
 func main() {
 	workspace := int32(56) // int32 | The workspace ID
-	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. (optional)
+	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -290,7 +298,7 @@ Other parameters are passed through a pointer to a apiActionsApiPolicyRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. | 
+ **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. | 
 
 ### Return type
 
@@ -333,7 +341,7 @@ import (
 func main() {
 	workspace := int32(56) // int32 | The workspace ID
 	action := "action_example" // string | 
-	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. (optional)
+	accountId := int32(56) // int32 | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -365,7 +373,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one. | 
+ **accountId** | **int32** | Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. | 
 
 ### Return type
 

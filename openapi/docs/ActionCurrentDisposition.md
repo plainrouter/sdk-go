@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ReceiptStatus** | **NullableString** |  | 
+**OutcomePayload** | [**NullableActionCurrentDispositionOutcomePayload**](ActionCurrentDispositionOutcomePayload.md) |  | 
 **OutcomeStatus** | **NullableString** |  | 
 **OutcomeReasonCode** | **NullableString** |  | 
 **OutcomeCheckedAt** | **NullableTime** |  | 
@@ -16,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewActionCurrentDisposition
 
-`func NewActionCurrentDisposition(receiptStatus NullableString, outcomeStatus NullableString, outcomeReasonCode NullableString, outcomeCheckedAt NullableTime, compensationReasonCode NullableString, recoveryDisposition NullableString, lateRestored bool, ) *ActionCurrentDisposition`
+`func NewActionCurrentDisposition(receiptStatus NullableString, outcomePayload NullableActionCurrentDispositionOutcomePayload, outcomeStatus NullableString, outcomeReasonCode NullableString, outcomeCheckedAt NullableTime, compensationReasonCode NullableString, recoveryDisposition NullableString, lateRestored bool, ) *ActionCurrentDisposition`
 
 NewActionCurrentDisposition instantiates a new ActionCurrentDisposition object
 This constructor will assign default values to properties that have it defined,
@@ -61,6 +62,36 @@ SetReceiptStatus sets ReceiptStatus field to given value.
 `func (o *ActionCurrentDisposition) UnsetReceiptStatus()`
 
 UnsetReceiptStatus ensures that no value is present for ReceiptStatus, not even an explicit nil
+### GetOutcomePayload
+
+`func (o *ActionCurrentDisposition) GetOutcomePayload() ActionCurrentDispositionOutcomePayload`
+
+GetOutcomePayload returns the OutcomePayload field if non-nil, zero value otherwise.
+
+### GetOutcomePayloadOk
+
+`func (o *ActionCurrentDisposition) GetOutcomePayloadOk() (*ActionCurrentDispositionOutcomePayload, bool)`
+
+GetOutcomePayloadOk returns a tuple with the OutcomePayload field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOutcomePayload
+
+`func (o *ActionCurrentDisposition) SetOutcomePayload(v ActionCurrentDispositionOutcomePayload)`
+
+SetOutcomePayload sets OutcomePayload field to given value.
+
+
+### SetOutcomePayloadNil
+
+`func (o *ActionCurrentDisposition) SetOutcomePayloadNil(b bool)`
+
+ SetOutcomePayloadNil sets the value for OutcomePayload to be an explicit nil
+
+### UnsetOutcomePayload
+`func (o *ActionCurrentDisposition) UnsetOutcomePayload()`
+
+UnsetOutcomePayload ensures that no value is present for OutcomePayload, not even an explicit nil
 ### GetOutcomeStatus
 
 `func (o *ActionCurrentDisposition) GetOutcomeStatus() string`

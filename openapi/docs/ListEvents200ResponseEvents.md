@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **From** | **NullableInt32** |  | 
 **LastPage** | **int32** |  | 
 **LastPageUrl** | **NullableString** |  | 
-**Links** | [**[]ListEvents200ResponseEventsLinksInner**](ListEvents200ResponseEventsLinksInner.md) |  | 
+**Links** | [**[]LaunchPoliciesIndex200ResponsePoliciesLinksInner**](LaunchPoliciesIndex200ResponsePoliciesLinksInner.md) |  | 
 **NextPageUrl** | **NullableString** |  | 
 **Path** | **NullableString** |  | 
 **PerPage** | **int32** |  | 
@@ -22,7 +22,7 @@ Name | Type | Description | Notes
 
 ### NewListEvents200ResponseEvents
 
-`func NewListEvents200ResponseEvents(currentPage int32, data []GetEvent200ResponseEvent, firstPageUrl NullableString, from NullableInt32, lastPage int32, lastPageUrl NullableString, links []ListEvents200ResponseEventsLinksInner, nextPageUrl NullableString, path NullableString, perPage int32, prevPageUrl NullableString, to NullableInt32, total int32, ) *ListEvents200ResponseEvents`
+`func NewListEvents200ResponseEvents(currentPage int32, data []GetEvent200ResponseEvent, firstPageUrl NullableString, from NullableInt32, lastPage int32, lastPageUrl NullableString, links []LaunchPoliciesIndex200ResponsePoliciesLinksInner, nextPageUrl NullableString, path NullableString, perPage int32, prevPageUrl NullableString, to NullableInt32, total int32, ) *ListEvents200ResponseEvents`
 
 NewListEvents200ResponseEvents instantiates a new ListEvents200ResponseEvents object
 This constructor will assign default values to properties that have it defined,
@@ -189,20 +189,20 @@ SetLastPageUrl sets LastPageUrl field to given value.
 UnsetLastPageUrl ensures that no value is present for LastPageUrl, not even an explicit nil
 ### GetLinks
 
-`func (o *ListEvents200ResponseEvents) GetLinks() []ListEvents200ResponseEventsLinksInner`
+`func (o *ListEvents200ResponseEvents) GetLinks() []LaunchPoliciesIndex200ResponsePoliciesLinksInner`
 
 GetLinks returns the Links field if non-nil, zero value otherwise.
 
 ### GetLinksOk
 
-`func (o *ListEvents200ResponseEvents) GetLinksOk() (*[]ListEvents200ResponseEventsLinksInner, bool)`
+`func (o *ListEvents200ResponseEvents) GetLinksOk() (*[]LaunchPoliciesIndex200ResponsePoliciesLinksInner, bool)`
 
 GetLinksOk returns a tuple with the Links field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLinks
 
-`func (o *ListEvents200ResponseEvents) SetLinks(v []ListEvents200ResponseEventsLinksInner)`
+`func (o *ListEvents200ResponseEvents) SetLinks(v []LaunchPoliciesIndex200ResponsePoliciesLinksInner)`
 
 SetLinks sets Links field to given value.
 

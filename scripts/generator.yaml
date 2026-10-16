@@ -1,0 +1,4 @@
+files:
+  empty_closed_object.mustache:
+    templateType: SupportingFiles
+    destinationFilename: empty_closed_object.go

@@ -46,12 +46,14 @@ The generated contract moved from the root package to `github.com/plainrouter/sd
 
 ## Contract and generation
 
-- API contract: signed OpenAPI `0.5.0`
+- API contract: signed OpenAPI `0.5.0` (core main `2d15dc970d92ca22e00d369ab544c113c8cdde77`)
 - Generator: OpenAPI Generator `7.25.0`, checksum-pinned by `scripts/generate.sh`
 - Module path: `github.com/plainrouter/sdk-go`
 - Documentation: [plainrouter.com/docs](https://plainrouter.com/docs)
 
-Run `scripts/generate.sh` to regenerate the `openapi` subpackage and `scripts/check-generated.sh` to verify that committed output matches the signed contract. The root package is repository-owned and intentionally small.
+Run `scripts/generate.sh` to regenerate the `openapi` subpackage and `scripts/check-generated.sh` to verify that committed output matches the signed contract. The root package is repository-owned and intentionally small. Its constructors reject JSON booleans in integer fields and unknown keys in closed request objects before sending, including values supplied through permissive maps. These guards are generated from the signed spec; numbers and numeric strings are preserved.
+
+The six Actions and Launch list operations accept `int64` pages through `10^16`. Leave page unset to omit it and use the server default of page 1. The server also accepts integer strings; the Go setters take integers. See [CHANGELOG.md](CHANGELOG.md) for the complete contract delta.
 
 ## License
 

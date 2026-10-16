@@ -16,6 +16,10 @@ Name | Type | Description | Notes
 **Rationale** | **string** |  | 
 **ProposedBy** | [**ActionProposalReadProposalProposedBy**](ActionProposalReadProposalProposedBy.md) |  | 
 **Actions** | [**[]ActionProposalReadProposalActionsInner**](ActionProposalReadProposalActionsInner.md) |  | 
+**NextCursor** | Pointer to **NullableInt32** |  | [optional] 
+**Truncated** | Pointer to **bool** |  | [optional] 
+**Continuation** | Pointer to **string** |  | [optional] 
+**Total** | Pointer to **int32** |  | [optional] 
 
 ## Methods
 
@@ -295,6 +299,116 @@ and a boolean to check if the value has been set.
 
 SetActions sets Actions field to given value.
 
+
+### GetNextCursor
+
+`func (o *ActionProposalReadProposal) GetNextCursor() int32`
+
+GetNextCursor returns the NextCursor field if non-nil, zero value otherwise.
+
+### GetNextCursorOk
+
+`func (o *ActionProposalReadProposal) GetNextCursorOk() (*int32, bool)`
+
+GetNextCursorOk returns a tuple with the NextCursor field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNextCursor
+
+`func (o *ActionProposalReadProposal) SetNextCursor(v int32)`
+
+SetNextCursor sets NextCursor field to given value.
+
+### HasNextCursor
+
+`func (o *ActionProposalReadProposal) HasNextCursor() bool`
+
+HasNextCursor returns a boolean if a field has been set.
+
+### SetNextCursorNil
+
+`func (o *ActionProposalReadProposal) SetNextCursorNil(b bool)`
+
+ SetNextCursorNil sets the value for NextCursor to be an explicit nil
+
+### UnsetNextCursor
+`func (o *ActionProposalReadProposal) UnsetNextCursor()`
+
+UnsetNextCursor ensures that no value is present for NextCursor, not even an explicit nil
+### GetTruncated
+
+`func (o *ActionProposalReadProposal) GetTruncated() bool`
+
+GetTruncated returns the Truncated field if non-nil, zero value otherwise.
+
+### GetTruncatedOk
+
+`func (o *ActionProposalReadProposal) GetTruncatedOk() (*bool, bool)`
+
+GetTruncatedOk returns a tuple with the Truncated field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTruncated
+
+`func (o *ActionProposalReadProposal) SetTruncated(v bool)`
+
+SetTruncated sets Truncated field to given value.
+
+### HasTruncated
+
+`func (o *ActionProposalReadProposal) HasTruncated() bool`
+
+HasTruncated returns a boolean if a field has been set.
+
+### GetContinuation
+
+`func (o *ActionProposalReadProposal) GetContinuation() string`
+
+GetContinuation returns the Continuation field if non-nil, zero value otherwise.
+
+### GetContinuationOk
+
+`func (o *ActionProposalReadProposal) GetContinuationOk() (*string, bool)`
+
+GetContinuationOk returns a tuple with the Continuation field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContinuation
+
+`func (o *ActionProposalReadProposal) SetContinuation(v string)`
+
+SetContinuation sets Continuation field to given value.
+
+### HasContinuation
+
+`func (o *ActionProposalReadProposal) HasContinuation() bool`
+
+HasContinuation returns a boolean if a field has been set.
+
+### GetTotal
+
+`func (o *ActionProposalReadProposal) GetTotal() int32`
+
+GetTotal returns the Total field if non-nil, zero value otherwise.
+
+### GetTotalOk
+
+`func (o *ActionProposalReadProposal) GetTotalOk() (*int32, bool)`
+
+GetTotalOk returns a tuple with the Total field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTotal
+
+`func (o *ActionProposalReadProposal) SetTotal(v int32)`
+
+SetTotal sets Total field to given value.
+
+### HasTotal
+
+`func (o *ActionProposalReadProposal) HasTotal() bool`
+
+HasTotal returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

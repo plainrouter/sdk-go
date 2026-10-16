@@ -5,6 +5,8 @@
 
 * `CONSENT_CAPTURED_AT_INVALID` (value: `"consent_captured_at_invalid"`)
 
+* `EVENT_SOURCE_INVALID` (value: `"event_source_invalid"`)
+
 * `UNKNOWN_DEFAULT_OPEN_API` (value: `"unknown_default_open_api"`)
 
 

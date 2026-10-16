@@ -21,12 +21,14 @@ type DestinationType string
 // List of DestinationType
 const (
 	DESTINATIONTYPE_META                     DestinationType = "meta"
+	DESTINATIONTYPE_GOOGLE_ADS               DestinationType = "google_ads"
 	DESTINATIONTYPE_UNKNOWN_DEFAULT_OPEN_API DestinationType = "unknown_default_open_api"
 )
 
 // All allowed values of DestinationType enum
 var AllowedDestinationTypeEnumValues = []DestinationType{
 	"meta",
+	"google_ads",
 	"unknown_default_open_api",
 }
 

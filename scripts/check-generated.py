@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPOSITORY_OWNED = {
     ".gitignore",
+    "doc.go",
     ".openapi-generator-ignore",
     ".travis.yml",
     "README.md",
@@ -34,12 +35,21 @@ def main() -> None:
     parser.add_argument("actual", type=Path)
     args = parser.parse_args()
 
-    expected_files = manifest(args.expected)
-    actual_files = manifest(args.actual)
+    expected_files = manifest(args.expected) | {"request_contract_generated.go"}
+    actual_files = manifest(args.actual) | {"request_contract_generated.go"}
     if expected_files != actual_files:
         missing = sorted(expected_files - actual_files)
         extra = sorted(actual_files - expected_files)
         raise SystemExit(f"generated manifest drift; missing={missing}, extra={extra}")
+
+    unexpected = {
+        str(path.relative_to(args.expected))
+        for pattern in ("*.go", "docs/*.md")
+        for path in (args.expected / "openapi").glob(pattern)
+        if path.name not in REPOSITORY_OWNED
+    } - expected_files
+    if unexpected:
+        raise SystemExit("unmanaged generated files: " + ", ".join(sorted(unexpected)))
 
     changed = [
         relative

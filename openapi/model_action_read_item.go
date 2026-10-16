@@ -20,20 +20,25 @@ var _ MappedNullable = &ActionReadItem{}
 
 // ActionReadItem struct for ActionReadItem
 type ActionReadItem struct {
-	Id                   string                   `json:"id"`
-	BatchId              string                   `json:"batch_id"`
-	WorkspaceId          int32                    `json:"workspace_id"`
-	Type                 string                   `json:"type"`
-	TargetEntityType     string                   `json:"target_entity_type"`
-	TargetEntityId       string                   `json:"target_entity_id"`
-	TargetEntityName     NullableString           `json:"target_entity_name"`
-	Params               interface{}              `json:"params"`
-	Rationale            string                   `json:"rationale"`
-	Status               string                   `json:"status"`
-	BatchStatus          string                   `json:"batch_status"`
-	Disposition          ActionCurrentDisposition `json:"disposition"`
-	PolicyDecision       NullableString           `json:"policy_decision"`
-	PolicyReasons        []string                 `json:"policy_reasons"`
+	Id                   string                                `json:"id"`
+	BatchId              string                                `json:"batch_id"`
+	WorkspaceId          int32                                 `json:"workspace_id"`
+	Type                 string                                `json:"type"`
+	TargetEntityType     string                                `json:"target_entity_type"`
+	TargetEntityId       string                                `json:"target_entity_id"`
+	TargetEntityName     NullableString                        `json:"target_entity_name"`
+	CountedEvidence      NullableActionReadItemCountedEvidence `json:"counted_evidence,omitempty"`
+	Params               interface{}                           `json:"params"`
+	Rationale            string                                `json:"rationale"`
+	Proposer             *ActionReadItemProposer               `json:"proposer,omitempty"`
+	Evidence             *ActionReadItemEvidence               `json:"evidence,omitempty"`
+	Status               string                                `json:"status"`
+	BatchStatus          string                                `json:"batch_status"`
+	Disposition          ActionCurrentDisposition              `json:"disposition"`
+	PolicyDecision       NullableString                        `json:"policy_decision"`
+	PolicyReasons        []string                              `json:"policy_reasons"`
+	PolicyResult         NullableActionPolicyResult            `json:"policy_result"`
+	PolicyResults        []ActionPolicyResult                  `json:"policy_results"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -43,7 +48,7 @@ type _ActionReadItem ActionReadItem
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActionReadItem(id string, batchId string, workspaceId int32, type_ string, targetEntityType string, targetEntityId string, targetEntityName NullableString, params interface{}, rationale string, status string, batchStatus string, disposition ActionCurrentDisposition, policyDecision NullableString, policyReasons []string) *ActionReadItem {
+func NewActionReadItem(id string, batchId string, workspaceId int32, type_ string, targetEntityType string, targetEntityId string, targetEntityName NullableString, params interface{}, rationale string, status string, batchStatus string, disposition ActionCurrentDisposition, policyDecision NullableString, policyReasons []string, policyResult NullableActionPolicyResult, policyResults []ActionPolicyResult) *ActionReadItem {
 	this := ActionReadItem{}
 	this.Id = id
 	this.BatchId = batchId
@@ -59,6 +64,8 @@ func NewActionReadItem(id string, batchId string, workspaceId int32, type_ strin
 	this.Disposition = disposition
 	this.PolicyDecision = policyDecision
 	this.PolicyReasons = policyReasons
+	this.PolicyResult = policyResult
+	this.PolicyResults = policyResults
 	return &this
 }
 
@@ -240,6 +247,49 @@ func (o *ActionReadItem) SetTargetEntityName(v string) {
 	o.TargetEntityName.Set(&v)
 }
 
+// GetCountedEvidence returns the CountedEvidence field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ActionReadItem) GetCountedEvidence() ActionReadItemCountedEvidence {
+	if o == nil || IsNil(o.CountedEvidence.Get()) {
+		var ret ActionReadItemCountedEvidence
+		return ret
+	}
+	return *o.CountedEvidence.Get()
+}
+
+// GetCountedEvidenceOk returns a tuple with the CountedEvidence field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ActionReadItem) GetCountedEvidenceOk() (*ActionReadItemCountedEvidence, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.CountedEvidence.Get(), o.CountedEvidence.IsSet()
+}
+
+// HasCountedEvidence returns a boolean if a field has been set.
+func (o *ActionReadItem) HasCountedEvidence() bool {
+	if o != nil && o.CountedEvidence.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetCountedEvidence gets a reference to the given NullableActionReadItemCountedEvidence and assigns it to the CountedEvidence field.
+func (o *ActionReadItem) SetCountedEvidence(v ActionReadItemCountedEvidence) {
+	o.CountedEvidence.Set(&v)
+}
+
+// SetCountedEvidenceNil sets the value for CountedEvidence to be an explicit nil
+func (o *ActionReadItem) SetCountedEvidenceNil() {
+	o.CountedEvidence.Set(nil)
+}
+
+// UnsetCountedEvidence ensures that no value is present for CountedEvidence, not even an explicit nil
+func (o *ActionReadItem) UnsetCountedEvidence() {
+	o.CountedEvidence.Unset()
+}
+
 // GetParams returns the Params field value
 // If the value is explicit nil, the zero value for interface{} will be returned
 func (o *ActionReadItem) GetParams() interface{} {
@@ -288,6 +338,70 @@ func (o *ActionReadItem) GetRationaleOk() (*string, bool) {
 // SetRationale sets field value
 func (o *ActionReadItem) SetRationale(v string) {
 	o.Rationale = v
+}
+
+// GetProposer returns the Proposer field value if set, zero value otherwise.
+func (o *ActionReadItem) GetProposer() ActionReadItemProposer {
+	if o == nil || IsNil(o.Proposer) {
+		var ret ActionReadItemProposer
+		return ret
+	}
+	return *o.Proposer
+}
+
+// GetProposerOk returns a tuple with the Proposer field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionReadItem) GetProposerOk() (*ActionReadItemProposer, bool) {
+	if o == nil || IsNil(o.Proposer) {
+		return nil, false
+	}
+	return o.Proposer, true
+}
+
+// HasProposer returns a boolean if a field has been set.
+func (o *ActionReadItem) HasProposer() bool {
+	if o != nil && !IsNil(o.Proposer) {
+		return true
+	}
+
+	return false
+}
+
+// SetProposer gets a reference to the given ActionReadItemProposer and assigns it to the Proposer field.
+func (o *ActionReadItem) SetProposer(v ActionReadItemProposer) {
+	o.Proposer = &v
+}
+
+// GetEvidence returns the Evidence field value if set, zero value otherwise.
+func (o *ActionReadItem) GetEvidence() ActionReadItemEvidence {
+	if o == nil || IsNil(o.Evidence) {
+		var ret ActionReadItemEvidence
+		return ret
+	}
+	return *o.Evidence
+}
+
+// GetEvidenceOk returns a tuple with the Evidence field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionReadItem) GetEvidenceOk() (*ActionReadItemEvidence, bool) {
+	if o == nil || IsNil(o.Evidence) {
+		return nil, false
+	}
+	return o.Evidence, true
+}
+
+// HasEvidence returns a boolean if a field has been set.
+func (o *ActionReadItem) HasEvidence() bool {
+	if o != nil && !IsNil(o.Evidence) {
+		return true
+	}
+
+	return false
+}
+
+// SetEvidence gets a reference to the given ActionReadItemEvidence and assigns it to the Evidence field.
+func (o *ActionReadItem) SetEvidence(v ActionReadItemEvidence) {
+	o.Evidence = &v
 }
 
 // GetStatus returns the Status field value
@@ -412,6 +526,56 @@ func (o *ActionReadItem) SetPolicyReasons(v []string) {
 	o.PolicyReasons = v
 }
 
+// GetPolicyResult returns the PolicyResult field value
+// If the value is explicit nil, the zero value for ActionPolicyResult will be returned
+func (o *ActionReadItem) GetPolicyResult() ActionPolicyResult {
+	if o == nil || o.PolicyResult.Get() == nil {
+		var ret ActionPolicyResult
+		return ret
+	}
+
+	return *o.PolicyResult.Get()
+}
+
+// GetPolicyResultOk returns a tuple with the PolicyResult field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ActionReadItem) GetPolicyResultOk() (*ActionPolicyResult, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PolicyResult.Get(), o.PolicyResult.IsSet()
+}
+
+// SetPolicyResult sets field value
+func (o *ActionReadItem) SetPolicyResult(v ActionPolicyResult) {
+	o.PolicyResult.Set(&v)
+}
+
+// GetPolicyResults returns the PolicyResults field value
+func (o *ActionReadItem) GetPolicyResults() []ActionPolicyResult {
+	if o == nil {
+		var ret []ActionPolicyResult
+		return ret
+	}
+
+	return o.PolicyResults
+}
+
+// GetPolicyResultsOk returns a tuple with the PolicyResults field value
+// and a boolean to check if the value has been set.
+func (o *ActionReadItem) GetPolicyResultsOk() ([]ActionPolicyResult, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PolicyResults, true
+}
+
+// SetPolicyResults sets field value
+func (o *ActionReadItem) SetPolicyResults(v []ActionPolicyResult) {
+	o.PolicyResults = v
+}
+
 func (o ActionReadItem) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -429,15 +593,26 @@ func (o ActionReadItem) ToMap() (map[string]interface{}, error) {
 	toSerialize["target_entity_type"] = o.TargetEntityType
 	toSerialize["target_entity_id"] = o.TargetEntityId
 	toSerialize["target_entity_name"] = o.TargetEntityName.Get()
+	if o.CountedEvidence.IsSet() {
+		toSerialize["counted_evidence"] = o.CountedEvidence.Get()
+	}
 	if o.Params != nil {
 		toSerialize["params"] = o.Params
 	}
 	toSerialize["rationale"] = o.Rationale
+	if !IsNil(o.Proposer) {
+		toSerialize["proposer"] = o.Proposer
+	}
+	if !IsNil(o.Evidence) {
+		toSerialize["evidence"] = o.Evidence
+	}
 	toSerialize["status"] = o.Status
 	toSerialize["batch_status"] = o.BatchStatus
 	toSerialize["disposition"] = o.Disposition
 	toSerialize["policy_decision"] = o.PolicyDecision.Get()
 	toSerialize["policy_reasons"] = o.PolicyReasons
+	toSerialize["policy_result"] = o.PolicyResult.Get()
+	toSerialize["policy_results"] = o.PolicyResults
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -465,6 +640,8 @@ func (o *ActionReadItem) UnmarshalJSON(data []byte) (err error) {
 		"disposition",
 		"policy_decision",
 		"policy_reasons",
+		"policy_result",
+		"policy_results",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -501,13 +678,18 @@ func (o *ActionReadItem) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "target_entity_type")
 		delete(additionalProperties, "target_entity_id")
 		delete(additionalProperties, "target_entity_name")
+		delete(additionalProperties, "counted_evidence")
 		delete(additionalProperties, "params")
 		delete(additionalProperties, "rationale")
+		delete(additionalProperties, "proposer")
+		delete(additionalProperties, "evidence")
 		delete(additionalProperties, "status")
 		delete(additionalProperties, "batch_status")
 		delete(additionalProperties, "disposition")
 		delete(additionalProperties, "policy_decision")
 		delete(additionalProperties, "policy_reasons")
+		delete(additionalProperties, "policy_result")
+		delete(additionalProperties, "policy_results")
 		o.AdditionalProperties = additionalProperties
 	}
 

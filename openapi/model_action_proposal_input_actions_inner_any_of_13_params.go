@@ -11,6 +11,7 @@ API version: 0.5.0
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 )
@@ -20,10 +21,9 @@ var _ MappedNullable = &ActionProposalInputActionsInnerAnyOf13Params{}
 
 // ActionProposalInputActionsInnerAnyOf13Params struct for ActionProposalInputActionsInnerAnyOf13Params
 type ActionProposalInputActionsInnerAnyOf13Params struct {
-	AssetId              string         `json:"asset_id" validate:"regexp=^(image|video):.+$"`
-	Status               string         `json:"status"`
-	NameSuffix           NullableString `json:"name_suffix,omitempty"`
-	AdditionalProperties map[string]interface{}
+	AssetId    string         `json:"asset_id" validate:"regexp=^(image|video):.+$"`
+	Status     string         `json:"status"`
+	NameSuffix NullableString `json:"name_suffix,omitempty"`
 }
 
 type _ActionProposalInputActionsInnerAnyOf13Params ActionProposalInputActionsInnerAnyOf13Params
@@ -153,11 +153,6 @@ func (o ActionProposalInputActionsInnerAnyOf13Params) ToMap() (map[string]interf
 	if o.NameSuffix.IsSet() {
 		toSerialize["name_suffix"] = o.NameSuffix.Get()
 	}
-
-	for key, value := range o.AdditionalProperties {
-		toSerialize[key] = value
-	}
-
 	return toSerialize, nil
 }
 
@@ -186,22 +181,15 @@ func (o *ActionProposalInputActionsInnerAnyOf13Params) UnmarshalJSON(data []byte
 
 	varActionProposalInputActionsInnerAnyOf13Params := _ActionProposalInputActionsInnerAnyOf13Params{}
 
-	err = json.Unmarshal(data, &varActionProposalInputActionsInnerAnyOf13Params)
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varActionProposalInputActionsInnerAnyOf13Params)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ActionProposalInputActionsInnerAnyOf13Params(varActionProposalInputActionsInnerAnyOf13Params)
-
-	additionalProperties := make(map[string]interface{})
-
-	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "asset_id")
-		delete(additionalProperties, "status")
-		delete(additionalProperties, "name_suffix")
-		o.AdditionalProperties = additionalProperties
-	}
 
 	return err
 }

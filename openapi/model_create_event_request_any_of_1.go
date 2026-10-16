@@ -33,7 +33,7 @@ type CreateEventRequestAnyOf1 struct {
 	ActionSource *string `json:"action_source,omitempty"`
 	// Optional visitor identifier; maximum 255 characters.
 	VisitorId *string `json:"visitor_id,omitempty"`
-	// Legal basis for processing. Legitimate-interest revenue lifecycle events are rejected; use an authenticated server adapter.
+	// Legal basis for processing. Legitimate-interest server revenue retains identity only with admitted global visitor or buyer-country evidence and no opt-out.
 	ConsentBasis string `json:"consent_basis"`
 	// Consent state supplied with the event.
 	Consent map[string]*interface{} `json:"consent,omitempty"`

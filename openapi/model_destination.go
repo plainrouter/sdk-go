@@ -29,10 +29,13 @@ type Destination struct {
 	PlatformAdAccountId  NullableInt32               `json:"platform_ad_account_id"`
 	Type                 DestinationType             `json:"type"`
 	CredentialSource     DestinationCredentialSource `json:"credential_source"`
-	Config               []interface{}               `json:"config"`
+	Config               interface{}                 `json:"config"`
 	Status               DestinationStatus           `json:"status"`
 	CreatedAt            NullableTime                `json:"created_at"`
 	UpdatedAt            NullableTime                `json:"updated_at"`
+	AttentionReason      interface{}                 `json:"attention_reason"`
+	HeldCount            int32                       `json:"held_count"`
+	Notices              []map[string]*interface{}   `json:"notices"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -42,7 +45,7 @@ type _Destination Destination
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config []interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime) *Destination {
+func NewDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config interface{}, status DestinationStatus, createdAt NullableTime, updatedAt NullableTime, attentionReason interface{}, heldCount int32, notices []map[string]*interface{}) *Destination {
 	this := Destination{}
 	this.Id = id
 	this.WorkspaceId = workspaceId
@@ -54,6 +57,9 @@ func NewDestination(id string, workspaceId int32, signalTrackerId string, platfo
 	this.Status = status
 	this.CreatedAt = createdAt
 	this.UpdatedAt = updatedAt
+	this.AttentionReason = attentionReason
+	this.HeldCount = heldCount
+	this.Notices = notices
 	return &this
 }
 
@@ -215,9 +221,10 @@ func (o *Destination) SetCredentialSource(v DestinationCredentialSource) {
 }
 
 // GetConfig returns the Config field value
-func (o *Destination) GetConfig() []interface{} {
+// If the value is explicit nil, the zero value for interface{} will be returned
+func (o *Destination) GetConfig() interface{} {
 	if o == nil {
-		var ret []interface{}
+		var ret interface{}
 		return ret
 	}
 
@@ -226,15 +233,16 @@ func (o *Destination) GetConfig() []interface{} {
 
 // GetConfigOk returns a tuple with the Config field value
 // and a boolean to check if the value has been set.
-func (o *Destination) GetConfigOk() ([]interface{}, bool) {
-	if o == nil {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Destination) GetConfigOk() (*interface{}, bool) {
+	if o == nil || IsNil(o.Config) {
 		return nil, false
 	}
-	return o.Config, true
+	return &o.Config, true
 }
 
 // SetConfig sets field value
-func (o *Destination) SetConfig(v []interface{}) {
+func (o *Destination) SetConfig(v interface{}) {
 	o.Config = v
 }
 
@@ -314,6 +322,80 @@ func (o *Destination) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt.Set(&v)
 }
 
+// GetAttentionReason returns the AttentionReason field value
+// If the value is explicit nil, the zero value for interface{} will be returned
+func (o *Destination) GetAttentionReason() interface{} {
+	if o == nil {
+		var ret interface{}
+		return ret
+	}
+
+	return o.AttentionReason
+}
+
+// GetAttentionReasonOk returns a tuple with the AttentionReason field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Destination) GetAttentionReasonOk() (*interface{}, bool) {
+	if o == nil || IsNil(o.AttentionReason) {
+		return nil, false
+	}
+	return &o.AttentionReason, true
+}
+
+// SetAttentionReason sets field value
+func (o *Destination) SetAttentionReason(v interface{}) {
+	o.AttentionReason = v
+}
+
+// GetHeldCount returns the HeldCount field value
+func (o *Destination) GetHeldCount() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.HeldCount
+}
+
+// GetHeldCountOk returns a tuple with the HeldCount field value
+// and a boolean to check if the value has been set.
+func (o *Destination) GetHeldCountOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.HeldCount, true
+}
+
+// SetHeldCount sets field value
+func (o *Destination) SetHeldCount(v int32) {
+	o.HeldCount = v
+}
+
+// GetNotices returns the Notices field value
+func (o *Destination) GetNotices() []map[string]*interface{} {
+	if o == nil {
+		var ret []map[string]*interface{}
+		return ret
+	}
+
+	return o.Notices
+}
+
+// GetNoticesOk returns a tuple with the Notices field value
+// and a boolean to check if the value has been set.
+func (o *Destination) GetNoticesOk() ([]map[string]*interface{}, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Notices, true
+}
+
+// SetNotices sets field value
+func (o *Destination) SetNotices(v []map[string]*interface{}) {
+	o.Notices = v
+}
+
 func (o Destination) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -330,10 +412,17 @@ func (o Destination) ToMap() (map[string]interface{}, error) {
 	toSerialize["platform_ad_account_id"] = o.PlatformAdAccountId.Get()
 	toSerialize["type"] = o.Type
 	toSerialize["credential_source"] = o.CredentialSource
-	toSerialize["config"] = o.Config
+	if o.Config != nil {
+		toSerialize["config"] = o.Config
+	}
 	toSerialize["status"] = o.Status
 	toSerialize["created_at"] = o.CreatedAt.Get()
 	toSerialize["updated_at"] = o.UpdatedAt.Get()
+	if o.AttentionReason != nil {
+		toSerialize["attention_reason"] = o.AttentionReason
+	}
+	toSerialize["held_count"] = o.HeldCount
+	toSerialize["notices"] = o.Notices
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -357,6 +446,9 @@ func (o *Destination) UnmarshalJSON(data []byte) (err error) {
 		"status",
 		"created_at",
 		"updated_at",
+		"attention_reason",
+		"held_count",
+		"notices",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -396,6 +488,9 @@ func (o *Destination) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "status")
 		delete(additionalProperties, "created_at")
 		delete(additionalProperties, "updated_at")
+		delete(additionalProperties, "attention_reason")
+		delete(additionalProperties, "held_count")
+		delete(additionalProperties, "notices")
 		o.AdditionalProperties = additionalProperties
 	}
 

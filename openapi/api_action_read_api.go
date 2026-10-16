@@ -28,11 +28,25 @@ type ApiActionsApiBatchRequest struct {
 	workspace   int32
 	actionBatch string
 	accountId   *int32
+	cursor      *int32
+	limit       *int32
 }
 
-// Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.
+// Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.
 func (r ApiActionsApiBatchRequest) AccountId(accountId int32) ApiActionsApiBatchRequest {
 	r.accountId = &accountId
+	return r
+}
+
+// Continue using next_cursor with the same filters; rule lists use an immutable rule ID, other lists an offset or object ID.
+func (r ApiActionsApiBatchRequest) Cursor(cursor int32) ApiActionsApiBatchRequest {
+	r.cursor = &cursor
+	return r
+}
+
+// Maximum complete rows; the byte budget may return fewer. Defaults to 25.
+func (r ApiActionsApiBatchRequest) Limit(limit int32) ApiActionsApiBatchRequest {
+	r.limit = &limit
 	return r
 }
 
@@ -43,7 +57,7 @@ func (r ApiActionsApiBatchRequest) Execute() (*ActionBatchRead, *http.Response, 
 /*
 ActionsApiBatch Get action batch
 
-Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.
+Read persisted Actions data for the authorized account. Unbound keys require exactly one active account; account_id cannot select among multiple accounts.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param workspace The workspace ID
@@ -86,6 +100,16 @@ func (a *ActionReadApiAPIService) ActionsApiBatchExecute(r ApiActionsApiBatchReq
 	if r.accountId != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "account_id", r.accountId, "form", "")
 	}
+	if r.cursor != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "form", "")
+	}
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 25
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", defaultValue, "form", "")
+		r.limit = &defaultValue
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -126,7 +150,7 @@ func (a *ActionReadApiAPIService) ActionsApiBatchExecute(r ApiActionsApiBatchReq
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
-			var v ErrorMessage
+			var v ActionsApiDryRun401Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -137,7 +161,7 @@ func (a *ActionReadApiAPIService) ActionsApiBatchExecute(r ApiActionsApiBatchReq
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
-			var v ErrorMessage
+			var v AgentCredentialError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -148,7 +172,7 @@ func (a *ActionReadApiAPIService) ActionsApiBatchExecute(r ApiActionsApiBatchReq
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ErrorMessage
+			var v ApiRouteNotFound
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -191,7 +215,7 @@ type ApiActionsApiDecisionReceiptRequest struct {
 	accountId  *int32
 }
 
-// Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.
+// Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.
 func (r ApiActionsApiDecisionReceiptRequest) AccountId(accountId int32) ApiActionsApiDecisionReceiptRequest {
 	r.accountId = &accountId
 	return r
@@ -204,7 +228,7 @@ func (r ApiActionsApiDecisionReceiptRequest) Execute() (*ActionDecisionReceiptRe
 /*
 ActionsApiDecisionReceipt Get decision receipt
 
-Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.
+Read persisted Actions data for the authorized account. Unbound keys require exactly one active account; account_id cannot select among multiple accounts.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param workspace The workspace ID
@@ -287,7 +311,7 @@ func (a *ActionReadApiAPIService) ActionsApiDecisionReceiptExecute(r ApiActionsA
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
-			var v ErrorMessage
+			var v ActionsApiDryRun401Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -298,7 +322,7 @@ func (a *ActionReadApiAPIService) ActionsApiDecisionReceiptExecute(r ApiActionsA
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
-			var v ErrorMessage
+			var v AgentCredentialError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -309,7 +333,7 @@ func (a *ActionReadApiAPIService) ActionsApiDecisionReceiptExecute(r ApiActionsA
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ErrorMessage
+			var v ActionsApiDecisionReceipt404Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -349,8 +373,10 @@ type ApiActionsApiIndexRequest struct {
 	ApiService *ActionReadApiAPIService
 	workspace  int32
 	status     *string
-	page       *int32
 	accountId  *int32
+	cursor     *int32
+	limit      *int32
+	page       *int64
 }
 
 func (r ApiActionsApiIndexRequest) Status(status string) ApiActionsApiIndexRequest {
@@ -358,14 +384,27 @@ func (r ApiActionsApiIndexRequest) Status(status string) ApiActionsApiIndexReque
 	return r
 }
 
-func (r ApiActionsApiIndexRequest) Page(page int32) ApiActionsApiIndexRequest {
-	r.page = &page
+// Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.
+func (r ApiActionsApiIndexRequest) AccountId(accountId int32) ApiActionsApiIndexRequest {
+	r.accountId = &accountId
 	return r
 }
 
-// Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.
-func (r ApiActionsApiIndexRequest) AccountId(accountId int32) ApiActionsApiIndexRequest {
-	r.accountId = &accountId
+// Continue using next_cursor with the same filters; rule lists use an immutable rule ID, other lists an offset or object ID.
+func (r ApiActionsApiIndexRequest) Cursor(cursor int32) ApiActionsApiIndexRequest {
+	r.cursor = &cursor
+	return r
+}
+
+// Maximum complete rows; the byte budget may return fewer. Defaults to 25.
+func (r ApiActionsApiIndexRequest) Limit(limit int32) ApiActionsApiIndexRequest {
+	r.limit = &limit
+	return r
+}
+
+// Integer page from 1 through 10000000000000000; integer strings are accepted. Zero, negatives, fractions, non-numeric strings and booleans return 422 with a page field validation error.
+func (r ApiActionsApiIndexRequest) Page(page int64) ApiActionsApiIndexRequest {
+	r.page = &page
 	return r
 }
 
@@ -376,7 +415,7 @@ func (r ApiActionsApiIndexRequest) Execute() (*ActionListRead, *http.Response, e
 /*
 ActionsApiIndex List actions
 
-Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.
+Read persisted Actions data for the authorized account. Unbound keys require exactly one active account; account_id cannot select among multiple accounts.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param workspace The workspace ID
@@ -416,11 +455,21 @@ func (a *ActionReadApiAPIService) ActionsApiIndexExecute(r ApiActionsApiIndexReq
 	if r.status != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "status", r.status, "form", "")
 	}
-	if r.page != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
-	}
 	if r.accountId != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "account_id", r.accountId, "form", "")
+	}
+	if r.cursor != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "form", "")
+	}
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 25
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", defaultValue, "form", "")
+		r.limit = &defaultValue
+	}
+	if r.page != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -462,7 +511,7 @@ func (a *ActionReadApiAPIService) ActionsApiIndexExecute(r ApiActionsApiIndexReq
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
-			var v ErrorMessage
+			var v ActionsApiDryRun401Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -473,7 +522,7 @@ func (a *ActionReadApiAPIService) ActionsApiIndexExecute(r ApiActionsApiIndexReq
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
-			var v ErrorMessage
+			var v AgentCredentialError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -484,7 +533,7 @@ func (a *ActionReadApiAPIService) ActionsApiIndexExecute(r ApiActionsApiIndexReq
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ErrorMessage
+			var v ApiRouteNotFound
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -526,7 +575,7 @@ type ApiActionsApiPolicyRequest struct {
 	accountId  *int32
 }
 
-// Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.
+// Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.
 func (r ApiActionsApiPolicyRequest) AccountId(accountId int32) ApiActionsApiPolicyRequest {
 	r.accountId = &accountId
 	return r
@@ -539,7 +588,7 @@ func (r ApiActionsApiPolicyRequest) Execute() (*ActionPolicyRead, *http.Response
 /*
 ActionsApiPolicy Get action policy
 
-Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.
+Read persisted Actions data for the authorized account. Unbound keys require exactly one active account; account_id cannot select among multiple accounts.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param workspace The workspace ID
@@ -619,7 +668,7 @@ func (a *ActionReadApiAPIService) ActionsApiPolicyExecute(r ApiActionsApiPolicyR
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
-			var v ErrorMessage
+			var v ActionsApiDryRun401Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -630,7 +679,7 @@ func (a *ActionReadApiAPIService) ActionsApiPolicyExecute(r ApiActionsApiPolicyR
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
-			var v ErrorMessage
+			var v AgentCredentialError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -641,7 +690,7 @@ func (a *ActionReadApiAPIService) ActionsApiPolicyExecute(r ApiActionsApiPolicyR
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ErrorMessage
+			var v ApiRouteNotFound
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -684,7 +733,7 @@ type ApiActionsApiShowRequest struct {
 	accountId  *int32
 }
 
-// Optional positive account ID. A bound key may name only its own account; any other value returns 422. An unbound key may name only an active account with an active connection in its workspace, and must name one when the workspace has more than one.
+// Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.
 func (r ApiActionsApiShowRequest) AccountId(accountId int32) ApiActionsApiShowRequest {
 	r.accountId = &accountId
 	return r
@@ -697,7 +746,7 @@ func (r ApiActionsApiShowRequest) Execute() (*ActionDetailRead, *http.Response, 
 /*
 ActionsApiShow Get action
 
-Read persisted Actions data for an account available to this workspace key. An unbound key selects account_id; a bound key stays limited to its own account.
+Read persisted Actions data for the authorized account. Unbound keys require exactly one active account; account_id cannot select among multiple accounts.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param workspace The workspace ID
@@ -780,7 +829,7 @@ func (a *ActionReadApiAPIService) ActionsApiShowExecute(r ApiActionsApiShowReque
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
-			var v ErrorMessage
+			var v ActionsApiDryRun401Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -791,7 +840,7 @@ func (a *ActionReadApiAPIService) ActionsApiShowExecute(r ApiActionsApiShowReque
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
-			var v ErrorMessage
+			var v AgentCredentialError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -802,7 +851,7 @@ func (a *ActionReadApiAPIService) ActionsApiShowExecute(r ApiActionsApiShowReque
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ErrorMessage
+			var v ApiRouteNotFound
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

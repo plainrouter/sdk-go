@@ -11,19 +11,24 @@ Name | Type | Description | Notes
 **TargetEntityType** | **string** |  | 
 **TargetEntityId** | **string** |  | 
 **TargetEntityName** | **NullableString** |  | 
+**CountedEvidence** | Pointer to [**NullableActionReadItemCountedEvidence**](ActionReadItemCountedEvidence.md) |  | [optional] 
 **Params** | **interface{}** |  | 
 **Rationale** | **string** |  | 
+**Proposer** | Pointer to [**ActionReadItemProposer**](ActionReadItemProposer.md) |  | [optional] 
+**Evidence** | Pointer to [**ActionReadItemEvidence**](ActionReadItemEvidence.md) |  | [optional] 
 **Status** | **string** |  | 
 **BatchStatus** | **string** |  | 
 **Disposition** | [**ActionCurrentDisposition**](ActionCurrentDisposition.md) |  | 
 **PolicyDecision** | **NullableString** |  | 
 **PolicyReasons** | **[]string** |  | 
+**PolicyResult** | [**NullableActionPolicyResult**](ActionPolicyResult.md) |  | 
+**PolicyResults** | [**[]ActionPolicyResult**](ActionPolicyResult.md) |  | 
 
 ## Methods
 
 ### NewActionReadItem
 
-`func NewActionReadItem(id string, batchId string, workspaceId int32, type_ string, targetEntityType string, targetEntityId string, targetEntityName NullableString, params interface{}, rationale string, status string, batchStatus string, disposition ActionCurrentDisposition, policyDecision NullableString, policyReasons []string, ) *ActionReadItem`
+`func NewActionReadItem(id string, batchId string, workspaceId int32, type_ string, targetEntityType string, targetEntityId string, targetEntityName NullableString, params interface{}, rationale string, status string, batchStatus string, disposition ActionCurrentDisposition, policyDecision NullableString, policyReasons []string, policyResult NullableActionPolicyResult, policyResults []ActionPolicyResult, ) *ActionReadItem`
 
 NewActionReadItem instantiates a new ActionReadItem object
 This constructor will assign default values to properties that have it defined,
@@ -188,6 +193,41 @@ SetTargetEntityName sets TargetEntityName field to given value.
 `func (o *ActionReadItem) UnsetTargetEntityName()`
 
 UnsetTargetEntityName ensures that no value is present for TargetEntityName, not even an explicit nil
+### GetCountedEvidence
+
+`func (o *ActionReadItem) GetCountedEvidence() ActionReadItemCountedEvidence`
+
+GetCountedEvidence returns the CountedEvidence field if non-nil, zero value otherwise.
+
+### GetCountedEvidenceOk
+
+`func (o *ActionReadItem) GetCountedEvidenceOk() (*ActionReadItemCountedEvidence, bool)`
+
+GetCountedEvidenceOk returns a tuple with the CountedEvidence field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCountedEvidence
+
+`func (o *ActionReadItem) SetCountedEvidence(v ActionReadItemCountedEvidence)`
+
+SetCountedEvidence sets CountedEvidence field to given value.
+
+### HasCountedEvidence
+
+`func (o *ActionReadItem) HasCountedEvidence() bool`
+
+HasCountedEvidence returns a boolean if a field has been set.
+
+### SetCountedEvidenceNil
+
+`func (o *ActionReadItem) SetCountedEvidenceNil(b bool)`
+
+ SetCountedEvidenceNil sets the value for CountedEvidence to be an explicit nil
+
+### UnsetCountedEvidence
+`func (o *ActionReadItem) UnsetCountedEvidence()`
+
+UnsetCountedEvidence ensures that no value is present for CountedEvidence, not even an explicit nil
 ### GetParams
 
 `func (o *ActionReadItem) GetParams() interface{}`
@@ -237,6 +277,56 @@ and a boolean to check if the value has been set.
 
 SetRationale sets Rationale field to given value.
 
+
+### GetProposer
+
+`func (o *ActionReadItem) GetProposer() ActionReadItemProposer`
+
+GetProposer returns the Proposer field if non-nil, zero value otherwise.
+
+### GetProposerOk
+
+`func (o *ActionReadItem) GetProposerOk() (*ActionReadItemProposer, bool)`
+
+GetProposerOk returns a tuple with the Proposer field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProposer
+
+`func (o *ActionReadItem) SetProposer(v ActionReadItemProposer)`
+
+SetProposer sets Proposer field to given value.
+
+### HasProposer
+
+`func (o *ActionReadItem) HasProposer() bool`
+
+HasProposer returns a boolean if a field has been set.
+
+### GetEvidence
+
+`func (o *ActionReadItem) GetEvidence() ActionReadItemEvidence`
+
+GetEvidence returns the Evidence field if non-nil, zero value otherwise.
+
+### GetEvidenceOk
+
+`func (o *ActionReadItem) GetEvidenceOk() (*ActionReadItemEvidence, bool)`
+
+GetEvidenceOk returns a tuple with the Evidence field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEvidence
+
+`func (o *ActionReadItem) SetEvidence(v ActionReadItemEvidence)`
+
+SetEvidence sets Evidence field to given value.
+
+### HasEvidence
+
+`func (o *ActionReadItem) HasEvidence() bool`
+
+HasEvidence returns a boolean if a field has been set.
 
 ### GetStatus
 
@@ -346,6 +436,56 @@ and a boolean to check if the value has been set.
 `func (o *ActionReadItem) SetPolicyReasons(v []string)`
 
 SetPolicyReasons sets PolicyReasons field to given value.
+
+
+### GetPolicyResult
+
+`func (o *ActionReadItem) GetPolicyResult() ActionPolicyResult`
+
+GetPolicyResult returns the PolicyResult field if non-nil, zero value otherwise.
+
+### GetPolicyResultOk
+
+`func (o *ActionReadItem) GetPolicyResultOk() (*ActionPolicyResult, bool)`
+
+GetPolicyResultOk returns a tuple with the PolicyResult field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPolicyResult
+
+`func (o *ActionReadItem) SetPolicyResult(v ActionPolicyResult)`
+
+SetPolicyResult sets PolicyResult field to given value.
+
+
+### SetPolicyResultNil
+
+`func (o *ActionReadItem) SetPolicyResultNil(b bool)`
+
+ SetPolicyResultNil sets the value for PolicyResult to be an explicit nil
+
+### UnsetPolicyResult
+`func (o *ActionReadItem) UnsetPolicyResult()`
+
+UnsetPolicyResult ensures that no value is present for PolicyResult, not even an explicit nil
+### GetPolicyResults
+
+`func (o *ActionReadItem) GetPolicyResults() []ActionPolicyResult`
+
+GetPolicyResults returns the PolicyResults field if non-nil, zero value otherwise.
+
+### GetPolicyResultsOk
+
+`func (o *ActionReadItem) GetPolicyResultsOk() (*[]ActionPolicyResult, bool)`
+
+GetPolicyResultsOk returns a tuple with the PolicyResults field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPolicyResults
+
+`func (o *ActionReadItem) SetPolicyResults(v []ActionPolicyResult)`
+
+SetPolicyResults sets PolicyResults field to given value.
 
 
 

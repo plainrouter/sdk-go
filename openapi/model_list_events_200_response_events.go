@@ -20,19 +20,19 @@ var _ MappedNullable = &ListEvents200ResponseEvents{}
 
 // ListEvents200ResponseEvents struct for ListEvents200ResponseEvents
 type ListEvents200ResponseEvents struct {
-	CurrentPage          int32                                   `json:"current_page"`
-	Data                 []GetEvent200ResponseEvent              `json:"data"`
-	FirstPageUrl         NullableString                          `json:"first_page_url"`
-	From                 NullableInt32                           `json:"from"`
-	LastPage             int32                                   `json:"last_page"`
-	LastPageUrl          NullableString                          `json:"last_page_url"`
-	Links                []ListEvents200ResponseEventsLinksInner `json:"links"`
-	NextPageUrl          NullableString                          `json:"next_page_url"`
-	Path                 NullableString                          `json:"path"`
-	PerPage              int32                                   `json:"per_page"`
-	PrevPageUrl          NullableString                          `json:"prev_page_url"`
-	To                   NullableInt32                           `json:"to"`
-	Total                int32                                   `json:"total"`
+	CurrentPage          int32                                              `json:"current_page"`
+	Data                 []GetEvent200ResponseEvent                         `json:"data"`
+	FirstPageUrl         NullableString                                     `json:"first_page_url"`
+	From                 NullableInt32                                      `json:"from"`
+	LastPage             int32                                              `json:"last_page"`
+	LastPageUrl          NullableString                                     `json:"last_page_url"`
+	Links                []LaunchPoliciesIndex200ResponsePoliciesLinksInner `json:"links"`
+	NextPageUrl          NullableString                                     `json:"next_page_url"`
+	Path                 NullableString                                     `json:"path"`
+	PerPage              int32                                              `json:"per_page"`
+	PrevPageUrl          NullableString                                     `json:"prev_page_url"`
+	To                   NullableInt32                                      `json:"to"`
+	Total                int32                                              `json:"total"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -42,7 +42,7 @@ type _ListEvents200ResponseEvents ListEvents200ResponseEvents
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListEvents200ResponseEvents(currentPage int32, data []GetEvent200ResponseEvent, firstPageUrl NullableString, from NullableInt32, lastPage int32, lastPageUrl NullableString, links []ListEvents200ResponseEventsLinksInner, nextPageUrl NullableString, path NullableString, perPage int32, prevPageUrl NullableString, to NullableInt32, total int32) *ListEvents200ResponseEvents {
+func NewListEvents200ResponseEvents(currentPage int32, data []GetEvent200ResponseEvent, firstPageUrl NullableString, from NullableInt32, lastPage int32, lastPageUrl NullableString, links []LaunchPoliciesIndex200ResponsePoliciesLinksInner, nextPageUrl NullableString, path NullableString, perPage int32, prevPageUrl NullableString, to NullableInt32, total int32) *ListEvents200ResponseEvents {
 	this := ListEvents200ResponseEvents{}
 	this.CurrentPage = currentPage
 	this.Data = data
@@ -219,9 +219,9 @@ func (o *ListEvents200ResponseEvents) SetLastPageUrl(v string) {
 }
 
 // GetLinks returns the Links field value
-func (o *ListEvents200ResponseEvents) GetLinks() []ListEvents200ResponseEventsLinksInner {
+func (o *ListEvents200ResponseEvents) GetLinks() []LaunchPoliciesIndex200ResponsePoliciesLinksInner {
 	if o == nil {
-		var ret []ListEvents200ResponseEventsLinksInner
+		var ret []LaunchPoliciesIndex200ResponsePoliciesLinksInner
 		return ret
 	}
 
@@ -230,7 +230,7 @@ func (o *ListEvents200ResponseEvents) GetLinks() []ListEvents200ResponseEventsLi
 
 // GetLinksOk returns a tuple with the Links field value
 // and a boolean to check if the value has been set.
-func (o *ListEvents200ResponseEvents) GetLinksOk() ([]ListEvents200ResponseEventsLinksInner, bool) {
+func (o *ListEvents200ResponseEvents) GetLinksOk() ([]LaunchPoliciesIndex200ResponsePoliciesLinksInner, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -238,7 +238,7 @@ func (o *ListEvents200ResponseEvents) GetLinksOk() ([]ListEvents200ResponseEvent
 }
 
 // SetLinks sets field value
-func (o *ListEvents200ResponseEvents) SetLinks(v []ListEvents200ResponseEventsLinksInner) {
+func (o *ListEvents200ResponseEvents) SetLinks(v []LaunchPoliciesIndex200ResponsePoliciesLinksInner) {
 	o.Links = v
 }
 

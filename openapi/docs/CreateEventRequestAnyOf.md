@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **EventSource** | Pointer to **string** | Optional absolute source URL. | [optional] 
 **ActionSource** | Pointer to **string** | Optional action source; defaults to website and is limited to 50 characters. | [optional] 
 **VisitorId** | Pointer to **string** | Optional visitor identifier; maximum 255 characters. | [optional] 
-**ConsentBasis** | **string** | Legal basis for processing. Legitimate-interest revenue lifecycle events are rejected; use an authenticated server adapter. | 
+**ConsentBasis** | **string** | Legal basis for processing. Legitimate-interest server revenue retains identity only with admitted global visitor or buyer-country evidence and no opt-out. | 
 **Consent** | Pointer to **map[string]interface{}** | Consent state supplied with the event. | [optional] 
 **ConsentMode** | Pointer to **map[string]interface{}** | Consent Mode v2 signal values supplied with the event. | [optional] 
 **Tcf** | Pointer to **map[string]interface{}** | TCF v2 data containing string and optional captured_at. | [optional] 

@@ -10,6 +10,9 @@ Name | Type | Description | Notes
 **PlatformAdAccountId** | **NullableInt32** |  | 
 **Type** | [**DestinationType**](DestinationType.md) |  | 
 **CredentialSource** | [**DestinationCredentialSource**](DestinationCredentialSource.md) |  | 
+**AttentionReason** | **interface{}** |  | 
+**HeldCount** | **int32** |  | 
+**Notices** | **[]map[string]*interface{}** |  | 
 **Config** | **interface{}** |  | 
 **Status** | [**DestinationStatus**](DestinationStatus.md) |  | 
 **CreatedAt** | **NullableString** |  | 
@@ -19,7 +22,7 @@ Name | Type | Description | Notes
 
 ### NewSetDestinationTestMode200ResponseDestination
 
-`func NewSetDestinationTestMode200ResponseDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, config interface{}, status DestinationStatus, createdAt NullableString, updatedAt NullableString, ) *SetDestinationTestMode200ResponseDestination`
+`func NewSetDestinationTestMode200ResponseDestination(id string, workspaceId int32, signalTrackerId string, platformAdAccountId NullableInt32, type_ DestinationType, credentialSource DestinationCredentialSource, attentionReason interface{}, heldCount int32, notices []map[string]*interface{}, config interface{}, status DestinationStatus, createdAt NullableString, updatedAt NullableString, ) *SetDestinationTestMode200ResponseDestination`
 
 NewSetDestinationTestMode200ResponseDestination instantiates a new SetDestinationTestMode200ResponseDestination object
 This constructor will assign default values to properties that have it defined,
@@ -162,6 +165,76 @@ and a boolean to check if the value has been set.
 `func (o *SetDestinationTestMode200ResponseDestination) SetCredentialSource(v DestinationCredentialSource)`
 
 SetCredentialSource sets CredentialSource field to given value.
+
+
+### GetAttentionReason
+
+`func (o *SetDestinationTestMode200ResponseDestination) GetAttentionReason() interface{}`
+
+GetAttentionReason returns the AttentionReason field if non-nil, zero value otherwise.
+
+### GetAttentionReasonOk
+
+`func (o *SetDestinationTestMode200ResponseDestination) GetAttentionReasonOk() (*interface{}, bool)`
+
+GetAttentionReasonOk returns a tuple with the AttentionReason field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttentionReason
+
+`func (o *SetDestinationTestMode200ResponseDestination) SetAttentionReason(v interface{})`
+
+SetAttentionReason sets AttentionReason field to given value.
+
+
+### SetAttentionReasonNil
+
+`func (o *SetDestinationTestMode200ResponseDestination) SetAttentionReasonNil(b bool)`
+
+ SetAttentionReasonNil sets the value for AttentionReason to be an explicit nil
+
+### UnsetAttentionReason
+`func (o *SetDestinationTestMode200ResponseDestination) UnsetAttentionReason()`
+
+UnsetAttentionReason ensures that no value is present for AttentionReason, not even an explicit nil
+### GetHeldCount
+
+`func (o *SetDestinationTestMode200ResponseDestination) GetHeldCount() int32`
+
+GetHeldCount returns the HeldCount field if non-nil, zero value otherwise.
+
+### GetHeldCountOk
+
+`func (o *SetDestinationTestMode200ResponseDestination) GetHeldCountOk() (*int32, bool)`
+
+GetHeldCountOk returns a tuple with the HeldCount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHeldCount
+
+`func (o *SetDestinationTestMode200ResponseDestination) SetHeldCount(v int32)`
+
+SetHeldCount sets HeldCount field to given value.
+
+
+### GetNotices
+
+`func (o *SetDestinationTestMode200ResponseDestination) GetNotices() []map[string]*interface{}`
+
+GetNotices returns the Notices field if non-nil, zero value otherwise.
+
+### GetNoticesOk
+
+`func (o *SetDestinationTestMode200ResponseDestination) GetNoticesOk() (*[]map[string]*interface{}, bool)`
+
+GetNoticesOk returns a tuple with the Notices field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNotices
+
+`func (o *SetDestinationTestMode200ResponseDestination) SetNotices(v []map[string]*interface{})`
+
+SetNotices sets Notices field to given value.
 
 
 ### GetConfig

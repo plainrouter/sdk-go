@@ -22,6 +22,7 @@ type DeliveryStatus string
 const (
 	DELIVERYSTATUS_QUEUED                   DeliveryStatus = "queued"
 	DELIVERYSTATUS_SENT                     DeliveryStatus = "sent"
+	DELIVERYSTATUS_HELD                     DeliveryStatus = "held"
 	DELIVERYSTATUS_ACCEPTED                 DeliveryStatus = "accepted"
 	DELIVERYSTATUS_RETRYING                 DeliveryStatus = "retrying"
 	DELIVERYSTATUS_FAILED_AUTH              DeliveryStatus = "failed:auth"
@@ -38,6 +39,7 @@ const (
 var AllowedDeliveryStatusEnumValues = []DeliveryStatus{
 	"queued",
 	"sent",
+	"held",
 	"accepted",
 	"retrying",
 	"failed:auth",

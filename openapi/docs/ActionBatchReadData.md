@@ -15,6 +15,10 @@ Name | Type | Description | Notes
 **Rationale** | **string** |  | 
 **IdempotencyKey** | **string** |  | 
 **Actions** | [**[]ActionReadItem**](ActionReadItem.md) |  | 
+**NextCursor** | Pointer to **NullableInt32** |  | [optional] 
+**Truncated** | Pointer to **bool** |  | [optional] 
+**Continuation** | Pointer to **string** |  | [optional] 
+**Total** | Pointer to **int32** |  | [optional] 
 
 ## Methods
 
@@ -274,6 +278,116 @@ and a boolean to check if the value has been set.
 
 SetActions sets Actions field to given value.
 
+
+### GetNextCursor
+
+`func (o *ActionBatchReadData) GetNextCursor() int32`
+
+GetNextCursor returns the NextCursor field if non-nil, zero value otherwise.
+
+### GetNextCursorOk
+
+`func (o *ActionBatchReadData) GetNextCursorOk() (*int32, bool)`
+
+GetNextCursorOk returns a tuple with the NextCursor field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNextCursor
+
+`func (o *ActionBatchReadData) SetNextCursor(v int32)`
+
+SetNextCursor sets NextCursor field to given value.
+
+### HasNextCursor
+
+`func (o *ActionBatchReadData) HasNextCursor() bool`
+
+HasNextCursor returns a boolean if a field has been set.
+
+### SetNextCursorNil
+
+`func (o *ActionBatchReadData) SetNextCursorNil(b bool)`
+
+ SetNextCursorNil sets the value for NextCursor to be an explicit nil
+
+### UnsetNextCursor
+`func (o *ActionBatchReadData) UnsetNextCursor()`
+
+UnsetNextCursor ensures that no value is present for NextCursor, not even an explicit nil
+### GetTruncated
+
+`func (o *ActionBatchReadData) GetTruncated() bool`
+
+GetTruncated returns the Truncated field if non-nil, zero value otherwise.
+
+### GetTruncatedOk
+
+`func (o *ActionBatchReadData) GetTruncatedOk() (*bool, bool)`
+
+GetTruncatedOk returns a tuple with the Truncated field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTruncated
+
+`func (o *ActionBatchReadData) SetTruncated(v bool)`
+
+SetTruncated sets Truncated field to given value.
+
+### HasTruncated
+
+`func (o *ActionBatchReadData) HasTruncated() bool`
+
+HasTruncated returns a boolean if a field has been set.
+
+### GetContinuation
+
+`func (o *ActionBatchReadData) GetContinuation() string`
+
+GetContinuation returns the Continuation field if non-nil, zero value otherwise.
+
+### GetContinuationOk
+
+`func (o *ActionBatchReadData) GetContinuationOk() (*string, bool)`
+
+GetContinuationOk returns a tuple with the Continuation field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContinuation
+
+`func (o *ActionBatchReadData) SetContinuation(v string)`
+
+SetContinuation sets Continuation field to given value.
+
+### HasContinuation
+
+`func (o *ActionBatchReadData) HasContinuation() bool`
+
+HasContinuation returns a boolean if a field has been set.
+
+### GetTotal
+
+`func (o *ActionBatchReadData) GetTotal() int32`
+
+GetTotal returns the Total field if non-nil, zero value otherwise.
+
+### GetTotalOk
+
+`func (o *ActionBatchReadData) GetTotalOk() (*int32, bool)`
+
+GetTotalOk returns a tuple with the Total field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTotal
+
+`func (o *ActionBatchReadData) SetTotal(v int32)`
+
+SetTotal sets Total field to given value.
+
+### HasTotal
+
+`func (o *ActionBatchReadData) HasTotal() bool`
+
+HasTotal returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

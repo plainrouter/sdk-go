@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Type** | **string** |  | 
 **TargetEntity** | [**ActionProposalInputActionsInnerAnyOfTargetEntity**](ActionProposalInputActionsInnerAnyOfTargetEntity.md) |  | 
-**Params** | **map[string]interface{}** |  | 
+**Params** | [**EmptyClosedObject**](EmptyClosedObject.md) |  | 
 **Rationale** | **string** |  | 
 **IdempotencyKey** | Pointer to **string** |  | [optional] 
 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewActionProposalInputActionsInnerAnyOf2
 
-`func NewActionProposalInputActionsInnerAnyOf2(type_ string, targetEntity ActionProposalInputActionsInnerAnyOfTargetEntity, params map[string]interface{}, rationale string, ) *ActionProposalInputActionsInnerAnyOf2`
+`func NewActionProposalInputActionsInnerAnyOf2(type_ string, targetEntity ActionProposalInputActionsInnerAnyOfTargetEntity, params EmptyClosedObject, rationale string, ) *ActionProposalInputActionsInnerAnyOf2`
 
 NewActionProposalInputActionsInnerAnyOf2 instantiates a new ActionProposalInputActionsInnerAnyOf2 object
 This constructor will assign default values to properties that have it defined,
@@ -71,20 +71,20 @@ SetTargetEntity sets TargetEntity field to given value.
 
 ### GetParams
 
-`func (o *ActionProposalInputActionsInnerAnyOf2) GetParams() map[string]interface{}`
+`func (o *ActionProposalInputActionsInnerAnyOf2) GetParams() EmptyClosedObject`
 
 GetParams returns the Params field if non-nil, zero value otherwise.
 
 ### GetParamsOk
 
-`func (o *ActionProposalInputActionsInnerAnyOf2) GetParamsOk() (*map[string]interface{}, bool)`
+`func (o *ActionProposalInputActionsInnerAnyOf2) GetParamsOk() (*EmptyClosedObject, bool)`
 
 GetParamsOk returns a tuple with the Params field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetParams
 
-`func (o *ActionProposalInputActionsInnerAnyOf2) SetParams(v map[string]interface{})`
+`func (o *ActionProposalInputActionsInnerAnyOf2) SetParams(v EmptyClosedObject)`
 
 SetParams sets Params field to given value.
 

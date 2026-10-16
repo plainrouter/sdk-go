@@ -7,6 +7,8 @@
 
 * `SENT` (value: `"sent"`)
 
+* `HELD` (value: `"held"`)
+
 * `ACCEPTED` (value: `"accepted"`)
 
 * `RETRYING` (value: `"retrying"`)

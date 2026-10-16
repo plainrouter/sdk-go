@@ -5,6 +5,8 @@
 
 * `ACTIVE` (value: `"active"`)
 
+* `NEEDS_ATTENTION` (value: `"needs_attention"`)
+
 * `INACTIVE` (value: `"inactive"`)
 
 * `UNKNOWN_DEFAULT_OPEN_API` (value: `"unknown_default_open_api"`)
