@@ -129,6 +129,12 @@ func (a *CreativeAPIService) LaunchCreativesIndexExecute(r ApiLaunchCreativesInd
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -280,6 +286,12 @@ func (a *CreativeAPIService) LaunchCreativesShowExecute(r ApiLaunchCreativesShow
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -429,6 +441,12 @@ func (a *CreativeAPIService) LaunchCreativesStatusExecute(r ApiLaunchCreativesSt
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
@@ -610,6 +628,12 @@ func (a *CreativeAPIService) StoreCreativeExecute(r ApiStoreCreativeRequest) (*C
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -777,6 +801,12 @@ func (a *CreativeAPIService) StoreCreativeFromUrlExecute(r ApiStoreCreativeFromU
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)

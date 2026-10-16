@@ -86,6 +86,10 @@ type Configuration struct {
 	Servers          ServerConfigurations
 	OperationServers map[string]ServerConfigurations
 	HTTPClient       *http.Client
+	// RequestValidator runs before sending a generated request. The serverURL
+	// is the selected operation server, including context overrides and variables.
+	// Root constructors install the signed-contract guard here.
+	RequestValidator func(request *http.Request, serverURL string) error `json:"-"`
 }
 
 // NewConfiguration returns a new Configuration object

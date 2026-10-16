@@ -29,6 +29,10 @@ fi
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/plainrouter-go-generate.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 NORMALIZED_SPEC="$WORK/openapi.normalized.json"
+TEMPLATES="$WORK/templates"
+mkdir -p "$TEMPLATES"
+cp "$ROOT/scripts/templates/"* "$TEMPLATES/"
+"$PYTHON_BIN" "$ROOT/scripts/prepare-templates.py" "$GENERATOR_JAR" "$TEMPLATES"
 
 "$PYTHON_BIN" "$ROOT/scripts/verify_spec.py"
 "$PYTHON_BIN" "$ROOT/scripts/normalize_openapi.py" "$ROOT/spec/openapi.json" "$NORMALIZED_SPEC"
@@ -59,7 +63,7 @@ PYTHON
   -o "$GENERATED_OUTPUT" \
   --schema-mappings EmptyClosedObject=EmptyClosedObject \
   -c "$ROOT/scripts/generator.yaml" \
-  -t "$ROOT/scripts/templates" \
+  -t "$TEMPLATES" \
   --git-user-id plainrouter \
   --git-repo-id sdk-go/openapi \
   --ignore-file-override "$ROOT/.openapi-generator-ignore" \

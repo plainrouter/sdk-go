@@ -2,6 +2,52 @@
 
 ## Unreleased
 
+### Go source compatibility breaks
+
+Compared with the last tag `v0.6.0`; the untagged pre-#9 plan-copy rename and first-#9 rule-definition replacements are also included. Removed model types include their generated helper APIs.
+
+- `ApiActionsApiIndexRequest.Page` now accepts `int64` instead of `int32`.
+- `PlanCopyError` is renamed `PlanCopyNotFound`, including its constructors and nullable wrapper.
+- `PlanCopyErrorError` is renamed `PlanCopyNotFoundError`, including `PlanCopyNotFound.Error`, its accessors, constructors and nullable wrapper.
+- `ListEvents200ResponseEventsLinksInner` is removed, including its constructors, methods and nullable wrapper; use `LaunchPoliciesIndex200ResponsePoliciesLinksInner`.
+- `ListEvents200ResponseEvents.Links`, its getters, `SetLinks` and constructor parameter now use `[]LaunchPoliciesIndex200ResponsePoliciesLinksInner` instead of `[]ListEvents200ResponseEventsLinksInner`.
+- `CreateSandboxKey201Response` is removed, including its constructors, methods and nullable wrapper; use the existing `GetSandbox200ResponseSelfServeKeyIssuedKey` response type returned by `CreateSandboxKey`.
+- `CreateSandboxKey201ResponseUse` is removed, including its constructors, methods and nullable wrapper; use `GetSandbox200ResponseSelfServeKeyIssuedKeyUse`.
+- `ActionProposalInputActionsInnerAnyOf11Params` is removed, including its constructors, methods and nullable wrapper; use `ActionProposalInputActionsInnerAnyOfParams`.
+- `ActionProposalInputActionsInnerAnyOf11.Params`, its getters, `SetParams` and constructor parameter now use `ActionProposalInputActionsInnerAnyOfParams` instead of `ActionProposalInputActionsInnerAnyOf11Params`.
+- `ActionProposalInputActionsInnerAnyOf2.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf3.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf4.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf5.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf6.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf7.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf8.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf9.Params`, its getters, `SetParams` and constructor parameter now use `EmptyClosedObject` instead of `map[string]interface{}`.
+- `ActionProposalInputActionsInnerAnyOf10Params.AdditionalProperties` is removed; unknown params can no longer be retained or serialized.
+- `ActionProposalInputActionsInnerAnyOf12Params.AdditionalProperties` is removed; unknown params can no longer be retained or serialized.
+- `ActionProposalInputActionsInnerAnyOf13Params.AdditionalProperties` is removed; unknown params can no longer be retained or serialized.
+- `ActionsRulesStoreRequestDefinitionAnyOf` is replaced by shared `ActionRuleDefinitionVariant1`, including union members, constructors and accessors (relative to the first #9 regeneration).
+- `ActionsRulesStoreRequestDefinitionAnyOf1` is replaced by shared `ActionRuleDefinitionVariant2`, including union members, constructors and accessors (relative to the first #9 regeneration).
+- `ActionsRulesStoreRequestDefinitionAnyOf2` is replaced by shared `ActionRuleDefinitionVariant3`, including union members, constructors and accessors (relative to the first #9 regeneration).
+- `ActionsRulesUpdateRequestDefinitionAnyOf` is replaced by shared `ActionRuleDefinitionVariant1`, including union members, constructors and accessors (relative to the first #9 regeneration).
+- `ActionsRulesUpdateRequestDefinitionAnyOf1` is replaced by shared `ActionRuleDefinitionVariant2`, including union members, constructors and accessors (relative to the first #9 regeneration).
+- `ActionsRulesUpdateRequestDefinitionAnyOf2` is replaced by shared `ActionRuleDefinitionVariant3`, including union members, constructors and accessors (relative to the first #9 regeneration).
+- `ActionsRulesUpdateRequest.Definition`, its getters and `SetDefinition` now use `*ActionsRulesStoreRequestDefinition` / `ActionsRulesStoreRequestDefinition` instead of the update-specific union (relative to the first #9 regeneration).
+- `ActionsRulesUpdateRequestDefinition` is removed in favor of `ActionsRulesStoreRequestDefinition`, including its nullable wrapper and union conversion helpers (relative to the first #9 regeneration).
+- `Destination.Config`, its getters, `SetConfig` and constructor parameter now use `interface{}` instead of `[]interface{}`.
+- `NewDestination` additionally requires `attentionReason interface{}`, `heldCount int32` and `notices []map[string]*interface{}` arguments.
+- `NewSetDestinationTestMode200ResponseDestination` now requires `attentionReason interface{}`, `heldCount int32` and `notices []map[string]*interface{}` before `config`.
+- `NewActionCurrentDisposition` now requires `outcomePayload NullableActionCurrentDispositionOutcomePayload` after `receiptStatus`.
+- `NewActionReadItem` now requires trailing `policyResult NullableActionPolicyResult` and `policyResults []ActionPolicyResult` arguments.
+- `NewGetEvent200ResponseDeliveriesInner` now requires `uploadDeadlineAt NullableString` and `freshnessBasis NullableString` after `nextAttemptAt`.
+- `NewGetEvent200ResponseEventDeliveriesInner` now requires `uploadDeadlineAt NullableString` and `freshnessBasis NullableString` after `nextAttemptAt`.
+- `ActionPolicyReadData.MaxSpendDeltaPercent` and its getter/setter methods are removed; `NewActionPolicyReadData` no longer accepts that argument.
+- `ActionPolicyReadData.HardAccountDailyCapMinor` and its getter/setter methods are removed; `NewActionPolicyReadData` no longer accepts that argument.
+- `ActionPolicyReadData.ProtectedEntities` and its getter/setter methods are removed; `NewActionPolicyReadData` no longer accepts that argument.
+- `ActionPolicyReadData.QuietHoursStart` and its getter/setter methods are removed; `NewActionPolicyReadData` no longer accepts that argument.
+- `ActionPolicyReadData.QuietHoursEnd` and its getter/setter methods are removed; `NewActionPolicyReadData` no longer accepts that argument.
+- `ActionPolicyReadData.ProtectLearningPhase` and its getter/setter methods are removed; `NewActionPolicyReadData` no longer accepts that argument.
+
 Regenerated from core main `2d15dc970d92ca22e00d369ab544c113c8cdde77` (signed OpenAPI `0.5.0`). The contract version remains `0.5.0`.
 
 ### Stricter validation of the existing contract

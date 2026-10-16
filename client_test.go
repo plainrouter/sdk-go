@@ -140,6 +140,127 @@ func TestContractWireValidation(t *testing.T) {
 	client := New("", WithBaseURL(server.URL))
 	api := client.OpenAPI()
 	ctx := context.Background()
+
+	// These rows cover constructor/client identity and full-path selection in
+	// addition to the existing scalar/closed-object wire cases below.
+	refuse := func(t *testing.T, candidate *openapi.APIClient) {
+		t.Helper()
+		for _, extra := range []map[string]interface{}{
+			{"account_id": true},
+			{"actions": []interface{}{map[string]interface{}{
+				"type": "increase_budget", "params": map[string]interface{}{"unexpected": 1},
+			}}},
+		} {
+			before := requests.Load()
+			_, _, err := candidate.ActionProposalApiAPI.ActionsApiPropose(ctx, 1).
+				ActionProposalInput(openapi.ActionProposalInput{AdditionalProperties: extra}).Execute()
+			if err == nil || (!strings.Contains(err.Error(), "account_id") && !strings.Contains(err.Error(), "actions.0.params.unexpected")) {
+				t.Errorf("expected named contract refusal, got %v", err)
+			}
+			if requests.Load() != before {
+				t.Error("invalid body sent a request")
+			}
+		}
+	}
+	t.Run("base-url-api-v1", func(t *testing.T) {
+		if NewConfiguration().HTTPClient != nil {
+			t.Error("NewConfiguration HTTPClient must remain nil")
+		}
+		supplied := server.Client()
+		candidate := New("", WithBaseURL(server.URL+"/api/v1"), WithHTTPClient(supplied)).OpenAPI()
+		if candidate.GetConfig().HTTPClient != supplied {
+			t.Error("root client replaced the supplied HTTPClient")
+		}
+		refuse(t, candidate)
+	})
+	t.Run("NewAPIClient-openapi-configuration", func(t *testing.T) {
+		configuration := openapi.NewConfiguration()
+		configuration.Servers = openapi.ServerConfigurations{{URL: server.URL}}
+		supplied := server.Client()
+		configuration.HTTPClient = supplied
+		candidate := NewAPIClient(configuration)
+		if candidate.GetConfig().HTTPClient != supplied {
+			t.Error("deprecated NewAPIClient replaced the supplied HTTPClient")
+		}
+		refuse(t, candidate)
+	})
+	t.Run("transport-swapped-after-New", func(t *testing.T) {
+		var oldCalls, newCalls atomic.Int32
+		mock := func(counter *atomic.Int32) roundTripFunc {
+			return func(r *http.Request) (*http.Response, error) {
+				counter.Add(1)
+				return &http.Response{StatusCode: http.StatusNoContent, Header: http.Header{},
+					Body: io.NopCloser(strings.NewReader("")), Request: r}, nil
+			}
+		}
+		originalDefault := http.DefaultTransport
+		defer func() { http.DefaultTransport = originalDefault }()
+		for _, useDefault := range []bool{false, true} {
+			supplied := &http.Client{}
+			http.DefaultTransport = mock(&oldCalls)
+			if !useDefault {
+				supplied.Transport = mock(&oldCalls)
+			}
+			candidate := New("", WithBaseURL(server.URL), WithHTTPClient(supplied)).OpenAPI()
+			if useDefault {
+				http.DefaultTransport = mock(&newCalls)
+			} else {
+				supplied.Transport = mock(&newCalls)
+			}
+			// Accepted input must reach the newly installed mock, while both
+			// refusal kinds must reach neither old nor new transport.
+			before := newCalls.Load()
+			_, _, err := candidate.ActionProposalApiAPI.ActionsApiPropose(ctx, 1).
+				ActionProposalInput(openapi.ActionProposalInput{}).Execute()
+			if err != nil || newCalls.Load() != before+1 || oldCalls.Load() != 0 {
+				t.Errorf("late transport swap (default=%v) bypassed: old=%d new=%d err=%v", useDefault, oldCalls.Load(), newCalls.Load(), err)
+			}
+			before = newCalls.Load()
+			oldBefore := oldCalls.Load()
+			refuse(t, candidate)
+			if newCalls.Load() != before || oldCalls.Load() != oldBefore {
+				t.Error("invalid body reached a transport")
+			}
+		}
+	})
+	t.Run("POST-sandbox-events", func(t *testing.T) {
+		// num_items is an integer only in /events. Sandbox permits this
+		// unrecognized value_data key, so the suffix route must not win.
+		input := openapi.ValidateSandboxEventRequest{EventName: "fixture",
+			AdditionalProperties: map[string]interface{}{
+				"value_data": map[string]interface{}{"num_items": true},
+			}}
+		before := requests.Load()
+		_, _, err := api.SandboxAPI.ValidateSandboxEvent(ctx).ValidateSandboxEventRequest(input).Execute()
+		if err != nil || requests.Load() != before+1 {
+			t.Fatalf("sandbox selected /events schema: %v", err)
+		}
+		// Model a future spec-derived sandbox-only integer. Keep every route,
+		// including /events first, so a suffix match would miss the new field.
+		original := requestConstraints
+		raw, err := json.Marshal(requestConstraints)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var scratch []requestConstraint
+		if err := json.Unmarshal(raw, &scratch); err != nil {
+			t.Fatal(err)
+		}
+		for i := range scratch {
+			scratch[i].pattern = original[i].pattern
+			if scratch[i].Method == "POST" && scratch[i].Path == "/sandbox/events" {
+				scratch[i].Schema["properties"].(map[string]interface{})["scratch_integer"] = map[string]interface{}{"type": "integer"}
+			}
+		}
+		requestConstraints = scratch
+		defer func() { requestConstraints = original }()
+		input.AdditionalProperties = map[string]interface{}{"scratch_integer": true}
+		before = requests.Load()
+		_, _, err = api.SandboxAPI.ValidateSandboxEvent(ctx).ValidateSandboxEventRequest(input).Execute()
+		if err == nil || !strings.Contains(err.Error(), "scratch_integer") || requests.Load() != before {
+			t.Fatalf("sandbox-only integer was not refused before send: %v", err)
+		}
+	})
 	lists := []struct {
 		name string
 		call func(*int64) error

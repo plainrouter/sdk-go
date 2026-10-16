@@ -113,6 +113,12 @@ func (a *LaunchPolicyAPIService) LaunchPoliciesIndexExecute(r ApiLaunchPoliciesI
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -251,6 +257,12 @@ func (a *LaunchPolicyAPIService) LaunchPoliciesRetireExecute(r ApiLaunchPolicies
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
@@ -398,6 +410,12 @@ func (a *LaunchPolicyAPIService) LaunchPoliciesStoreExecute(r ApiLaunchPoliciesS
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
