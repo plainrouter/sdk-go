@@ -19,8 +19,8 @@ var _ MappedNullable = &ActionsRulesUpdateRequest{}
 
 // ActionsRulesUpdateRequest All fields are optional. platform_ad_account_id must be absent. window, window_days, author_type and current_revision_id must be absent or empty.
 type ActionsRulesUpdateRequest struct {
-	Name       *string                              `json:"name,omitempty" validate:"regexp=\\S"`
-	Definition *ActionsRulesUpdateRequestDefinition `json:"definition,omitempty"`
+	Name       *string                             `json:"name,omitempty" validate:"regexp=\\S"`
+	Definition *ActionsRulesStoreRequestDefinition `json:"definition,omitempty"`
 	// Optional integer account ID. JSON booleans return 422 with message plus field errors. A valid supplied ID is ignored by an account-bound key. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.
 	AccountId            *int32                                 `json:"account_id,omitempty"`
 	Enabled              *bool                                  `json:"enabled,omitempty"`
@@ -83,9 +83,9 @@ func (o *ActionsRulesUpdateRequest) SetName(v string) {
 }
 
 // GetDefinition returns the Definition field value if set, zero value otherwise.
-func (o *ActionsRulesUpdateRequest) GetDefinition() ActionsRulesUpdateRequestDefinition {
+func (o *ActionsRulesUpdateRequest) GetDefinition() ActionsRulesStoreRequestDefinition {
 	if o == nil || IsNil(o.Definition) {
-		var ret ActionsRulesUpdateRequestDefinition
+		var ret ActionsRulesStoreRequestDefinition
 		return ret
 	}
 	return *o.Definition
@@ -93,7 +93,7 @@ func (o *ActionsRulesUpdateRequest) GetDefinition() ActionsRulesUpdateRequestDef
 
 // GetDefinitionOk returns a tuple with the Definition field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ActionsRulesUpdateRequest) GetDefinitionOk() (*ActionsRulesUpdateRequestDefinition, bool) {
+func (o *ActionsRulesUpdateRequest) GetDefinitionOk() (*ActionsRulesStoreRequestDefinition, bool) {
 	if o == nil || IsNil(o.Definition) {
 		return nil, false
 	}
@@ -109,8 +109,8 @@ func (o *ActionsRulesUpdateRequest) HasDefinition() bool {
 	return false
 }
 
-// SetDefinition gets a reference to the given ActionsRulesUpdateRequestDefinition and assigns it to the Definition field.
-func (o *ActionsRulesUpdateRequest) SetDefinition(v ActionsRulesUpdateRequestDefinition) {
+// SetDefinition gets a reference to the given ActionsRulesStoreRequestDefinition and assigns it to the Definition field.
+func (o *ActionsRulesUpdateRequest) SetDefinition(v ActionsRulesStoreRequestDefinition) {
 	o.Definition = &v
 }
 

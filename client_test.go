@@ -380,4 +380,71 @@ func TestContractWireValidation(t *testing.T) {
 			}
 		})
 	}
+	t.Run("rules-store/closed-definition", func(t *testing.T) {
+		// The shared definition variants must be strict even with the direct
+		// generated client, which does not use the root transport guard.
+		configuration := openapi.NewConfiguration()
+		configuration.Servers = openapi.ServerConfigurations{{URL: server.URL}}
+		generatedClient := openapi.NewAPIClient(configuration)
+		definitions := []reflect.Type{
+			reflect.TypeOf(openapi.ActionsRulesStoreRequest{}.Definition),
+			reflect.TypeOf(openapi.ActionsRulesUpdateRequest{}.Definition).Elem(),
+		}
+		for _, union := range definitions {
+			if union.NumField() != 3 {
+				t.Fatalf("expected three rule definitions, got %d", union.NumField())
+			}
+			for index, action := range []string{"pause", "increase_budget", "decrease_budget"} {
+				modelType := union.Field(index).Type.Elem()
+				if _, extra := modelType.FieldByName("AdditionalProperties"); extra {
+					t.Fatalf("%s can carry extra keys", modelType)
+				}
+				fixture := map[string]interface{}{
+					"target_level": "ad_set", "action": action,
+					"minimum_counted_arrivals": 100, "cost_comparison": "at_least", "cost_ratio": 1,
+				}
+				if action != "pause" {
+					fixture["budget_change_percent"] = 10
+				}
+				valid, err := json.Marshal(fixture)
+				if err != nil {
+					t.Fatal(err)
+				}
+				model := reflect.New(modelType).Interface()
+				if err := json.Unmarshal(valid, model); err != nil {
+					t.Fatalf("%s valid fixture: %v", modelType, err)
+				}
+				fixture["zz_unexpected"] = true
+				invalid, err := json.Marshal(fixture)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := json.Unmarshal(invalid, model); err == nil || !strings.Contains(err.Error(), "zz_unexpected") {
+					t.Fatalf("%s accepted extra key: %v", modelType, err)
+				}
+				encoded, err := json.Marshal(model)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if strings.Contains(string(encoded), "zz_unexpected") {
+					t.Fatalf("%s retained extra key: %s", modelType, encoded)
+				}
+				request := openapi.ActionsRulesStoreRequest{Name: "fixture", PlatformAdAccountId: 1}
+				if err := json.Unmarshal(encoded, &request.Definition); err != nil {
+					t.Fatal(err)
+				}
+				before := requests.Load()
+				_, _, err = generatedClient.ActionRuleApiAPI.ActionsRulesStore(ctx, 1).ActionsRulesStoreRequest(request).Execute()
+				if err != nil {
+					t.Fatal(err)
+				}
+				if requests.Load() != before+1 {
+					t.Fatal("expected one generated-client request")
+				}
+				if strings.Contains(string(capturedBody.Load().([]byte)), "zz_unexpected") {
+					t.Fatal("generated client sent extra definition key")
+				}
+			}
+		}
+	})
 }

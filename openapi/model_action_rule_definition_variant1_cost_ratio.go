@@ -15,14 +15,14 @@ import (
 	"fmt"
 )
 
-// ActionsRulesStoreRequestDefinitionAnyOfCostRatio Numeric value from 0.10 to 10.00, with zero to two decimal places.
-type ActionsRulesStoreRequestDefinitionAnyOfCostRatio struct {
+// ActionRuleDefinitionVariant1CostRatio Numeric value from 0.10 to 10.00, with zero to two decimal places.
+type ActionRuleDefinitionVariant1CostRatio struct {
 	Float32 *float32
 	String  *string
 }
 
 // Unmarshal JSON data into any of the pointers in the struct
-func (dst *ActionsRulesStoreRequestDefinitionAnyOfCostRatio) UnmarshalJSON(data []byte) error {
+func (dst *ActionRuleDefinitionVariant1CostRatio) UnmarshalJSON(data []byte) error {
 	var err error
 	// try to unmarshal JSON data into Float32
 	err = json.Unmarshal(data, &dst.Float32)
@@ -50,11 +50,11 @@ func (dst *ActionsRulesStoreRequestDefinitionAnyOfCostRatio) UnmarshalJSON(data 
 		dst.String = nil
 	}
 
-	return fmt.Errorf("data failed to match schemas in anyOf(ActionsRulesStoreRequestDefinitionAnyOfCostRatio)")
+	return fmt.Errorf("data failed to match schemas in anyOf(ActionRuleDefinitionVariant1CostRatio)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON
-func (src ActionsRulesStoreRequestDefinitionAnyOfCostRatio) MarshalJSON() ([]byte, error) {
+func (src ActionRuleDefinitionVariant1CostRatio) MarshalJSON() ([]byte, error) {
 	if src.Float32 != nil {
 		return json.Marshal(&src.Float32)
 	}
@@ -66,38 +66,38 @@ func (src ActionsRulesStoreRequestDefinitionAnyOfCostRatio) MarshalJSON() ([]byt
 	return nil, nil // no data in anyOf schemas
 }
 
-type NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio struct {
-	value *ActionsRulesStoreRequestDefinitionAnyOfCostRatio
+type NullableActionRuleDefinitionVariant1CostRatio struct {
+	value *ActionRuleDefinitionVariant1CostRatio
 	isSet bool
 }
 
-func (v NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio) Get() *ActionsRulesStoreRequestDefinitionAnyOfCostRatio {
+func (v NullableActionRuleDefinitionVariant1CostRatio) Get() *ActionRuleDefinitionVariant1CostRatio {
 	return v.value
 }
 
-func (v *NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio) Set(val *ActionsRulesStoreRequestDefinitionAnyOfCostRatio) {
+func (v *NullableActionRuleDefinitionVariant1CostRatio) Set(val *ActionRuleDefinitionVariant1CostRatio) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio) IsSet() bool {
+func (v NullableActionRuleDefinitionVariant1CostRatio) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio) Unset() {
+func (v *NullableActionRuleDefinitionVariant1CostRatio) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableActionsRulesStoreRequestDefinitionAnyOfCostRatio(val *ActionsRulesStoreRequestDefinitionAnyOfCostRatio) *NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio {
-	return &NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio{value: val, isSet: true}
+func NewNullableActionRuleDefinitionVariant1CostRatio(val *ActionRuleDefinitionVariant1CostRatio) *NullableActionRuleDefinitionVariant1CostRatio {
+	return &NullableActionRuleDefinitionVariant1CostRatio{value: val, isSet: true}
 }
 
-func (v NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio) MarshalJSON() ([]byte, error) {
+func (v NullableActionRuleDefinitionVariant1CostRatio) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableActionsRulesStoreRequestDefinitionAnyOfCostRatio) UnmarshalJSON(src []byte) error {
+func (v *NullableActionRuleDefinitionVariant1CostRatio) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

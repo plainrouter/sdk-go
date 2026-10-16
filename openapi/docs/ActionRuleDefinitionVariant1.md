@@ -1,4 +1,4 @@
-# ActionsRulesStoreRequestDefinitionAnyOf
+# ActionRuleDefinitionVariant1
 
 ## Properties
 
@@ -8,123 +8,123 @@ Name | Type | Description | Notes
 **Action** | **string** |  | 
 **MinimumCountedArrivals** | **int32** |  | 
 **CostComparison** | **string** |  | 
-**CostRatio** | [**ActionsRulesStoreRequestDefinitionAnyOfCostRatio**](ActionsRulesStoreRequestDefinitionAnyOfCostRatio.md) |  | 
+**CostRatio** | [**ActionRuleDefinitionVariant1CostRatio**](ActionRuleDefinitionVariant1CostRatio.md) |  | 
 
 ## Methods
 
-### NewActionsRulesStoreRequestDefinitionAnyOf
+### NewActionRuleDefinitionVariant1
 
-`func NewActionsRulesStoreRequestDefinitionAnyOf(targetLevel string, action string, minimumCountedArrivals int32, costComparison string, costRatio ActionsRulesStoreRequestDefinitionAnyOfCostRatio, ) *ActionsRulesStoreRequestDefinitionAnyOf`
+`func NewActionRuleDefinitionVariant1(targetLevel string, action string, minimumCountedArrivals int32, costComparison string, costRatio ActionRuleDefinitionVariant1CostRatio, ) *ActionRuleDefinitionVariant1`
 
-NewActionsRulesStoreRequestDefinitionAnyOf instantiates a new ActionsRulesStoreRequestDefinitionAnyOf object
+NewActionRuleDefinitionVariant1 instantiates a new ActionRuleDefinitionVariant1 object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewActionsRulesStoreRequestDefinitionAnyOfWithDefaults
+### NewActionRuleDefinitionVariant1WithDefaults
 
-`func NewActionsRulesStoreRequestDefinitionAnyOfWithDefaults() *ActionsRulesStoreRequestDefinitionAnyOf`
+`func NewActionRuleDefinitionVariant1WithDefaults() *ActionRuleDefinitionVariant1`
 
-NewActionsRulesStoreRequestDefinitionAnyOfWithDefaults instantiates a new ActionsRulesStoreRequestDefinitionAnyOf object
+NewActionRuleDefinitionVariant1WithDefaults instantiates a new ActionRuleDefinitionVariant1 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetTargetLevel
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetTargetLevel() string`
+`func (o *ActionRuleDefinitionVariant1) GetTargetLevel() string`
 
 GetTargetLevel returns the TargetLevel field if non-nil, zero value otherwise.
 
 ### GetTargetLevelOk
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetTargetLevelOk() (*string, bool)`
+`func (o *ActionRuleDefinitionVariant1) GetTargetLevelOk() (*string, bool)`
 
 GetTargetLevelOk returns a tuple with the TargetLevel field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTargetLevel
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) SetTargetLevel(v string)`
+`func (o *ActionRuleDefinitionVariant1) SetTargetLevel(v string)`
 
 SetTargetLevel sets TargetLevel field to given value.
 
 
 ### GetAction
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetAction() string`
+`func (o *ActionRuleDefinitionVariant1) GetAction() string`
 
 GetAction returns the Action field if non-nil, zero value otherwise.
 
 ### GetActionOk
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetActionOk() (*string, bool)`
+`func (o *ActionRuleDefinitionVariant1) GetActionOk() (*string, bool)`
 
 GetActionOk returns a tuple with the Action field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAction
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) SetAction(v string)`
+`func (o *ActionRuleDefinitionVariant1) SetAction(v string)`
 
 SetAction sets Action field to given value.
 
 
 ### GetMinimumCountedArrivals
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetMinimumCountedArrivals() int32`
+`func (o *ActionRuleDefinitionVariant1) GetMinimumCountedArrivals() int32`
 
 GetMinimumCountedArrivals returns the MinimumCountedArrivals field if non-nil, zero value otherwise.
 
 ### GetMinimumCountedArrivalsOk
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetMinimumCountedArrivalsOk() (*int32, bool)`
+`func (o *ActionRuleDefinitionVariant1) GetMinimumCountedArrivalsOk() (*int32, bool)`
 
 GetMinimumCountedArrivalsOk returns a tuple with the MinimumCountedArrivals field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetMinimumCountedArrivals
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) SetMinimumCountedArrivals(v int32)`
+`func (o *ActionRuleDefinitionVariant1) SetMinimumCountedArrivals(v int32)`
 
 SetMinimumCountedArrivals sets MinimumCountedArrivals field to given value.
 
 
 ### GetCostComparison
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetCostComparison() string`
+`func (o *ActionRuleDefinitionVariant1) GetCostComparison() string`
 
 GetCostComparison returns the CostComparison field if non-nil, zero value otherwise.
 
 ### GetCostComparisonOk
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetCostComparisonOk() (*string, bool)`
+`func (o *ActionRuleDefinitionVariant1) GetCostComparisonOk() (*string, bool)`
 
 GetCostComparisonOk returns a tuple with the CostComparison field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCostComparison
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) SetCostComparison(v string)`
+`func (o *ActionRuleDefinitionVariant1) SetCostComparison(v string)`
 
 SetCostComparison sets CostComparison field to given value.
 
 
 ### GetCostRatio
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetCostRatio() ActionsRulesStoreRequestDefinitionAnyOfCostRatio`
+`func (o *ActionRuleDefinitionVariant1) GetCostRatio() ActionRuleDefinitionVariant1CostRatio`
 
 GetCostRatio returns the CostRatio field if non-nil, zero value otherwise.
 
 ### GetCostRatioOk
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) GetCostRatioOk() (*ActionsRulesStoreRequestDefinitionAnyOfCostRatio, bool)`
+`func (o *ActionRuleDefinitionVariant1) GetCostRatioOk() (*ActionRuleDefinitionVariant1CostRatio, bool)`
 
 GetCostRatioOk returns a tuple with the CostRatio field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCostRatio
 
-`func (o *ActionsRulesStoreRequestDefinitionAnyOf) SetCostRatio(v ActionsRulesStoreRequestDefinitionAnyOfCostRatio)`
+`func (o *ActionRuleDefinitionVariant1) SetCostRatio(v ActionRuleDefinitionVariant1CostRatio)`
 
 SetCostRatio sets CostRatio field to given value.
 

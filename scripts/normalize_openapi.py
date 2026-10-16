@@ -82,10 +82,27 @@ def main() -> None:
                     schema["format"] = "int64"
                     schema.pop("default", None)
 
+    # Inline-model deduplication loses additionalProperties:false on the store
+    # definitions when identical update variants exist. Explicit shared refs
+    # preserve closure on both operations before the generator flattens them.
+    rule_definitions: dict[str, str] = {}
+    for item in document["paths"].values():
+        for operation in item.values():
+            if not isinstance(operation, dict) or operation.get("operationId") not in {"actions.rules.store", "actions.rules.update"}:
+                continue
+            definition = operation["requestBody"]["content"]["application/json"]["schema"]["properties"]["definition"]
+            for index, variant in enumerate(definition["anyOf"]):
+                signature = json.dumps(variant, sort_keys=True)
+                if signature not in rule_definitions:
+                    name = f"ActionRuleDefinitionVariant{len(rule_definitions) + 1}"
+                    document["components"]["schemas"][name] = variant
+                    rule_definitions[signature] = name
+                definition["anyOf"][index] = {"$ref": "#/components/schemas/" + rule_definitions[signature]}
+
     # An empty closed object is otherwise emitted as map[string]interface{}.
     # Schema mapping plus the supporting template makes it a Go struct{}, which can
-    # neither retain nor serialize unknown keys. Nonempty closed objects already
-    # generate structs and strict decoders with this generator.
+    # neither retain nor serialize unknown keys. The generation checker audits
+    # all closed objects, including nonempty inline union variants.
     def close_empty(value: Any) -> None:
         if isinstance(value, dict):
             if value.get("type") == "object" and value.get("additionalProperties") is False and not value.get("properties"):

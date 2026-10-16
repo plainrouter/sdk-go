@@ -61,7 +61,7 @@ Regenerated from core main `2d15dc970d92ca22e00d369ab544c113c8cdde77` (signed Op
 - Changed `PATCH /destinations/{destination}/test-mode` (`setDestinationTestMode`): response changes listed below.
 - Changed `POST /agent/workspaces/{workspace}/actions` (`actions.api.propose`): description updated; response changes listed below.
 - Changed `POST /agent/workspaces/{workspace}/actions/dry-run` (`actions.api.dry-run`): description updated; response changes listed below.
-- Changed `POST /events` (`createEvent`): request body updated (event delivery status/metadata contract); response changes listed below.
+- Changed `POST /events` (`createEvent`): request body updated (consent_basis description only); response changes listed below.
 - Changed `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` (`launch.plans.copy`): response changes listed below.
 
 ### Complete schema delta

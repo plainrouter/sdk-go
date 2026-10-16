@@ -188,7 +188,7 @@ import (
 
 func main() {
 	workspace := int32(56) // int32 | The workspace ID
-	actionsRulesStoreRequest := *openapiclient.NewActionsRulesStoreRequest("Name_example", *openapiclient.NewActionsRulesStoreRequestDefinition("TargetLevel_example", "Action_example", int32(123), "CostComparison_example", *openapiclient.NewActionsRulesStoreRequestDefinitionAnyOfCostRatio(), int32(123)), int32(123)) // ActionsRulesStoreRequest | 
+	actionsRulesStoreRequest := *openapiclient.NewActionsRulesStoreRequest("Name_example", *openapiclient.NewActionsRulesStoreRequestDefinition("TargetLevel_example", "Action_example", int32(123), "CostComparison_example", *openapiclient.NewActionRuleDefinitionVariant1CostRatio(), int32(123)), int32(123)) // ActionsRulesStoreRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

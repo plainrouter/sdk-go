@@ -17,51 +17,51 @@ import (
 
 // ActionsRulesStoreRequestDefinition struct for ActionsRulesStoreRequestDefinition
 type ActionsRulesStoreRequestDefinition struct {
-	ActionsRulesStoreRequestDefinitionAnyOf  *ActionsRulesStoreRequestDefinitionAnyOf
-	ActionsRulesStoreRequestDefinitionAnyOf1 *ActionsRulesStoreRequestDefinitionAnyOf1
-	ActionsRulesStoreRequestDefinitionAnyOf2 *ActionsRulesStoreRequestDefinitionAnyOf2
+	ActionRuleDefinitionVariant1 *ActionRuleDefinitionVariant1
+	ActionRuleDefinitionVariant2 *ActionRuleDefinitionVariant2
+	ActionRuleDefinitionVariant3 *ActionRuleDefinitionVariant3
 }
 
 // Unmarshal JSON data into any of the pointers in the struct
 func (dst *ActionsRulesStoreRequestDefinition) UnmarshalJSON(data []byte) error {
 	var err error
-	// try to unmarshal JSON data into ActionsRulesStoreRequestDefinitionAnyOf
-	err = json.Unmarshal(data, &dst.ActionsRulesStoreRequestDefinitionAnyOf)
+	// try to unmarshal JSON data into ActionRuleDefinitionVariant1
+	err = json.Unmarshal(data, &dst.ActionRuleDefinitionVariant1)
 	if err == nil {
-		jsonActionsRulesStoreRequestDefinitionAnyOf, _ := json.Marshal(dst.ActionsRulesStoreRequestDefinitionAnyOf)
-		if string(jsonActionsRulesStoreRequestDefinitionAnyOf) == "{}" { // empty struct
-			dst.ActionsRulesStoreRequestDefinitionAnyOf = nil
+		jsonActionRuleDefinitionVariant1, _ := json.Marshal(dst.ActionRuleDefinitionVariant1)
+		if string(jsonActionRuleDefinitionVariant1) == "{}" { // empty struct
+			dst.ActionRuleDefinitionVariant1 = nil
 		} else {
-			return nil // data stored in dst.ActionsRulesStoreRequestDefinitionAnyOf, return on the first match
+			return nil // data stored in dst.ActionRuleDefinitionVariant1, return on the first match
 		}
 	} else {
-		dst.ActionsRulesStoreRequestDefinitionAnyOf = nil
+		dst.ActionRuleDefinitionVariant1 = nil
 	}
 
-	// try to unmarshal JSON data into ActionsRulesStoreRequestDefinitionAnyOf1
-	err = json.Unmarshal(data, &dst.ActionsRulesStoreRequestDefinitionAnyOf1)
+	// try to unmarshal JSON data into ActionRuleDefinitionVariant2
+	err = json.Unmarshal(data, &dst.ActionRuleDefinitionVariant2)
 	if err == nil {
-		jsonActionsRulesStoreRequestDefinitionAnyOf1, _ := json.Marshal(dst.ActionsRulesStoreRequestDefinitionAnyOf1)
-		if string(jsonActionsRulesStoreRequestDefinitionAnyOf1) == "{}" { // empty struct
-			dst.ActionsRulesStoreRequestDefinitionAnyOf1 = nil
+		jsonActionRuleDefinitionVariant2, _ := json.Marshal(dst.ActionRuleDefinitionVariant2)
+		if string(jsonActionRuleDefinitionVariant2) == "{}" { // empty struct
+			dst.ActionRuleDefinitionVariant2 = nil
 		} else {
-			return nil // data stored in dst.ActionsRulesStoreRequestDefinitionAnyOf1, return on the first match
+			return nil // data stored in dst.ActionRuleDefinitionVariant2, return on the first match
 		}
 	} else {
-		dst.ActionsRulesStoreRequestDefinitionAnyOf1 = nil
+		dst.ActionRuleDefinitionVariant2 = nil
 	}
 
-	// try to unmarshal JSON data into ActionsRulesStoreRequestDefinitionAnyOf2
-	err = json.Unmarshal(data, &dst.ActionsRulesStoreRequestDefinitionAnyOf2)
+	// try to unmarshal JSON data into ActionRuleDefinitionVariant3
+	err = json.Unmarshal(data, &dst.ActionRuleDefinitionVariant3)
 	if err == nil {
-		jsonActionsRulesStoreRequestDefinitionAnyOf2, _ := json.Marshal(dst.ActionsRulesStoreRequestDefinitionAnyOf2)
-		if string(jsonActionsRulesStoreRequestDefinitionAnyOf2) == "{}" { // empty struct
-			dst.ActionsRulesStoreRequestDefinitionAnyOf2 = nil
+		jsonActionRuleDefinitionVariant3, _ := json.Marshal(dst.ActionRuleDefinitionVariant3)
+		if string(jsonActionRuleDefinitionVariant3) == "{}" { // empty struct
+			dst.ActionRuleDefinitionVariant3 = nil
 		} else {
-			return nil // data stored in dst.ActionsRulesStoreRequestDefinitionAnyOf2, return on the first match
+			return nil // data stored in dst.ActionRuleDefinitionVariant3, return on the first match
 		}
 	} else {
-		dst.ActionsRulesStoreRequestDefinitionAnyOf2 = nil
+		dst.ActionRuleDefinitionVariant3 = nil
 	}
 
 	return fmt.Errorf("data failed to match schemas in anyOf(ActionsRulesStoreRequestDefinition)")
@@ -69,16 +69,16 @@ func (dst *ActionsRulesStoreRequestDefinition) UnmarshalJSON(data []byte) error 
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src ActionsRulesStoreRequestDefinition) MarshalJSON() ([]byte, error) {
-	if src.ActionsRulesStoreRequestDefinitionAnyOf != nil {
-		return json.Marshal(&src.ActionsRulesStoreRequestDefinitionAnyOf)
+	if src.ActionRuleDefinitionVariant1 != nil {
+		return json.Marshal(&src.ActionRuleDefinitionVariant1)
 	}
 
-	if src.ActionsRulesStoreRequestDefinitionAnyOf1 != nil {
-		return json.Marshal(&src.ActionsRulesStoreRequestDefinitionAnyOf1)
+	if src.ActionRuleDefinitionVariant2 != nil {
+		return json.Marshal(&src.ActionRuleDefinitionVariant2)
 	}
 
-	if src.ActionsRulesStoreRequestDefinitionAnyOf2 != nil {
-		return json.Marshal(&src.ActionsRulesStoreRequestDefinitionAnyOf2)
+	if src.ActionRuleDefinitionVariant3 != nil {
+		return json.Marshal(&src.ActionRuleDefinitionVariant3)
 	}
 
 	return nil, nil // no data in anyOf schemas

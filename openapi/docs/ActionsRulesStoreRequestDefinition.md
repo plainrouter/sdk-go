@@ -8,14 +8,14 @@ Name | Type | Description | Notes
 **Action** | **string** |  | 
 **MinimumCountedArrivals** | **int32** |  | 
 **CostComparison** | **string** |  | 
-**CostRatio** | [**ActionsRulesStoreRequestDefinitionAnyOfCostRatio**](ActionsRulesStoreRequestDefinitionAnyOfCostRatio.md) |  | 
+**CostRatio** | [**ActionRuleDefinitionVariant1CostRatio**](ActionRuleDefinitionVariant1CostRatio.md) |  | 
 **BudgetChangePercent** | **int32** |  | 
 
 ## Methods
 
 ### NewActionsRulesStoreRequestDefinition
 
-`func NewActionsRulesStoreRequestDefinition(targetLevel string, action string, minimumCountedArrivals int32, costComparison string, costRatio ActionsRulesStoreRequestDefinitionAnyOfCostRatio, budgetChangePercent int32, ) *ActionsRulesStoreRequestDefinition`
+`func NewActionsRulesStoreRequestDefinition(targetLevel string, action string, minimumCountedArrivals int32, costComparison string, costRatio ActionRuleDefinitionVariant1CostRatio, budgetChangePercent int32, ) *ActionsRulesStoreRequestDefinition`
 
 NewActionsRulesStoreRequestDefinition instantiates a new ActionsRulesStoreRequestDefinition object
 This constructor will assign default values to properties that have it defined,
@@ -112,20 +112,20 @@ SetCostComparison sets CostComparison field to given value.
 
 ### GetCostRatio
 
-`func (o *ActionsRulesStoreRequestDefinition) GetCostRatio() ActionsRulesStoreRequestDefinitionAnyOfCostRatio`
+`func (o *ActionsRulesStoreRequestDefinition) GetCostRatio() ActionRuleDefinitionVariant1CostRatio`
 
 GetCostRatio returns the CostRatio field if non-nil, zero value otherwise.
 
 ### GetCostRatioOk
 
-`func (o *ActionsRulesStoreRequestDefinition) GetCostRatioOk() (*ActionsRulesStoreRequestDefinitionAnyOfCostRatio, bool)`
+`func (o *ActionsRulesStoreRequestDefinition) GetCostRatioOk() (*ActionRuleDefinitionVariant1CostRatio, bool)`
 
 GetCostRatioOk returns a tuple with the CostRatio field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCostRatio
 
-`func (o *ActionsRulesStoreRequestDefinition) SetCostRatio(v ActionsRulesStoreRequestDefinitionAnyOfCostRatio)`
+`func (o *ActionsRulesStoreRequestDefinition) SetCostRatio(v ActionRuleDefinitionVariant1CostRatio)`
 
 SetCostRatio sets CostRatio field to given value.
 

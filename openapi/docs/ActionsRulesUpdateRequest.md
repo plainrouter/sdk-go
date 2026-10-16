@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | Pointer to **string** |  | [optional] 
-**Definition** | Pointer to [**ActionsRulesUpdateRequestDefinition**](ActionsRulesUpdateRequestDefinition.md) |  | [optional] 
+**Definition** | Pointer to [**ActionsRulesStoreRequestDefinition**](ActionsRulesStoreRequestDefinition.md) |  | [optional] 
 **AccountId** | Pointer to **int32** | Optional integer account ID. JSON booleans return 422 with message plus field errors. A valid supplied ID is ignored by an account-bound key. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied. | [optional] 
 **Enabled** | Pointer to **bool** |  | [optional] 
 **Window** | Pointer to [**NullableActionsRulesStoreRequestWindow**](ActionsRulesStoreRequestWindow.md) |  | [optional] 
@@ -59,20 +59,20 @@ HasName returns a boolean if a field has been set.
 
 ### GetDefinition
 
-`func (o *ActionsRulesUpdateRequest) GetDefinition() ActionsRulesUpdateRequestDefinition`
+`func (o *ActionsRulesUpdateRequest) GetDefinition() ActionsRulesStoreRequestDefinition`
 
 GetDefinition returns the Definition field if non-nil, zero value otherwise.
 
 ### GetDefinitionOk
 
-`func (o *ActionsRulesUpdateRequest) GetDefinitionOk() (*ActionsRulesUpdateRequestDefinition, bool)`
+`func (o *ActionsRulesUpdateRequest) GetDefinitionOk() (*ActionsRulesStoreRequestDefinition, bool)`
 
 GetDefinitionOk returns a tuple with the Definition field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDefinition
 
-`func (o *ActionsRulesUpdateRequest) SetDefinition(v ActionsRulesUpdateRequestDefinition)`
+`func (o *ActionsRulesUpdateRequest) SetDefinition(v ActionsRulesStoreRequestDefinition)`
 
 SetDefinition sets Definition field to given value.
 

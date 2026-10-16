@@ -70,3 +70,5 @@ PYTHON
 "$GOFMT_BIN" -w "$OUTPUT/request_contract_generated.go"
 
 find "$GENERATED_OUTPUT" -maxdepth 1 -name '*.go' -print0 | xargs -0 "$GOFMT_BIN" -w
+
+"$PYTHON_BIN" "$ROOT/scripts/check-generated.py" --closed-only "$ROOT" "$OUTPUT"
