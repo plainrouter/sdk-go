@@ -98,6 +98,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansCopyExecute(r ApiLaunchPlansCopyRe
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -302,6 +308,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansExecuteExecute(r ApiLaunchPlansExe
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
@@ -540,6 +552,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansIndexExecute(r ApiLaunchPlansIndex
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -715,6 +733,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansShowExecute(r ApiLaunchPlansShowRe
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -873,6 +897,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansStoreExecute(r ApiLaunchPlansStore
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -1021,6 +1051,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansUpdateExecute(r ApiLaunchPlansUpda
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -1159,6 +1195,12 @@ func (a *DeploymentPlanAPIService) LaunchPlansValidateExecute(r ApiLaunchPlansVa
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -15,8 +16,6 @@ import (
 // The guard inspects serialized JSON so AdditionalProperties cannot overwrite a
 // typed integer or a closed object after model construction. It never coerces
 // values: numbers and numeric strings retain their existing representation.
-type contractTransport struct{ next http.RoundTripper }
-
 type requestConstraint struct {
 	Method  string                 `json:"method"`
 	Path    string                 `json:"path"`
@@ -40,55 +39,52 @@ func loadRequestConstraints() []requestConstraint {
 				parts[j] = regexp.QuoteMeta(part)
 			}
 		}
-		routes[i].pattern = regexp.MustCompile(strings.Join(parts, "/") + "$")
+		routes[i].pattern = regexp.MustCompile("^" + strings.Join(parts, "/") + "$")
 	}
 	return routes
 }
 
 func guardConfiguration(configuration *openapi.Configuration) {
-	client := configuration.HTTPClient
-	if client == nil {
-		client = http.DefaultClient
-	}
-	next := client.Transport
-	if next == nil {
-		next = http.DefaultTransport
-	}
-	if _, guarded := next.(*contractTransport); guarded {
-		return
-	}
-	// Preserve the caller's timeout, redirect policy, cookie jar and transport
-	// without changing its shared http.Client.
-	guarded := *client
-	guarded.Transport = &contractTransport{next: next}
-	configuration.HTTPClient = &guarded
+	configuration.RequestValidator = validateContractRequest
 }
 
-func (transport *contractTransport) RoundTrip(request *http.Request) (*http.Response, error) {
+func validateContractRequest(request *http.Request, serverURL string) error {
+	server, err := url.Parse(serverURL)
+	if err != nil {
+		return err
+	}
+	basePath := strings.TrimRight(server.Path, "/")
+	path := request.URL.Path
+	if basePath != "" {
+		if !strings.HasPrefix(path, basePath+"/") {
+			return nil
+		}
+		path = strings.TrimPrefix(path, basePath)
+	}
 	if request.Body != nil && strings.Contains(request.Header.Get("Content-Type"), "json") {
 		for _, route := range requestConstraints {
-			if request.Method != route.Method || !route.pattern.MatchString(request.URL.Path) {
+			if request.Method != route.Method || !route.pattern.MatchString(path) {
 				continue
 			}
 			raw, err := io.ReadAll(request.Body)
 			request.Body.Close()
 			if err != nil {
-				return nil, err
+				return err
 			}
 			var value interface{}
 			decoder := json.NewDecoder(bytes.NewReader(raw))
 			decoder.UseNumber()
 			if err := decoder.Decode(&value); err != nil {
-				return nil, err
+				return err
 			}
 			if err := validateRequestValue(value, route.Schema, ""); err != nil {
-				return nil, err
+				return err
 			}
 			request.Body = io.NopCloser(bytes.NewReader(raw))
 			break
 		}
 	}
-	return transport.next.RoundTrip(request)
+	return nil
 }
 
 func constraintApplies(value interface{}, schema map[string]interface{}) bool {

@@ -13,7 +13,10 @@ The signed source contract remains byte-for-byte unchanged in spec/openapi.json.
 from __future__ import annotations
 
 import argparse
+import copy
+import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -61,6 +64,79 @@ def normalize(value: Any) -> int:
     return changed
 
 
+def hoist_shared_closed_objects(document: dict[str, Any]) -> None:
+    """Share structurally identical closed objects used by distinct operations.
+
+    Derive both discovery and names from the spec. Common operation/property
+    names retain readable public model names; unrelated operations use a stable
+    structural hash. Rewrite nested duplicates as well as top-level bodies.
+    """
+    occurrences: dict[str, list[tuple[str, list[str]]]] = {}
+    schemas: dict[str, Any] = {}
+
+    def collect(value: Any, operation: str, path: list[str]) -> None:
+        if isinstance(value, dict):
+            if value.get("additionalProperties") is False:
+                signature = json.dumps(value, sort_keys=True)
+                occurrences.setdefault(signature, []).append((operation, path))
+                schemas[signature] = value
+            for key, child in value.items():
+                collect(child, operation, [*path, key])
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                collect(child, operation, [*path, str(index)])
+
+    operations = [
+        operation
+        for item in document["paths"].values()
+        for method, operation in item.items()
+        if method.lower() in {"get", "put", "post", "delete", "patch", "options", "head", "trace"}
+        and isinstance(operation, dict)
+    ]
+    for operation in operations:
+        collect(operation, operation["operationId"], [])
+
+    components = document.setdefault("components", {}).setdefault("schemas", {})
+    names: dict[str, str] = {}
+    for signature, uses in occurrences.items():
+        if len({operation for operation, _ in uses}) < 2:
+            continue
+        tokens = [re.split(r"[^a-zA-Z0-9]+", operation) for operation, _ in uses]
+        common = []
+        for column in zip(*tokens):
+            if len(set(column)) != 1:
+                break
+            common.append(column[0])
+        path = uses[0][1]
+        properties = [path[index + 1] for index, key in enumerate(path[:-1]) if key == "properties"]
+        # Singular common operation nouns preserve established shared type names.
+        parts = [token.removesuffix("s") for token in common] + properties
+        name = "".join(part[:1].upper() + part[1:] for part in parts)
+        if len(path) >= 2 and path[-2] in {"anyOf", "oneOf"}:
+            name += "Variant" + str(int(path[-1]) + 1)
+        digest = hashlib.sha256(signature.encode()).hexdigest()[:12]
+        if not common or not name or name in components or name in names.values():
+            name = "SharedClosedObject" + digest
+        names[signature] = name
+
+    def rewrite(value: Any, root: bool = False) -> Any:
+        if isinstance(value, dict):
+            signature = json.dumps(value, sort_keys=True)
+            if not root and signature in names:
+                return {"$ref": "#/components/schemas/" + names[signature]}
+            return {key: rewrite(child) for key, child in value.items()}
+        if isinstance(value, list):
+            return [rewrite(child) for child in value]
+        return value
+
+    shared = {name: rewrite(copy.deepcopy(schemas[signature]), root=True) for signature, name in names.items()}
+    for operation in operations:
+        rewritten = rewrite(operation, root=True)
+        operation.clear()
+        operation.update(rewritten)
+    components.update(shared)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
@@ -82,22 +158,8 @@ def main() -> None:
                     schema["format"] = "int64"
                     schema.pop("default", None)
 
-    # Inline-model deduplication loses additionalProperties:false on the store
-    # definitions when identical update variants exist. Explicit shared refs
-    # preserve closure on both operations before the generator flattens them.
-    rule_definitions: dict[str, str] = {}
-    for item in document["paths"].values():
-        for operation in item.values():
-            if not isinstance(operation, dict) or operation.get("operationId") not in {"actions.rules.store", "actions.rules.update"}:
-                continue
-            definition = operation["requestBody"]["content"]["application/json"]["schema"]["properties"]["definition"]
-            for index, variant in enumerate(definition["anyOf"]):
-                signature = json.dumps(variant, sort_keys=True)
-                if signature not in rule_definitions:
-                    name = f"ActionRuleDefinitionVariant{len(rule_definitions) + 1}"
-                    document["components"]["schemas"][name] = variant
-                    rule_definitions[signature] = name
-                definition["anyOf"][index] = {"$ref": "#/components/schemas/" + rule_definitions[signature]}
+    # Inline-model deduplication can discard closure on the first copy.
+    hoist_shared_closed_objects(document)
 
     # An empty closed object is otherwise emitted as map[string]interface{}.
     # Schema mapping plus the supporting template makes it a Go struct{}, which can

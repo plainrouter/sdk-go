@@ -105,6 +105,12 @@ func (a *ActionDryRunApiAPIService) ActionsApiDryRunExecute(r ApiActionsApiDryRu
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err

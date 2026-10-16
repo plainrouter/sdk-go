@@ -101,6 +101,12 @@ func (a *OperationsAPIService) DeleteUserDataExecute(r ApiDeleteUserDataRequest)
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -222,6 +228,12 @@ func (a *OperationsAPIService) GetEmqReportExecute(r ApiGetEmqReportRequest) (*G
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -340,6 +352,12 @@ func (a *OperationsAPIService) GetReconciliationReportExecute(r ApiGetReconcilia
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
@@ -477,6 +495,12 @@ func (a *OperationsAPIService) ListEventsExecute(r ApiListEventsRequest) (*ListE
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -611,6 +635,12 @@ func (a *OperationsAPIService) ListEventsByCursorExecute(r ApiListEventsByCursor
 		return localVarReturnValue, nil, err
 	}
 
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
+	}
+
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
 		return localVarReturnValue, localVarHTTPResponse, err
@@ -727,6 +757,12 @@ func (a *OperationsAPIService) ReplayDeliveriesExecute(r ApiReplayDeliveriesRequ
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
@@ -860,6 +896,12 @@ func (a *OperationsAPIService) SendTestPurchaseExecute(r ApiSendTestPurchaseRequ
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
@@ -1018,6 +1060,12 @@ func (a *OperationsAPIService) SetDestinationTestModeExecute(r ApiSetDestination
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
+	}
+
+	if validate := a.client.cfg.RequestValidator; validate != nil {
+		if err := validate(req, localBasePath); err != nil {
+			return localVarReturnValue, nil, err
+		}
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
