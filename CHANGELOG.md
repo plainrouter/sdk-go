@@ -1,0 +1,332 @@
+# Changelog
+
+## Unreleased
+
+Regenerated from core main `2d15dc970d92ca22e00d369ab544c113c8cdde77` (signed OpenAPI `0.5.0`). The contract version remains `0.5.0`.
+
+### Stricter validation of the existing contract
+
+- Integer inputs refuse JSON booleans, including values supplied through permissive maps. Root clients report the field before sending; integers and numeric strings retain their existing behavior.
+- Action params accept exactly the documented keys for each of the 14 variants; extras are refused with `action_params_invalid` at `actions.N.params`. Generated closed models cannot retain extra keys, and root wire guards reject map-based overrides.
+- Launch plan validation and execution refuse plans needing a new Meta video upload with `launch_video_upload_unavailable` (REST 422), including `PlanExecuteRejected` and the execute route description.
+- Actions, action-rules, tests, creatives, plans and policies list pages range from 1 to 10^16, inclusive. The server accepts integer strings; invalid values (zero, negatives, decimals, non-numeric strings, booleans and oversized integers, plus explicit null on creatives, plans and policies) return 422 on `page`. Go page setters use `int64`; unset page is omitted, so the server defaults to page 1. Bounds are documented by the generated setter; callers use Go integers with that setter.
+
+### SDK generation and compatibility
+
+- Preserve the curated root client API and legacy constructors; apply spec-derived wire guards to their HTTP clients without changing a caller’s shared HTTP client.
+- Generate empty closed objects as `struct{}` with strict decoding through generator configuration and a supporting template.
+- Normalize the destination config free-form union to avoid invalid Go identifiers; preserve the signed vendored contract byte for byte.
+- Add the generated OAuth2 dependency (`golang.org/x/oauth2` v0.28.0, compatible with Go 1.23) for agent-context authentication.
+- Remove stale generated models and docs during generation; check generated metadata, code, docs and the spec-derived root wire constraints for drift.
+
+### Complete operation delta
+
+26 added, 0 removed, 14 changed operations. Each line names a direct operation change; response details follow separately.
+
+- Added `GET /agent/context` (`agent.context`): Get agent context.
+- Added `GET /agent/workspaces/{workspace}/action-rules` (`actions.rules.index`): List rule summaries.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` (`actions.rules.show`): Get an action rule.
+- Added `GET /agent/workspaces/{workspace}/tests` (`actions.tests.api.index`): List Tests and observed conversion event choices.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` (`actions.tests.api.show`): Read a Test, verdict, and pause candidates.
+- Added `GET /cookie-declarations/{publishableKey}` (`getCookieDeclaration`): Read the public cookie declaration.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory` (`get_account_inventory`): Read account inventory.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory/metrics` (`get_inventory_metrics`): Compare Meta metrics with counted arrivals.
+- Added `GET /workspaces/{workspace}/admin/creatives` (`launch.creatives.index`): List workspace creatives.
+- Added `GET /workspaces/{workspace}/admin/creatives/{creative}` (`launch.creatives.show`): Read a workspace creative.
+- Added `GET /workspaces/{workspace}/admin/plans` (`launch.plans.index`): List deployment plans.
+- Added `GET /workspaces/{workspace}/admin/plans/{deployment_plan}` (`launch.plans.show`): Read a deployment plan.
+- Added `GET /workspaces/{workspace}/admin/policies` (`launch.policies.index`): List Launch policies.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` (`actions.rules.update`): Update an action rule. Request: object.
+- Added `PATCH /workspaces/{workspace}/admin/creatives/{creative}/status` (`launch.creatives.status`): Update a workspace creative status. Request: UpdateCreativeStatusRequest.
+- Added `PATCH /workspaces/{workspace}/admin/plans/{deployment_plan}` (`launch.plans.update`): Update a deployment plan. Request: UpdateDeploymentPlanRequest.
+- Added `POST /agent/workspaces/{workspace}/action-rules` (`actions.rules.store`): Create an action rule. Request: object.
+- Added `POST /agent/workspaces/{workspace}/tests` (`actions.tests.api.store`): Create a judging Test. Request: object.
+- Added `POST /mcp/launcher/import` (`launcher.file-import`): Import a Launcher draft batch. Request: DraftBatchFileImportRequest.
+- Added `POST /workspaces/{workspace}/admin/creatives` (`storeCreative`): Upload a creative. Request: object.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` (`storeCreativeFromUrl`): Store a creative from a URL. Request: object.
+- Added `POST /workspaces/{workspace}/admin/plans` (`launch.plans.store`): Create a deployment plan. Request: StoreDeploymentPlanRequest.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` (`launch.plans.execute`): Execute a deployment plan. Request: ExecuteDeploymentPlanRequest.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/validate` (`launch.plans.validate`): Validate a deployment plan.
+- Added `POST /workspaces/{workspace}/admin/policies` (`launch.policies.store`): Create a Launch policy. Request: StoreLaunchPolicyRequest.
+- Added `POST /workspaces/{workspace}/admin/policies/{launch_policy}/retire` (`launch.policies.retire`): Retire a Launch policy.
+- Changed `GET /agent/workspaces/{workspace}/action-batches/{actionBatch}` (`actions.api.batch`): description updated; parameters updated query:account_id, added query:cursor, added query:limit; response changes listed below.
+- Changed `GET /agent/workspaces/{workspace}/actions` (`actions.api.index`): description updated; parameters updated query:account_id, added query:cursor, added query:limit, updated query:page; response changes listed below.
+- Changed `GET /agent/workspaces/{workspace}/actions/policy` (`actions.api.policy`): description updated; parameters updated query:account_id; response changes listed below.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}` (`actions.api.show`): description updated; parameters updated query:account_id; response changes listed below.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}/decision-receipt` (`actions.api.decision-receipt`): description updated; parameters updated query:account_id; response changes listed below.
+- Changed `GET /dashboard/events` (`listEvents`): response changes listed below.
+- Changed `GET /dashboard/events/cursor` (`listEventsByCursor`): response changes listed below.
+- Changed `GET /events/{event}` (`getEvent`): response changes listed below.
+- Changed `GET /reports/reconciliation` (`getReconciliationReport`): response changes listed below.
+- Changed `PATCH /destinations/{destination}/test-mode` (`setDestinationTestMode`): response changes listed below.
+- Changed `POST /agent/workspaces/{workspace}/actions` (`actions.api.propose`): description updated; response changes listed below.
+- Changed `POST /agent/workspaces/{workspace}/actions/dry-run` (`actions.api.dry-run`): description updated; response changes listed below.
+- Changed `POST /events` (`createEvent`): request body updated (consent_basis description only); response changes listed below.
+- Changed `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` (`launch.plans.copy`): response changes listed below.
+
+### Complete schema delta
+
+46 added, 1 removed, 13 changed component schemas. Inline operation response schemas are covered in the response inventory below.
+
+- Added `ActionPolicyResult`: properties `id`, `policy_id`, `policy_version`, `phase`, `outcome`, `reasons`, `reason_details`, `requested_minor`, `evaluated_at`.
+- Added `ActionReceiptUnavailable`: properties `error`.
+- Added `ActionRuleDetailRead`: properties `rule`.
+- Added `ActionRuleWriteRead`: properties `rule`.
+- Added `AdTest`: properties `id`, `workspace_id`, `platform_ad_account_id`, `ad_set_id`, `axis`, `event_name`, `arrivals_floor`, `minimum_conversions`, `maximum_days`, `maximum_spend_minor`, `anomaly_threshold_percent`, `currency`, `timezone`, `first_day`, `created_at`, `updated_at`, `count_health_click_threshold`.
+- Added `AdTestCreateRead`: properties `test`.
+- Added `AdTestDailyFactRead`: properties `date`, `ad_test_member_id`, `ad_id`, `spend_minor`, `spend`, `impressions`, `inline_link_clicks`, `counted_arrivals`, `recorded_conversions`, `admitted_conversions`.
+- Added `AdTestEventChoice`: properties `event_name`, `recorded_count`.
+- Added `AdTestListRead`: properties `tests`, `observed_conversion_events_available`, `observed_conversion_events`.
+- Added `AdTestRead`: properties `id`, `workspace_id`, `platform_ad_account_id`, `ad_set_id`, `axis`, `event_name`, `arrivals_floor`, `count_health_click_threshold`, `minimum_conversions`, `maximum_days`, `maximum_spend_minor`, `anomaly_threshold_percent`, `first_day`, `timezone`, `currency`, `created_at`, `members`, `pause_proposals`, `verdict`.
+- Added `AdTestShowRead`: properties `test`.
+- Added `AdTestVerdictMemberRead`: properties `ad_id`, `state`, `rank`, `spend`, `impressions`, `counted_arrivals`, `recorded_conversions`, `admitted_conversions`, `spend_per_recorded_conversion`, `covered_days`.
+- Added `AdTestVerdictRead`: properties `outcome`, `winner_ad_id`, `reason`, `halt_details`, `window_start`, `window_end`, `concluded_at`, `members`, `daily_facts`.
+- Added `AgentContextAuthError`: properties `error`, `error_description`.
+- Added `AgentCredentialError`: properties `error`, `error_description`.
+- Added `ApiRouteNotFound`: properties `error`, `request`, `resources`.
+- Added `CookieDeclaration`: properties `scan_date`, `categories`.
+- Added `CookieDeclarationItem`: properties `name`, `provider_domain`, `party`, `expiry`, `purpose`.
+- Added `CreativeIntakeRead`: properties `creative`.
+- Added `CreativeIntakeRejected`: properties `error`.
+- Added `CreativeIntakeTags`: properties `generator`, `generator_job`, `parent_creative`.
+- Added `CreativeMcpGrantOperation`: Workspace grants alone authorize creative MCP tools. Read: list_templates, get_render, list_creatives, preview_creatives. Write: render_ad, resume_render. No advertising account is required; account_id and platform_ad_account_id are refused. Images enter the library by upload or launch.creatives.store-from-url; render_ad renders a template over a library image..
+- Added `CreativeMcpPreview`: properties `id`, `state`, `url`, `mime_type`, `width`, `height`, `byte_size`, `expires_at`.
+- Added `CreativeMcpRefusal`: string.
+- Added `CreativeMcpTool`: Rendering: 6/minute per grant and 12/minute per workspace. Reads and preview signing share 60/minute per grant. list_creatives returns metadata and unchanged Library provenance, accepts kind/status filters and an ID cursor, and returns at most 50 items per page without storage keys or URLs. Matching request_key replays return the original job without reservation, queueing or write-limit counting. Changed normalized payloads return request_key_conflict. Resume queues held states only; running states return inspect guidance..
+- Added `DeploymentPlanRead`: properties `name`, `id`, `platform_ad_account_id`, `review_version`, `copy`, `landing_page`, `creatives`, `next_cursor`, `truncated`, `continuation`, `creative_count`.
+- Added `DraftBatchFileImportRequest`: properties `file`, `source_adset_id`, `source_ad_id`, `mode`, `folder_to_adset`, `grouping_enabled`, `account_id`, `workspace_id`.
+- Added `DraftBatchMode`: string.
+- Added `ExecuteDeploymentPlanRequest`: properties `review_version`, `intent_key`.
+- Added `LaunchIntentRead`: properties `intent`.
+- Added `LaunchPolicy`: properties `id`, `workspace_id`, `kind`, `name`, `version`, `body`, `status`, `created_at`, `updated_at`.
+- Added `PlanCopyForbidden`: properties `error`.
+- Added `PlanCopyNotFound`: properties `error`.
+- Added `PlanCopyRejected`: properties `error`.
+- Added `PlanExecuteConflict`: properties `error`.
+- Added `PlanExecuteRejected`: properties `error`.
+- Added `PlanValidateRejected`: properties `error`.
+- Added `ProposalReplayConflict`: properties `message`, `errors`.
+- Added `ProposalUnavailable`: properties `error`.
+- Added `StoreCreativeFromUrlRequest`: properties `url`, `source_ref`, `tags`.
+- Added `StoreCreativeRequest`: properties `file`, `source_ref`, `tags`.
+- Added `StoreDeploymentPlanRequest`: properties `name`, `platform_ad_account_id`, `platform`, `campaign_ref`, `campaign_spec`, `ad_set_ref`, `ad_set_spec`, `budget_type`, `budget_amount_minor`, `currency`, `copy`, `landing_page`, `utm_policy_name`, `naming_policy_name`, `creative_ids`, `creative_overrides`.
+- Added `StoreLaunchPolicyRequest`: properties `kind`, `name`, `body`.
+- Added `UpdateCreativeStatusRequest`: properties `status`.
+- Added `UpdateDeploymentPlanRequest`: properties `name`, `platform_ad_account_id`, `platform`, `campaign_ref`, `campaign_spec`, `ad_set_ref`, `ad_set_spec`, `budget_type`, `budget_amount_minor`, `currency`, `copy`, `landing_page`, `utm_policy_name`, `naming_policy_name`, `creative_ids`, `creative_overrides`.
+- Added `WorkspaceLockTimeout`: properties `error`.
+- Removed `PlanCopyError` (replaced by the specific plan-copy refusal schemas).
+- Changed `ActionBatchRead`: updated properties `data`.
+- Changed `ActionCurrentDisposition`: added properties `outcome_payload`; required fields updated.
+- Changed `ActionDryRunRead`: updated properties `dry_run`.
+- Changed `ActionListRead`: updated properties `meta`.
+- Changed `ActionPolicyRead`: updated properties `data`.
+- Changed `ActionProposalInput`: added properties `cursor`, `limit`, `workspace_id`; updated properties `actions`, `evidence`.
+- Changed `ActionProposalRead`: updated properties `proposal`.
+- Changed `ActionReadItem`: added properties `counted_evidence`, `evidence`, `policy_result`, `policy_results`, `proposer`; required fields updated.
+- Changed `DeliveryStatus`: enum added ['held']; removed [].
+- Changed `Destination`: added properties `attention_reason`, `held_count`, `notices`; updated properties `config`; required fields updated.
+- Changed `DestinationStatus`: enum added ['needs_attention']; removed [].
+- Changed `DestinationType`: enum added ['google_ads']; removed [].
+- Changed `IngestionWarningCode`: enum added ['event_source_invalid']; removed []; description updated.
+
+### Complete response delta
+
+Each added, removed or directly changed operation/status response has one line. Schema references name the updated component contract; inline schemas are identified explicitly. Descriptions below come from the vendored source.
+
+- Added `GET /agent/context` response `200`: Agent identity and account context. Body: inline application/json schema.
+- Added `GET /agent/context` response `400`: Malformed URL encoding. Body: `ErrorMessage`.
+- Added `GET /agent/context` response `401`: Missing, invalid, expired or revoked token, inactive binding, insufficient agent permission, or a management API key. Body: `AgentContextAuthError` / `ErrorMessage`. Headers: `WWW-Authenticate`.
+- Added `GET /agent/context` response `403`: Workspace selector, grant or operation is unauthorized; malformed or missing workspace selection can fail authorization before validation. Body: `AgentContextAuthError` / `ErrorMessage`.
+- Added `GET /agent/context` response `422`: Empty workspace_id, invalid account ID, mismatched account binding, or ambiguous active accounts. Body: `ValidationError`.
+- Added `GET /agent/context` response `429`: The shared API rate limit is exceeded. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Changed `GET /agent/workspaces/{workspace}/action-batches/{actionBatch}` response `200`: Authorized Actions resource. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: `ActionBatchRead`.
+- Changed `GET /agent/workspaces/{workspace}/action-batches/{actionBatch}` response `401`: Missing, invalid, expired or revoked credentials and inactive account bindings return error and error_description. Insufficient principal permission or lost issuer authority returns error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `GET /agent/workspaces/{workspace}/action-batches/{actionBatch}` response `403`: The key lacks the read-actions grant. Schema: reference schema to #/components/schemas/AgentCredentialError. Body: `AgentCredentialError`.
+- Changed `GET /agent/workspaces/{workspace}/action-batches/{actionBatch}` response `404`: Workspace, account, or Actions resource not found. Schema: reference schema to #/components/schemas/ApiRouteNotFound. Body: `ApiRouteNotFound`.
+- Added `GET /agent/workspaces/{workspace}/action-rules` response `200`: Bounded rows; no nested history is included in rule summaries. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: inline application/json schema.
+- Added `GET /agent/workspaces/{workspace}/action-rules` response `401`: Missing, invalid, expired or revoked workspace key. Body: `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/action-rules` response `403`: Insufficient ability or grant, or a conflicting workspace selector. Body: `ErrorMessage` / inline schema.
+- Added `GET /agent/workspaces/{workspace}/action-rules` response `404`: Workspace, account or rule unavailable in this scope. Body: `ApiRouteNotFound`.
+- Added `GET /agent/workspaces/{workspace}/action-rules` response `422`: Invalid rule input or account ID, mismatched account binding, or ambiguous active accounts. Body: `ValidationError`.
+- Added `GET /agent/workspaces/{workspace}/action-rules` response `429`: The shared API rate limit is exceeded. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` response `200`: Rule with revisions and recent runs. Body: `ActionRuleDetailRead`.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` response `401`: Missing, invalid, expired or revoked workspace key. Body: `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` response `403`: Insufficient ability or grant, or a conflicting workspace selector. Body: `ErrorMessage` / inline schema.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` response `404`: Workspace, account or rule unavailable in this scope. Body: `ApiRouteNotFound`.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` response `422`: Invalid rule input or account ID, mismatched account binding, or ambiguous active accounts. Body: `ValidationError`.
+- Added `GET /agent/workspaces/{workspace}/action-rules/{action_rule}` response `429`: The shared API rate limit is exceeded. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Changed `GET /agent/workspaces/{workspace}/actions` response `200`: Authorized Actions resource. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: `ActionListRead`.
+- Changed `GET /agent/workspaces/{workspace}/actions` response `401`: Missing, invalid, expired or revoked credentials and inactive account bindings return error and error_description. Insufficient principal permission or lost issuer authority returns error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `GET /agent/workspaces/{workspace}/actions` response `403`: The key lacks the read-actions grant. Schema: reference schema to #/components/schemas/AgentCredentialError. Body: `AgentCredentialError`.
+- Changed `GET /agent/workspaces/{workspace}/actions` response `404`: Workspace, account, or Actions resource not found. Schema: reference schema to #/components/schemas/ApiRouteNotFound. Body: `ApiRouteNotFound`.
+- Changed `GET /agent/workspaces/{workspace}/actions/policy` response `401`: Missing, invalid, expired or revoked credentials and inactive account bindings return error and error_description. Insufficient principal permission or lost issuer authority returns error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `GET /agent/workspaces/{workspace}/actions/policy` response `403`: The key lacks the read-actions grant. Schema: reference schema to #/components/schemas/AgentCredentialError. Body: `AgentCredentialError`.
+- Changed `GET /agent/workspaces/{workspace}/actions/policy` response `404`: Workspace, account, or Actions resource not found. Schema: reference schema to #/components/schemas/ApiRouteNotFound. Body: `ApiRouteNotFound`.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}` response `401`: Missing, invalid, expired or revoked credentials and inactive account bindings return error and error_description. Insufficient principal permission or lost issuer authority returns error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}` response `403`: The key lacks the read-actions grant. Schema: reference schema to #/components/schemas/AgentCredentialError. Body: `AgentCredentialError`.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}` response `404`: Workspace, account, or Actions resource not found. Schema: reference schema to #/components/schemas/ApiRouteNotFound. Body: `ApiRouteNotFound`.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}/decision-receipt` response `401`: Missing, invalid, expired or revoked credentials and inactive account bindings return error and error_description. Insufficient principal permission or lost issuer authority returns error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}/decision-receipt` response `403`: The key lacks the read-actions grant. Schema: reference schema to #/components/schemas/AgentCredentialError. Body: `AgentCredentialError`.
+- Changed `GET /agent/workspaces/{workspace}/actions/{action}/decision-receipt` response `404`: Workspace, account, or Actions resource not found. A visible action without an execution receipt returns error.code receipt_not_available and error.message "No execution receipt exists for this action because it was not executed." Schema: reference schema to inline; updated schema anyOf. Body: `ActionReceiptUnavailable` / `ApiRouteNotFound`.
+- Added `GET /agent/workspaces/{workspace}/tests` response `200`: Tests and observed conversion event choices. Body: `AdTestListRead`.
+- Added `GET /agent/workspaces/{workspace}/tests` response `401`: An active workspace principal is required; credential refusals include an error code and description. Body: `AgentCredentialError` / `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/tests` response `403`: The workspace principal lacks a matching plan grant or account binding. Body: `AgentCredentialError` / `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/tests` response `404`: The scoped workspace, account, or Test is unavailable, or the API route is not found. Body: `ApiRouteNotFound` / `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/tests` response `422`: Request validation failed, the event is not in the observed list, or selected ads are not members of the ad set. Body: `ValidationError`.
+- Added `GET /agent/workspaces/{workspace}/tests` response `429`: The shared API rate limit was exceeded; Retry-After gives the seconds until another request is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` response `200`: The Test and its stored verdict facts. Body: `AdTestShowRead`.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` response `401`: An active workspace principal is required; credential refusals include an error code and description. Body: `AgentCredentialError` / `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` response `403`: The workspace principal lacks a matching plan grant or account binding. Body: `AgentCredentialError` / `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` response `404`: The scoped workspace, account, or Test is unavailable, or the API route is not found. Body: `ApiRouteNotFound` / `ErrorMessage`.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` response `422`: Request validation failed, the event is not in the observed list, or selected ads are not members of the ad set. Body: `ValidationError`.
+- Added `GET /agent/workspaces/{workspace}/tests/{ad_test}` response `429`: The shared API rate limit was exceeded; Retry-After gives the seconds until another request is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `GET /cookie-declarations/{publishableKey}` response `200`: Latest completed scan metadata, or empty groups if none has completed. Body: `CookieDeclaration`. Headers: `Access-Control-Allow-Origin`, `Cache-Control`.
+- Added `GET /cookie-declarations/{publishableKey}` response `404`: Unknown well-formed key returns an empty array. Invalid-format keys return the API route-not-found response before any limiter bucket is created. Body: inline schema / `ApiRouteNotFound`. Headers: `Access-Control-Allow-Origin`.
+- Added `GET /cookie-declarations/{publishableKey}` response `429`: The 300-per-minute allowance for this key is exhausted. Body: `ErrorMessage`. Headers: `Access-Control-Allow-Origin`, `Cache-Control`, `Retry-After`.
+- Changed `GET /dashboard/events` response `200`: Page-number-paginated events and delivery acceptance metrics. Schema: added events.data[].deliveries[].freshness_basis; added events.data[].deliveries[].upload_deadline_at; updated events.data[].deliveries[] required. Body: inline application/json schema.
+- Changed `GET /dashboard/events/cursor` response `200`: Cursor-paginated events and delivery acceptance metrics. Schema: added events.data[].deliveries[].freshness_basis; added events.data[].deliveries[].upload_deadline_at; updated events.data[].deliveries[] required. Body: inline application/json schema.
+- Changed `GET /events/{event}` response `200`: Event, lineage, and destination delivery state. Schema: updated deliveries[] allOf; added event.deliveries[].freshness_basis; added event.deliveries[].upload_deadline_at; updated event.deliveries[] required. Body: inline application/json schema.
+- Changed `GET /reports/reconciliation` response `200`: Stored reconciliation reports for the requested date. Schema: added reports[].destination.attention_reason; added reports[].destination.held_count; added reports[].destination.notices; updated reports[].destination required. Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory` response `200`: Bounded account inventory with summary totals. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory` response `404`:  Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory/metrics` response `200`: Account-local Meta metrics and counted arrivals, clamped to plan retention. Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory/metrics` response `401`: Workspace read key missing or invalid. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory/metrics` response `403`: Workspace read grant required. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory/metrics` response `404`: Account not found or outside the key binding. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/ad-accounts/{account_id}/inventory/metrics` response `422`: Request validation failed. Body: `ValidationError`.
+- Added `GET /workspaces/{workspace}/admin/creatives` response `200`: Bounded rows; no nested history is included in rule summaries. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/creatives` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/creatives` response `403`: The workspace grant does not authorize this operation, or the token cannot access this workspace. Returns message. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/creatives` response `404`: A disabled Creative surface or missing workspace returns the api_route_not_found envelope with error, request and resources. Body: `ApiRouteNotFound`.
+- Added `GET /workspaces/{workspace}/admin/creatives` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `GET /workspaces/{workspace}/admin/creatives/{creative}` response `200`:  Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/creatives/{creative}` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/creatives/{creative}` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `GET /workspaces/{workspace}/admin/creatives/{creative}` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `GET /workspaces/{workspace}/admin/plans` response `200`: Plans with their current review version. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/plans` response `401`: An active principal is required. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/plans` response `403`: The principal lacks read access to this account. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/plans` response `404`: Workspace or plan not found. Body: `ApiRouteNotFound`.
+- Added `GET /workspaces/{workspace}/admin/plans` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `GET /workspaces/{workspace}/admin/plans/{deployment_plan}` response `200`: Plans with their current review version. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/plans/{deployment_plan}` response `401`: An active principal is required. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/plans/{deployment_plan}` response `403`: The principal lacks read access to this account. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/plans/{deployment_plan}` response `404`: Workspace or plan not found. Body: `ApiRouteNotFound`.
+- Added `GET /workspaces/{workspace}/admin/plans/{deployment_plan}` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `GET /workspaces/{workspace}/admin/policies` response `200`:  Body: inline application/json schema.
+- Added `GET /workspaces/{workspace}/admin/policies` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `GET /workspaces/{workspace}/admin/policies` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `GET /workspaces/{workspace}/admin/policies` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `200`: Saved rule with immutable revisions; no runs are included. Body: `ActionRuleWriteRead`.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `401`: Missing, invalid, expired or revoked workspace key. Body: `ErrorMessage`.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `403`: Insufficient ability or grant, or a conflicting workspace selector. Body: `ErrorMessage` / inline schema.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `404`: Workspace, account or rule unavailable in this scope. Body: `ApiRouteNotFound`.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `422`: Invalid rule input or account ID, mismatched account binding, or ambiguous active accounts. Body: `ValidationError`.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `429`: The shared API rate limit is exceeded. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `PATCH /agent/workspaces/{workspace}/action-rules/{action_rule}` response `503`: The bounded workspace transaction timed out; retry after one second. Body: `WorkspaceLockTimeout`. Headers: `Retry-After`.
+- Changed `PATCH /destinations/{destination}/test-mode` response `200`: Updated destination and its effective test-mode state. Schema: added destination.attention_reason; added destination.held_count; added destination.notices; updated destination required. Body: inline application/json schema.
+- Added `PATCH /workspaces/{workspace}/admin/creatives/{creative}/status` response `200`:  Body: inline application/json schema.
+- Added `PATCH /workspaces/{workspace}/admin/creatives/{creative}/status` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `PATCH /workspaces/{workspace}/admin/creatives/{creative}/status` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `PATCH /workspaces/{workspace}/admin/creatives/{creative}/status` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `PATCH /workspaces/{workspace}/admin/plans/{deployment_plan}` response `200`:  Body: inline application/json schema.
+- Added `PATCH /workspaces/{workspace}/admin/plans/{deployment_plan}` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `PATCH /workspaces/{workspace}/admin/plans/{deployment_plan}` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `PATCH /workspaces/{workspace}/admin/plans/{deployment_plan}` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `201`: Saved rule with immutable revisions; no runs are included. Body: `ActionRuleWriteRead`.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `401`: Missing, invalid, expired or revoked workspace key. Body: `ErrorMessage`.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `403`: Insufficient ability or grant, or a conflicting workspace selector. Body: `ErrorMessage` / inline schema.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `404`: Workspace, account or rule unavailable in this scope. Body: `ApiRouteNotFound`.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `422`: Invalid rule input or account ID, mismatched account binding, or ambiguous active accounts. Body: `ValidationError`.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `429`: The shared API rate limit is exceeded. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `POST /agent/workspaces/{workspace}/action-rules` response `503`: The bounded workspace transaction timed out; retry after one second. Body: `WorkspaceLockTimeout`. Headers: `Retry-After`.
+- Changed `POST /agent/workspaces/{workspace}/actions` response `200`: Saved idempotent proposal. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: `ActionProposalRead`.
+- Changed `POST /agent/workspaces/{workspace}/actions` response `201`: New proposal created. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: `ActionProposalRead`.
+- Changed `POST /agent/workspaces/{workspace}/actions` response `401`: Missing, invalid, revoked or expired credentials return error invalid_token and error_description. Missing principal permissions or an issuer whose current role no longer covers the key return error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `POST /agent/workspaces/{workspace}/actions` response `403`: A revoked or insufficient workspace grant returns error insufficient_scope and error_description. Missing creative.write permission returns message without a code. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `POST /agent/workspaces/{workspace}/actions` response `404`: A missing or inaccessible workspace or plan, or a disabled Plan surface, returns error.code api_route_not_found with error.message, error.resolution, request and resources. Schema: reference schema to #/components/schemas/ApiRouteNotFound. Body: `ApiRouteNotFound`.
+- Added `POST /agent/workspaces/{workspace}/actions` response `409`: A replay whose parameters or proposing principal differ returns message and errors.idempotency_key containing idempotency_key_parameters_mismatch: This submission key belongs to a different proposal. Body: `ProposalReplayConflict`.
+- Added `POST /agent/workspaces/{workspace}/actions` response `413`: Oversized POST data returns message "The POST data is too large." before route authorization. Body: `ErrorMessage`.
+- Changed `POST /agent/workspaces/{workspace}/actions` response `422`: Invalid input or account ID, mismatched account binding, ambiguous active accounts, evidence, parameters, targets, repeated management targets, missing staged assets or source ads, and invalid budget direction return message plus errors mapping field names to arrays of messages. Stable reason codes are prefixes of field messages, not an error.code property. Body: `ValidationError`.
+- Added `POST /agent/workspaces/{workspace}/actions` response `429`: The shared API rate limit is exceeded; message is "Too Many Attempts." Retry-After gives seconds until a retry is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `POST /agent/workspaces/{workspace}/actions` response `500`: An unexpected server or provider-read fault returns message "Server Error" when debug is disabled. Body: `ErrorMessage`.
+- Added `POST /agent/workspaces/{workspace}/actions` response `503`: The proposal could not be recorded: error.code proposal_not_recorded and error.message "The proposal could not be recorded. Retry." No proposal is committed. The bounded workspace transaction timed out: error.code workspace_lock_timeout and error.message "The workspace is busy. Retry the operation shortly." Retry-After is 1 second. Body: `ProposalUnavailable`. Headers: `Retry-After`.
+- Changed `POST /agent/workspaces/{workspace}/actions/dry-run` response `200`: Evaluated dry-run preview. Result projections share the 80,000-byte MCP JSON budget; defaults are bounded, next_cursor continues complete rows, and oversized single rows are explicitly refused. Plan creative continuation uses the read endpoint; proposal continuation uses the batch read endpoint. Body: `ActionDryRunRead`.
+- Changed `POST /agent/workspaces/{workspace}/actions/dry-run` response `401`: Missing, invalid, revoked or expired credentials return error invalid_token and error_description. Missing principal permissions or an issuer whose current role no longer covers the key return error insufficient_scope and error_description. A management key returns message instead. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `POST /agent/workspaces/{workspace}/actions/dry-run` response `403`: A revoked or insufficient workspace grant returns error insufficient_scope and error_description. Missing creative.write permission returns message without a code. Schema: reference schema to inline; updated schema anyOf. Body: `AgentCredentialError` / `ErrorMessage`.
+- Changed `POST /agent/workspaces/{workspace}/actions/dry-run` response `404`: A missing or inaccessible workspace or plan, or a disabled Plan surface, returns error.code api_route_not_found with error.message, error.resolution, request and resources. Schema: reference schema to #/components/schemas/ApiRouteNotFound. Body: `ApiRouteNotFound`.
+- Added `POST /agent/workspaces/{workspace}/actions/dry-run` response `413`: Oversized POST data returns message "The POST data is too large." before route authorization. Body: `ErrorMessage`.
+- Changed `POST /agent/workspaces/{workspace}/actions/dry-run` response `422`: Invalid input or account ID, mismatched account binding, ambiguous active accounts, evidence, parameters, targets, repeated management targets, missing staged assets or source ads, and invalid budget direction return message plus errors mapping field names to arrays of messages. Stable reason codes are prefixes of field messages, not an error.code property. Body: `ValidationError`.
+- Added `POST /agent/workspaces/{workspace}/actions/dry-run` response `429`: The shared API rate limit is exceeded; message is "Too Many Attempts." Retry-After gives seconds until a retry is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `POST /agent/workspaces/{workspace}/actions/dry-run` response `500`: An unexpected server or provider-read fault returns message "Server Error" when debug is disabled. Body: `ErrorMessage`.
+- Added `POST /agent/workspaces/{workspace}/tests` response `201`: The frozen judging Test. Body: `AdTestCreateRead`.
+- Added `POST /agent/workspaces/{workspace}/tests` response `401`: An active workspace principal is required; credential refusals include an error code and description. Body: `AgentCredentialError` / `ErrorMessage`.
+- Added `POST /agent/workspaces/{workspace}/tests` response `403`: The workspace principal lacks a matching plan grant or account binding. Body: `AgentCredentialError` / `ErrorMessage`.
+- Added `POST /agent/workspaces/{workspace}/tests` response `404`: The scoped workspace, account, or Test is unavailable, or the API route is not found. Body: `ApiRouteNotFound` / `ErrorMessage`.
+- Added `POST /agent/workspaces/{workspace}/tests` response `422`: Request validation failed, the event is not in the observed list, or selected ads are not members of the ad set. Body: `ValidationError`.
+- Added `POST /agent/workspaces/{workspace}/tests` response `429`: The shared API rate limit was exceeded; Retry-After gives the seconds until another request is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Changed `POST /events` response `202`: New event accepted for processing. Schema: updated warnings[].field enum. Body: inline application/json schema. Headers: `Location`, `Idempotency-Key`.
+- Added `POST /mcp/launcher/import` response `200`: Draft batch result and syntactic row failures. Body: inline application/json schema.
+- Added `POST /mcp/launcher/import` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `POST /mcp/launcher/import` response `403`:  Body: inline application/json schema.
+- Added `POST /mcp/launcher/import` response `422`: Integer selector or file validation returns message plus field errors. Rejected import files return error, reason_code and syntactic_row_failures. Body: `ValidationError` / inline schema.
+- Added `POST /workspaces/{workspace}/admin/creatives` response `201`: Creative stored, or the existing creative returned for identical bytes in this workspace. Body: `CreativeIntakeRead`.
+- Added `POST /workspaces/{workspace}/admin/creatives` response `401`: A valid workspace-bound credential is required. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/creatives` response `403`: The credential or workspace grant does not authorize creative intake. Body: `ErrorMessage` / `AgentCredentialError`.
+- Added `POST /workspaces/{workspace}/admin/creatives` response `404`: Creative intake is disabled, or the workspace is missing or inaccessible. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/creatives` response `413`: Creative bytes exceed the 4 GiB cap, or POST data exceeds the request limit. Body: `CreativeIntakeRejected` / `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/creatives` response `422`: A reserved tag that violates the provenance contract returns error.code creative_provenance_invalid and error.message naming the key. Other intake refusals return their stable error.code and error.message; request-shape errors return message plus field errors. Body: `CreativeIntakeRejected` / `ValidationError`.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` response `201`: Creative stored, or the existing creative returned for identical bytes in this workspace. Body: `CreativeIntakeRead`.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` response `401`: A valid workspace-bound credential is required. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` response `403`: The credential or workspace grant does not authorize creative intake. Body: `ErrorMessage` / `AgentCredentialError`.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` response `404`: Creative intake is disabled, or the workspace is missing or inaccessible. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` response `413`: Creative bytes exceed the 4 GiB cap, or POST data exceeds the request limit. Body: `CreativeIntakeRejected` / `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/creatives/from-url` response `422`: A reserved tag that violates the provenance contract returns error.code creative_provenance_invalid and error.message naming the key. Other intake refusals return their stable error.code and error.message; request-shape errors return message plus field errors. Body: `CreativeIntakeRejected` / `ValidationError`.
+- Added `POST /workspaces/{workspace}/admin/plans` response `201`:  Body: inline application/json schema.
+- Added `POST /workspaces/{workspace}/admin/plans` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/plans` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Changed `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `401`: Missing, invalid, revoked or expired credentials, a missing active principal, missing read scope or lost issuer authority return message. No error code is returned. Body: `ErrorMessage`.
+- Changed `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `403`: Missing workspace, account or write access returns error.code insufficient_scope and error.message. A revoked grant returns message without a code. Schema: reference schema to inline; updated schema anyOf. Body: `PlanCopyForbidden` / `ErrorMessage`.
+- Changed `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `404`: An inaccessible or missing plan returns error.code plan_not_found and error.message. A missing workspace or disabled Plan surface returns the api_route_not_found envelope with error, request and resources. Schema: reference schema to inline; updated schema anyOf. Body: `PlanCopyNotFound` / `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `413`: Oversized POST data returns message "The POST data is too large." before route authorization. Body: `ErrorMessage`.
+- Changed `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `422`: error.code plan_not_failed when the source is not failed; platform_ad_account_unavailable when its account becomes unavailable after authorization; plan_not_found if the source disappears after lookup. Each includes error.message. JSON booleans in integer workspace or account selectors return message plus field errors. Schema: reference schema to inline; updated schema anyOf. Body: `PlanCopyRejected` / `ValidationError`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `429`: The shared API rate limit is exceeded; message is "Too Many Attempts." Retry-After gives seconds until a retry is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `500`: An unexpected server or provider-read fault returns message "Server Error" when debug is disabled. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/copy` response `503`: The bounded workspace transaction timed out: error.code workspace_lock_timeout and error.message "The workspace is busy. Retry the operation shortly." Retry-After is 1 second. Body: `WorkspaceLockTimeout`. Headers: `Retry-After`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `200`: Created or replayed Launch intent, including a blocked intent under the kill switch. Body: `LaunchIntentRead`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `401`: Missing, invalid, revoked or expired credentials, a missing active principal, missing read scope or lost issuer authority return message. No error code is returned. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `403`: Missing workspace, account, write access, execution scope or workspace grant returns message without a code. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `404`: A missing or inaccessible workspace or plan, or a disabled Plan surface, returns error.code api_route_not_found with error.message, error.resolution, request and resources. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `409`: An intent key bound to another plan returns error.code launch_submission_key_plan_mismatch and error.message. Body: `PlanExecuteConflict`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `413`: Oversized POST data returns message "The POST data is too large." before route authorization. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `422`: Request validation returns message plus errors (including intent_key and review_version). Domain refusals return error.code and error.message: plan_changed_since_review ("This plan changed since you reviewed it. Reload and review the latest plan before submitting."), deployment_plan_not_executable, creative_not_ready, creative_bytes_unavailable, launch_video_upload_unavailable, ad_set_daily_budget_invalid, ad_set_bid_amount_invalid, currency_mismatch, currency_unsupported, budget_invalid, deployment_plan_has_no_actions. Proposal input or evidence validation returns message plus field errors. Body: `ValidationError` / `PlanExecuteRejected`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `429`: The shared API rate limit is exceeded; message is "Too Many Attempts." Retry-After gives seconds until a retry is allowed. Body: `ErrorMessage`. Headers: `Retry-After`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `500`: An unexpected server or provider-read fault returns message "Server Error" when debug is disabled. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/execute` response `503`: The proposal could not be recorded: error.code proposal_not_recorded and error.message "The proposal could not be recorded. Retry." No proposal is committed. The bounded workspace transaction timed out: error.code workspace_lock_timeout and error.message "The workspace is busy. Retry the operation shortly." Retry-After is 1 second. Body: `ProposalUnavailable`. Headers: `Retry-After`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/validate` response `200`: The plan and its validation result. Body: inline application/json schema.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/validate` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/validate` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/plans/{deployment_plan}/validate` response `422`: Request and integer selector validation returns message plus field errors. Domain refusals return error.code and error.message, including launch_video_upload_unavailable: New video uploads to Meta are unavailable. Use a video already uploaded to this Meta ad account or choose an image. Body: `ValidationError` / `PlanValidateRejected`.
+- Added `POST /workspaces/{workspace}/admin/policies` response `201`:  Body: inline application/json schema.
+- Added `POST /workspaces/{workspace}/admin/policies` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/policies` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/policies` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+- Added `POST /workspaces/{workspace}/admin/policies/{launch_policy}/retire` response `200`:  Body: inline application/json schema.
+- Added `POST /workspaces/{workspace}/admin/policies/{launch_policy}/retire` response `401`: Invalid or missing Server secret. Body: `ErrorMessage`.
+- Added `POST /workspaces/{workspace}/admin/policies/{launch_policy}/retire` response `404`: A missing workspace returns the api_route_not_found envelope. Body: `ApiRouteNotFound`.
+- Added `POST /workspaces/{workspace}/admin/policies/{launch_policy}/retire` response `422`: JSON booleans in integer inputs, including workspace selectors, return message plus errors mapping field names to arrays of messages. Numeric strings retain their existing validation and coercion. Body: `ValidationError`.
+
+### Other contract metadata changes
+
+- Added `securitySchemes.agentContextKey`: `{"type":"http","description":"Workspace key with read ability, ad-account.read permission and the agent.context grant.","scheme":"bearer"}`.
+- Added `securitySchemes.agentContextOAuth`: `{"type":"oauth2","description":"OAuth access token for an active approved agent principal with mcp:use, ad-account.read and agent.context authorization. Authorization code with PKCE and device authorization tokens are accepted. This scheme applies only to agent context.","flows":{"authorizationCode":{"authorizationUrl":"https://plainrouter.com/oauth2/authorize","tokenUrl":"https://plainrouter.com/oauth2/token","refreshUrl":"https://plainrouter.com/oauth2/token","scopes":{"mcp:use":"Use the approved agent principal."}}}}`.
+- Added `securitySchemes.creativeWriter`: `{"type":"http","description":"Workspace-bound write credential with a grant authorizing creative intake.","scheme":"bearer"}`.
+- Added `securitySchemes.planReader`: `{"type":"http","description":"An OAuth agent or account-bound Workspace Key with read access to the approved ad account.","scheme":"bearer"}`.
+- Added `securitySchemes.ruleReader`: `{"type":"http","description":"A workspace-scoped key with read ability and actions.rules.index or actions.rules.show access to the bound account. Send Accept: application/json.","scheme":"bearer"}`.
+- Added `securitySchemes.ruleWriter`: `{"type":"http","description":"A workspace-scoped key with write ability and the actions.rules.store or actions.rules.update grant. Send Accept: application/json.","scheme":"bearer"}`.
+- Added `securitySchemes.testReader`: `{"type":"http","description":"A workspace principal with read tier and the launch.plans.index and launch.plans.show grants for this account.","scheme":"bearer"}`.
+- Added `securitySchemes.testWriter`: `{"type":"http","description":"A workspace principal with write tier and the launch.plans.store grant for this account.","scheme":"bearer"}`.
+- Changed `securitySchemes.workspaceActionKey`: `{"type":"http","description":"Workspace key with read-actions for reads or propose-actions for writes. Optional positive account ID. A bound key may name only its own account; a different ID returns 422. An unbound key requires exactly one active available advertising account with an active connection; omission uses that account and a supplied ID must match it. Multiple active accounts return 422 even when account_id is supplied.","scheme":"bearer"}`.
+- Added `securitySchemes.workspaceInventoryKey`: `{"type":"http","description":"Workspace read key with the get_inventory_metrics grant. Account-bound keys can read only their bound account.","scheme":"bearer"}`.

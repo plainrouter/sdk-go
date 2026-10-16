@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Type** | **string** |  | 
 **TargetEntity** | [**ActionProposalInputActionsInnerAnyOf4TargetEntity**](ActionProposalInputActionsInnerAnyOf4TargetEntity.md) |  | 
-**Params** | [**ActionProposalInputActionsInnerAnyOf11Params**](ActionProposalInputActionsInnerAnyOf11Params.md) |  | 
+**Params** | [**ActionProposalInputActionsInnerAnyOfParams**](ActionProposalInputActionsInnerAnyOfParams.md) |  | 
 **Rationale** | **string** |  | 
 **IdempotencyKey** | Pointer to **string** |  | [optional] 
 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewActionProposalInputActionsInnerAnyOf11
 
-`func NewActionProposalInputActionsInnerAnyOf11(type_ string, targetEntity ActionProposalInputActionsInnerAnyOf4TargetEntity, params ActionProposalInputActionsInnerAnyOf11Params, rationale string, ) *ActionProposalInputActionsInnerAnyOf11`
+`func NewActionProposalInputActionsInnerAnyOf11(type_ string, targetEntity ActionProposalInputActionsInnerAnyOf4TargetEntity, params ActionProposalInputActionsInnerAnyOfParams, rationale string, ) *ActionProposalInputActionsInnerAnyOf11`
 
 NewActionProposalInputActionsInnerAnyOf11 instantiates a new ActionProposalInputActionsInnerAnyOf11 object
 This constructor will assign default values to properties that have it defined,
@@ -71,20 +71,20 @@ SetTargetEntity sets TargetEntity field to given value.
 
 ### GetParams
 
-`func (o *ActionProposalInputActionsInnerAnyOf11) GetParams() ActionProposalInputActionsInnerAnyOf11Params`
+`func (o *ActionProposalInputActionsInnerAnyOf11) GetParams() ActionProposalInputActionsInnerAnyOfParams`
 
 GetParams returns the Params field if non-nil, zero value otherwise.
 
 ### GetParamsOk
 
-`func (o *ActionProposalInputActionsInnerAnyOf11) GetParamsOk() (*ActionProposalInputActionsInnerAnyOf11Params, bool)`
+`func (o *ActionProposalInputActionsInnerAnyOf11) GetParamsOk() (*ActionProposalInputActionsInnerAnyOfParams, bool)`
 
 GetParamsOk returns a tuple with the Params field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetParams
 
-`func (o *ActionProposalInputActionsInnerAnyOf11) SetParams(v ActionProposalInputActionsInnerAnyOf11Params)`
+`func (o *ActionProposalInputActionsInnerAnyOf11) SetParams(v ActionProposalInputActionsInnerAnyOfParams)`
 
 SetParams sets Params field to given value.
 

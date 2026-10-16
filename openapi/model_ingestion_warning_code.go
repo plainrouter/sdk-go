@@ -15,18 +15,20 @@ import (
 	"fmt"
 )
 
-// IngestionWarningCode The closed set of non-rejection warnings returned by authenticated ingestion.
+// IngestionWarningCode The closed set of non-rejection warnings returned by POST /events.
 type IngestionWarningCode string
 
 // List of IngestionWarningCode
 const (
 	INGESTIONWARNINGCODE_CONSENT_CAPTURED_AT_INVALID IngestionWarningCode = "consent_captured_at_invalid"
+	INGESTIONWARNINGCODE_EVENT_SOURCE_INVALID        IngestionWarningCode = "event_source_invalid"
 	INGESTIONWARNINGCODE_UNKNOWN_DEFAULT_OPEN_API    IngestionWarningCode = "unknown_default_open_api"
 )
 
 // All allowed values of IngestionWarningCode enum
 var AllowedIngestionWarningCodeEnumValues = []IngestionWarningCode{
 	"consent_captured_at_invalid",
+	"event_source_invalid",
 	"unknown_default_open_api",
 }
 

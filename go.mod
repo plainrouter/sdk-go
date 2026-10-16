@@ -1,6 +1,5 @@
 module github.com/plainrouter/sdk-go
 
-go 1.23
+go 1.23.0
 
-require (
-)
+require golang.org/x/oauth2 v0.28.0

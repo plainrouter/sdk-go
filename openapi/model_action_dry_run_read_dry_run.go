@@ -18,9 +18,13 @@ import (
 // checks if the ActionDryRunReadDryRun type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ActionDryRunReadDryRun{}
 
-// ActionDryRunReadDryRun struct for ActionDryRunReadDryRun
+// ActionDryRunReadDryRun Complete projection rows are paged within 80,000 JSON bytes, accounting for both MCP representations. Defaults are bounded. Follow next_cursor with the same scope and filters. One oversized row is explicitly refused; fields are never silently clipped.
 type ActionDryRunReadDryRun struct {
 	Actions              []ActionDryRunReadDryRunActionsInner `json:"actions"`
+	NextCursor           NullableInt32                        `json:"next_cursor,omitempty"`
+	Truncated            *bool                                `json:"truncated,omitempty"`
+	Continuation         *string                              `json:"continuation,omitempty"`
+	Total                *int32                               `json:"total,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -68,6 +72,145 @@ func (o *ActionDryRunReadDryRun) SetActions(v []ActionDryRunReadDryRunActionsInn
 	o.Actions = v
 }
 
+// GetNextCursor returns the NextCursor field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ActionDryRunReadDryRun) GetNextCursor() int32 {
+	if o == nil || IsNil(o.NextCursor.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.NextCursor.Get()
+}
+
+// GetNextCursorOk returns a tuple with the NextCursor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ActionDryRunReadDryRun) GetNextCursorOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.NextCursor.Get(), o.NextCursor.IsSet()
+}
+
+// HasNextCursor returns a boolean if a field has been set.
+func (o *ActionDryRunReadDryRun) HasNextCursor() bool {
+	if o != nil && o.NextCursor.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetNextCursor gets a reference to the given NullableInt32 and assigns it to the NextCursor field.
+func (o *ActionDryRunReadDryRun) SetNextCursor(v int32) {
+	o.NextCursor.Set(&v)
+}
+
+// SetNextCursorNil sets the value for NextCursor to be an explicit nil
+func (o *ActionDryRunReadDryRun) SetNextCursorNil() {
+	o.NextCursor.Set(nil)
+}
+
+// UnsetNextCursor ensures that no value is present for NextCursor, not even an explicit nil
+func (o *ActionDryRunReadDryRun) UnsetNextCursor() {
+	o.NextCursor.Unset()
+}
+
+// GetTruncated returns the Truncated field value if set, zero value otherwise.
+func (o *ActionDryRunReadDryRun) GetTruncated() bool {
+	if o == nil || IsNil(o.Truncated) {
+		var ret bool
+		return ret
+	}
+	return *o.Truncated
+}
+
+// GetTruncatedOk returns a tuple with the Truncated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionDryRunReadDryRun) GetTruncatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Truncated) {
+		return nil, false
+	}
+	return o.Truncated, true
+}
+
+// HasTruncated returns a boolean if a field has been set.
+func (o *ActionDryRunReadDryRun) HasTruncated() bool {
+	if o != nil && !IsNil(o.Truncated) {
+		return true
+	}
+
+	return false
+}
+
+// SetTruncated gets a reference to the given bool and assigns it to the Truncated field.
+func (o *ActionDryRunReadDryRun) SetTruncated(v bool) {
+	o.Truncated = &v
+}
+
+// GetContinuation returns the Continuation field value if set, zero value otherwise.
+func (o *ActionDryRunReadDryRun) GetContinuation() string {
+	if o == nil || IsNil(o.Continuation) {
+		var ret string
+		return ret
+	}
+	return *o.Continuation
+}
+
+// GetContinuationOk returns a tuple with the Continuation field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionDryRunReadDryRun) GetContinuationOk() (*string, bool) {
+	if o == nil || IsNil(o.Continuation) {
+		return nil, false
+	}
+	return o.Continuation, true
+}
+
+// HasContinuation returns a boolean if a field has been set.
+func (o *ActionDryRunReadDryRun) HasContinuation() bool {
+	if o != nil && !IsNil(o.Continuation) {
+		return true
+	}
+
+	return false
+}
+
+// SetContinuation gets a reference to the given string and assigns it to the Continuation field.
+func (o *ActionDryRunReadDryRun) SetContinuation(v string) {
+	o.Continuation = &v
+}
+
+// GetTotal returns the Total field value if set, zero value otherwise.
+func (o *ActionDryRunReadDryRun) GetTotal() int32 {
+	if o == nil || IsNil(o.Total) {
+		var ret int32
+		return ret
+	}
+	return *o.Total
+}
+
+// GetTotalOk returns a tuple with the Total field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionDryRunReadDryRun) GetTotalOk() (*int32, bool) {
+	if o == nil || IsNil(o.Total) {
+		return nil, false
+	}
+	return o.Total, true
+}
+
+// HasTotal returns a boolean if a field has been set.
+func (o *ActionDryRunReadDryRun) HasTotal() bool {
+	if o != nil && !IsNil(o.Total) {
+		return true
+	}
+
+	return false
+}
+
+// SetTotal gets a reference to the given int32 and assigns it to the Total field.
+func (o *ActionDryRunReadDryRun) SetTotal(v int32) {
+	o.Total = &v
+}
+
 func (o ActionDryRunReadDryRun) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -79,6 +222,18 @@ func (o ActionDryRunReadDryRun) MarshalJSON() ([]byte, error) {
 func (o ActionDryRunReadDryRun) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["actions"] = o.Actions
+	if o.NextCursor.IsSet() {
+		toSerialize["next_cursor"] = o.NextCursor.Get()
+	}
+	if !IsNil(o.Truncated) {
+		toSerialize["truncated"] = o.Truncated
+	}
+	if !IsNil(o.Continuation) {
+		toSerialize["continuation"] = o.Continuation
+	}
+	if !IsNil(o.Total) {
+		toSerialize["total"] = o.Total
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -123,6 +278,10 @@ func (o *ActionDryRunReadDryRun) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "actions")
+		delete(additionalProperties, "next_cursor")
+		delete(additionalProperties, "truncated")
+		delete(additionalProperties, "continuation")
+		delete(additionalProperties, "total")
 		o.AdditionalProperties = additionalProperties
 	}
 

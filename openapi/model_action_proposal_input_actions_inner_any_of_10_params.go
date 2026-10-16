@@ -11,6 +11,7 @@ API version: 0.5.0
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 )
@@ -20,13 +21,12 @@ var _ MappedNullable = &ActionProposalInputActionsInnerAnyOf10Params{}
 
 // ActionProposalInputActionsInnerAnyOf10Params struct for ActionProposalInputActionsInnerAnyOf10Params
 type ActionProposalInputActionsInnerAnyOf10Params struct {
-	StagedAssetId        string         `json:"staged_asset_id" validate:"regexp=^stage_[a-f0-9]{40}$"`
-	AssetType            string         `json:"asset_type"`
-	Filename             string         `json:"filename"`
-	ContentSha256        string         `json:"content_sha256" validate:"regexp=^[a-f0-9]{64}$"`
-	MimeType             NullableString `json:"mime_type,omitempty"`
-	SizeBytes            NullableInt32  `json:"size_bytes,omitempty"`
-	AdditionalProperties map[string]interface{}
+	StagedAssetId string         `json:"staged_asset_id" validate:"regexp=^stage_[a-f0-9]{40}$"`
+	AssetType     string         `json:"asset_type"`
+	Filename      string         `json:"filename"`
+	ContentSha256 string         `json:"content_sha256" validate:"regexp=^[a-f0-9]{64}$"`
+	MimeType      NullableString `json:"mime_type,omitempty"`
+	SizeBytes     NullableInt32  `json:"size_bytes,omitempty"`
 }
 
 type _ActionProposalInputActionsInnerAnyOf10Params ActionProposalInputActionsInnerAnyOf10Params
@@ -254,11 +254,6 @@ func (o ActionProposalInputActionsInnerAnyOf10Params) ToMap() (map[string]interf
 	if o.SizeBytes.IsSet() {
 		toSerialize["size_bytes"] = o.SizeBytes.Get()
 	}
-
-	for key, value := range o.AdditionalProperties {
-		toSerialize[key] = value
-	}
-
 	return toSerialize, nil
 }
 
@@ -289,25 +284,15 @@ func (o *ActionProposalInputActionsInnerAnyOf10Params) UnmarshalJSON(data []byte
 
 	varActionProposalInputActionsInnerAnyOf10Params := _ActionProposalInputActionsInnerAnyOf10Params{}
 
-	err = json.Unmarshal(data, &varActionProposalInputActionsInnerAnyOf10Params)
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varActionProposalInputActionsInnerAnyOf10Params)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ActionProposalInputActionsInnerAnyOf10Params(varActionProposalInputActionsInnerAnyOf10Params)
-
-	additionalProperties := make(map[string]interface{})
-
-	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "staged_asset_id")
-		delete(additionalProperties, "asset_type")
-		delete(additionalProperties, "filename")
-		delete(additionalProperties, "content_sha256")
-		delete(additionalProperties, "mime_type")
-		delete(additionalProperties, "size_bytes")
-		o.AdditionalProperties = additionalProperties
-	}
 
 	return err
 }

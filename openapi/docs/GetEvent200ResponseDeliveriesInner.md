@@ -16,6 +16,8 @@ Name | Type | Description | Notes
 **PlatformResponse** | **interface{}** |  | 
 **PlatformTraceId** | **NullableString** |  | 
 **NextAttemptAt** | **NullableString** |  | 
+**UploadDeadlineAt** | **NullableString** |  | 
+**FreshnessBasis** | **NullableString** |  | 
 **CreatedAt** | **string** |  | 
 **UpdatedAt** | **NullableString** |  | 
 **Explanation** | **string** |  | 
@@ -24,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewGetEvent200ResponseDeliveriesInner
 
-`func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, createdAt string, updatedAt NullableString, explanation string, ) *GetEvent200ResponseDeliveriesInner`
+`func NewGetEvent200ResponseDeliveriesInner(id int32, workspaceId int32, signalTrackerId string, eventId string, destinationId NullableString, status DeliveryStatus, isTest bool, attemptCount int32, lastError interface{}, platformResponse interface{}, platformTraceId NullableString, nextAttemptAt NullableString, uploadDeadlineAt NullableString, freshnessBasis NullableString, createdAt string, updatedAt NullableString, explanation string, ) *GetEvent200ResponseDeliveriesInner`
 
 NewGetEvent200ResponseDeliveriesInner instantiates a new GetEvent200ResponseDeliveriesInner object
 This constructor will assign default values to properties that have it defined,
@@ -329,6 +331,66 @@ SetNextAttemptAt sets NextAttemptAt field to given value.
 `func (o *GetEvent200ResponseDeliveriesInner) UnsetNextAttemptAt()`
 
 UnsetNextAttemptAt ensures that no value is present for NextAttemptAt, not even an explicit nil
+### GetUploadDeadlineAt
+
+`func (o *GetEvent200ResponseDeliveriesInner) GetUploadDeadlineAt() string`
+
+GetUploadDeadlineAt returns the UploadDeadlineAt field if non-nil, zero value otherwise.
+
+### GetUploadDeadlineAtOk
+
+`func (o *GetEvent200ResponseDeliveriesInner) GetUploadDeadlineAtOk() (*string, bool)`
+
+GetUploadDeadlineAtOk returns a tuple with the UploadDeadlineAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUploadDeadlineAt
+
+`func (o *GetEvent200ResponseDeliveriesInner) SetUploadDeadlineAt(v string)`
+
+SetUploadDeadlineAt sets UploadDeadlineAt field to given value.
+
+
+### SetUploadDeadlineAtNil
+
+`func (o *GetEvent200ResponseDeliveriesInner) SetUploadDeadlineAtNil(b bool)`
+
+ SetUploadDeadlineAtNil sets the value for UploadDeadlineAt to be an explicit nil
+
+### UnsetUploadDeadlineAt
+`func (o *GetEvent200ResponseDeliveriesInner) UnsetUploadDeadlineAt()`
+
+UnsetUploadDeadlineAt ensures that no value is present for UploadDeadlineAt, not even an explicit nil
+### GetFreshnessBasis
+
+`func (o *GetEvent200ResponseDeliveriesInner) GetFreshnessBasis() string`
+
+GetFreshnessBasis returns the FreshnessBasis field if non-nil, zero value otherwise.
+
+### GetFreshnessBasisOk
+
+`func (o *GetEvent200ResponseDeliveriesInner) GetFreshnessBasisOk() (*string, bool)`
+
+GetFreshnessBasisOk returns a tuple with the FreshnessBasis field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFreshnessBasis
+
+`func (o *GetEvent200ResponseDeliveriesInner) SetFreshnessBasis(v string)`
+
+SetFreshnessBasis sets FreshnessBasis field to given value.
+
+
+### SetFreshnessBasisNil
+
+`func (o *GetEvent200ResponseDeliveriesInner) SetFreshnessBasisNil(b bool)`
+
+ SetFreshnessBasisNil sets the value for FreshnessBasis to be an explicit nil
+
+### UnsetFreshnessBasis
+`func (o *GetEvent200ResponseDeliveriesInner) UnsetFreshnessBasis()`
+
+UnsetFreshnessBasis ensures that no value is present for FreshnessBasis, not even an explicit nil
 ### GetCreatedAt
 
 `func (o *GetEvent200ResponseDeliveriesInner) GetCreatedAt() string`

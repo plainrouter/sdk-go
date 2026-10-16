@@ -22,7 +22,7 @@ var _ MappedNullable = &ActionProposalInputActionsInnerAnyOf2{}
 type ActionProposalInputActionsInnerAnyOf2 struct {
 	Type                 string                                           `json:"type"`
 	TargetEntity         ActionProposalInputActionsInnerAnyOfTargetEntity `json:"target_entity"`
-	Params               map[string]interface{}                           `json:"params"`
+	Params               EmptyClosedObject                                `json:"params"`
 	Rationale            string                                           `json:"rationale"`
 	IdempotencyKey       *string                                          `json:"idempotency_key,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -34,7 +34,7 @@ type _ActionProposalInputActionsInnerAnyOf2 ActionProposalInputActionsInnerAnyOf
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActionProposalInputActionsInnerAnyOf2(type_ string, targetEntity ActionProposalInputActionsInnerAnyOfTargetEntity, params map[string]interface{}, rationale string) *ActionProposalInputActionsInnerAnyOf2 {
+func NewActionProposalInputActionsInnerAnyOf2(type_ string, targetEntity ActionProposalInputActionsInnerAnyOfTargetEntity, params EmptyClosedObject, rationale string) *ActionProposalInputActionsInnerAnyOf2 {
 	this := ActionProposalInputActionsInnerAnyOf2{}
 	this.Type = type_
 	this.TargetEntity = targetEntity
@@ -100,9 +100,9 @@ func (o *ActionProposalInputActionsInnerAnyOf2) SetTargetEntity(v ActionProposal
 }
 
 // GetParams returns the Params field value
-func (o *ActionProposalInputActionsInnerAnyOf2) GetParams() map[string]interface{} {
+func (o *ActionProposalInputActionsInnerAnyOf2) GetParams() EmptyClosedObject {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret EmptyClosedObject
 		return ret
 	}
 
@@ -111,15 +111,15 @@ func (o *ActionProposalInputActionsInnerAnyOf2) GetParams() map[string]interface
 
 // GetParamsOk returns a tuple with the Params field value
 // and a boolean to check if the value has been set.
-func (o *ActionProposalInputActionsInnerAnyOf2) GetParamsOk() (map[string]interface{}, bool) {
+func (o *ActionProposalInputActionsInnerAnyOf2) GetParamsOk() (*EmptyClosedObject, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.Params, true
+	return &o.Params, true
 }
 
 // SetParams sets field value
-func (o *ActionProposalInputActionsInnerAnyOf2) SetParams(v map[string]interface{}) {
+func (o *ActionProposalInputActionsInnerAnyOf2) SetParams(v EmptyClosedObject) {
 	o.Params = v
 }
 

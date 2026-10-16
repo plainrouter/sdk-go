@@ -22,7 +22,7 @@ var _ MappedNullable = &ActionProposalInputActionsInnerAnyOf11{}
 type ActionProposalInputActionsInnerAnyOf11 struct {
 	Type                 string                                            `json:"type"`
 	TargetEntity         ActionProposalInputActionsInnerAnyOf4TargetEntity `json:"target_entity"`
-	Params               ActionProposalInputActionsInnerAnyOf11Params      `json:"params"`
+	Params               ActionProposalInputActionsInnerAnyOfParams        `json:"params"`
 	Rationale            string                                            `json:"rationale"`
 	IdempotencyKey       *string                                           `json:"idempotency_key,omitempty"`
 	AdditionalProperties map[string]interface{}
@@ -34,7 +34,7 @@ type _ActionProposalInputActionsInnerAnyOf11 ActionProposalInputActionsInnerAnyO
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActionProposalInputActionsInnerAnyOf11(type_ string, targetEntity ActionProposalInputActionsInnerAnyOf4TargetEntity, params ActionProposalInputActionsInnerAnyOf11Params, rationale string) *ActionProposalInputActionsInnerAnyOf11 {
+func NewActionProposalInputActionsInnerAnyOf11(type_ string, targetEntity ActionProposalInputActionsInnerAnyOf4TargetEntity, params ActionProposalInputActionsInnerAnyOfParams, rationale string) *ActionProposalInputActionsInnerAnyOf11 {
 	this := ActionProposalInputActionsInnerAnyOf11{}
 	this.Type = type_
 	this.TargetEntity = targetEntity
@@ -100,9 +100,9 @@ func (o *ActionProposalInputActionsInnerAnyOf11) SetTargetEntity(v ActionProposa
 }
 
 // GetParams returns the Params field value
-func (o *ActionProposalInputActionsInnerAnyOf11) GetParams() ActionProposalInputActionsInnerAnyOf11Params {
+func (o *ActionProposalInputActionsInnerAnyOf11) GetParams() ActionProposalInputActionsInnerAnyOfParams {
 	if o == nil {
-		var ret ActionProposalInputActionsInnerAnyOf11Params
+		var ret ActionProposalInputActionsInnerAnyOfParams
 		return ret
 	}
 
@@ -111,7 +111,7 @@ func (o *ActionProposalInputActionsInnerAnyOf11) GetParams() ActionProposalInput
 
 // GetParamsOk returns a tuple with the Params field value
 // and a boolean to check if the value has been set.
-func (o *ActionProposalInputActionsInnerAnyOf11) GetParamsOk() (*ActionProposalInputActionsInnerAnyOf11Params, bool) {
+func (o *ActionProposalInputActionsInnerAnyOf11) GetParamsOk() (*ActionProposalInputActionsInnerAnyOfParams, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -119,7 +119,7 @@ func (o *ActionProposalInputActionsInnerAnyOf11) GetParamsOk() (*ActionProposalI
 }
 
 // SetParams sets field value
-func (o *ActionProposalInputActionsInnerAnyOf11) SetParams(v ActionProposalInputActionsInnerAnyOf11Params) {
+func (o *ActionProposalInputActionsInnerAnyOf11) SetParams(v ActionProposalInputActionsInnerAnyOfParams) {
 	o.Params = v
 }
 

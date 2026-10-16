@@ -18,12 +18,15 @@ import (
 // checks if the ActionListReadMeta type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ActionListReadMeta{}
 
-// ActionListReadMeta struct for ActionListReadMeta
+// ActionListReadMeta Complete projection rows are paged within 80,000 JSON bytes, accounting for both MCP representations. Defaults are bounded. Follow next_cursor with the same scope and filters. One oversized row is explicitly refused; fields are never silently clipped.
 type ActionListReadMeta struct {
-	CurrentPage          int32 `json:"current_page"`
-	LastPage             int32 `json:"last_page"`
-	PerPage              int32 `json:"per_page"`
-	Total                int32 `json:"total"`
+	CurrentPage          int32         `json:"current_page"`
+	LastPage             int32         `json:"last_page"`
+	PerPage              int32         `json:"per_page"`
+	Total                int32         `json:"total"`
+	NextCursor           NullableInt32 `json:"next_cursor,omitempty"`
+	Truncated            *bool         `json:"truncated,omitempty"`
+	Continuation         *string       `json:"continuation,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -146,6 +149,113 @@ func (o *ActionListReadMeta) SetTotal(v int32) {
 	o.Total = v
 }
 
+// GetNextCursor returns the NextCursor field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ActionListReadMeta) GetNextCursor() int32 {
+	if o == nil || IsNil(o.NextCursor.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.NextCursor.Get()
+}
+
+// GetNextCursorOk returns a tuple with the NextCursor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ActionListReadMeta) GetNextCursorOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.NextCursor.Get(), o.NextCursor.IsSet()
+}
+
+// HasNextCursor returns a boolean if a field has been set.
+func (o *ActionListReadMeta) HasNextCursor() bool {
+	if o != nil && o.NextCursor.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetNextCursor gets a reference to the given NullableInt32 and assigns it to the NextCursor field.
+func (o *ActionListReadMeta) SetNextCursor(v int32) {
+	o.NextCursor.Set(&v)
+}
+
+// SetNextCursorNil sets the value for NextCursor to be an explicit nil
+func (o *ActionListReadMeta) SetNextCursorNil() {
+	o.NextCursor.Set(nil)
+}
+
+// UnsetNextCursor ensures that no value is present for NextCursor, not even an explicit nil
+func (o *ActionListReadMeta) UnsetNextCursor() {
+	o.NextCursor.Unset()
+}
+
+// GetTruncated returns the Truncated field value if set, zero value otherwise.
+func (o *ActionListReadMeta) GetTruncated() bool {
+	if o == nil || IsNil(o.Truncated) {
+		var ret bool
+		return ret
+	}
+	return *o.Truncated
+}
+
+// GetTruncatedOk returns a tuple with the Truncated field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionListReadMeta) GetTruncatedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Truncated) {
+		return nil, false
+	}
+	return o.Truncated, true
+}
+
+// HasTruncated returns a boolean if a field has been set.
+func (o *ActionListReadMeta) HasTruncated() bool {
+	if o != nil && !IsNil(o.Truncated) {
+		return true
+	}
+
+	return false
+}
+
+// SetTruncated gets a reference to the given bool and assigns it to the Truncated field.
+func (o *ActionListReadMeta) SetTruncated(v bool) {
+	o.Truncated = &v
+}
+
+// GetContinuation returns the Continuation field value if set, zero value otherwise.
+func (o *ActionListReadMeta) GetContinuation() string {
+	if o == nil || IsNil(o.Continuation) {
+		var ret string
+		return ret
+	}
+	return *o.Continuation
+}
+
+// GetContinuationOk returns a tuple with the Continuation field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionListReadMeta) GetContinuationOk() (*string, bool) {
+	if o == nil || IsNil(o.Continuation) {
+		return nil, false
+	}
+	return o.Continuation, true
+}
+
+// HasContinuation returns a boolean if a field has been set.
+func (o *ActionListReadMeta) HasContinuation() bool {
+	if o != nil && !IsNil(o.Continuation) {
+		return true
+	}
+
+	return false
+}
+
+// SetContinuation gets a reference to the given string and assigns it to the Continuation field.
+func (o *ActionListReadMeta) SetContinuation(v string) {
+	o.Continuation = &v
+}
+
 func (o ActionListReadMeta) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -160,6 +270,15 @@ func (o ActionListReadMeta) ToMap() (map[string]interface{}, error) {
 	toSerialize["last_page"] = o.LastPage
 	toSerialize["per_page"] = o.PerPage
 	toSerialize["total"] = o.Total
+	if o.NextCursor.IsSet() {
+		toSerialize["next_cursor"] = o.NextCursor.Get()
+	}
+	if !IsNil(o.Truncated) {
+		toSerialize["truncated"] = o.Truncated
+	}
+	if !IsNil(o.Continuation) {
+		toSerialize["continuation"] = o.Continuation
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -210,6 +329,9 @@ func (o *ActionListReadMeta) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "last_page")
 		delete(additionalProperties, "per_page")
 		delete(additionalProperties, "total")
+		delete(additionalProperties, "next_cursor")
+		delete(additionalProperties, "truncated")
+		delete(additionalProperties, "continuation")
 		o.AdditionalProperties = additionalProperties
 	}
 

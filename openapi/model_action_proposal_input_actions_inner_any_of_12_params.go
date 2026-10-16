@@ -11,6 +11,7 @@ API version: 0.5.0
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 )
@@ -20,8 +21,7 @@ var _ MappedNullable = &ActionProposalInputActionsInnerAnyOf12Params{}
 
 // ActionProposalInputActionsInnerAnyOf12Params struct for ActionProposalInputActionsInnerAnyOf12Params
 type ActionProposalInputActionsInnerAnyOf12Params struct {
-	Status               string `json:"status"`
-	AdditionalProperties map[string]interface{}
+	Status string `json:"status"`
 }
 
 type _ActionProposalInputActionsInnerAnyOf12Params ActionProposalInputActionsInnerAnyOf12Params
@@ -79,11 +79,6 @@ func (o ActionProposalInputActionsInnerAnyOf12Params) MarshalJSON() ([]byte, err
 func (o ActionProposalInputActionsInnerAnyOf12Params) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["status"] = o.Status
-
-	for key, value := range o.AdditionalProperties {
-		toSerialize[key] = value
-	}
-
 	return toSerialize, nil
 }
 
@@ -111,20 +106,15 @@ func (o *ActionProposalInputActionsInnerAnyOf12Params) UnmarshalJSON(data []byte
 
 	varActionProposalInputActionsInnerAnyOf12Params := _ActionProposalInputActionsInnerAnyOf12Params{}
 
-	err = json.Unmarshal(data, &varActionProposalInputActionsInnerAnyOf12Params)
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varActionProposalInputActionsInnerAnyOf12Params)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ActionProposalInputActionsInnerAnyOf12Params(varActionProposalInputActionsInnerAnyOf12Params)
-
-	additionalProperties := make(map[string]interface{})
-
-	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "status")
-		o.AdditionalProperties = additionalProperties
-	}
 
 	return err
 }

@@ -21,6 +21,7 @@ type DestinationStatus string
 // List of DestinationStatus
 const (
 	DESTINATIONSTATUS_ACTIVE                   DestinationStatus = "active"
+	DESTINATIONSTATUS_NEEDS_ATTENTION          DestinationStatus = "needs_attention"
 	DESTINATIONSTATUS_INACTIVE                 DestinationStatus = "inactive"
 	DESTINATIONSTATUS_UNKNOWN_DEFAULT_OPEN_API DestinationStatus = "unknown_default_open_api"
 )
@@ -28,6 +29,7 @@ const (
 // All allowed values of DestinationStatus enum
 var AllowedDestinationStatusEnumValues = []DestinationStatus{
 	"active",
+	"needs_attention",
 	"inactive",
 	"unknown_default_open_api",
 }

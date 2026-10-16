@@ -4,12 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Limit** | Pointer to **int32** | Maximum complete result actions; the shared JSON byte budget can return fewer. | [optional] [default to 25]
+**Cursor** | Pointer to **int32** | Continue using next_cursor. Read saved proposal actions with get_action_batch to avoid another write; dry runs repeat the same inputs. | [optional] 
 **Actions** | [**[]ActionProposalInputActionsInner**](ActionProposalInputActionsInner.md) |  | 
 **Rationale** | **string** |  | 
 **IdempotencyKey** | **string** |  | 
 **Evidence** | [**[]ActionProposalInputEvidenceInner**](ActionProposalInputEvidenceInner.md) |  | 
 **TargetSource** | **string** |  | 
 **AccountId** | Pointer to **int32** |  | [optional] 
+**WorkspaceId** | Pointer to **int32** |  | [optional] 
 
 ## Methods
 
@@ -29,6 +32,56 @@ will change when the set of required properties is changed
 NewActionProposalInputWithDefaults instantiates a new ActionProposalInput object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetLimit
+
+`func (o *ActionProposalInput) GetLimit() int32`
+
+GetLimit returns the Limit field if non-nil, zero value otherwise.
+
+### GetLimitOk
+
+`func (o *ActionProposalInput) GetLimitOk() (*int32, bool)`
+
+GetLimitOk returns a tuple with the Limit field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLimit
+
+`func (o *ActionProposalInput) SetLimit(v int32)`
+
+SetLimit sets Limit field to given value.
+
+### HasLimit
+
+`func (o *ActionProposalInput) HasLimit() bool`
+
+HasLimit returns a boolean if a field has been set.
+
+### GetCursor
+
+`func (o *ActionProposalInput) GetCursor() int32`
+
+GetCursor returns the Cursor field if non-nil, zero value otherwise.
+
+### GetCursorOk
+
+`func (o *ActionProposalInput) GetCursorOk() (*int32, bool)`
+
+GetCursorOk returns a tuple with the Cursor field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCursor
+
+`func (o *ActionProposalInput) SetCursor(v int32)`
+
+SetCursor sets Cursor field to given value.
+
+### HasCursor
+
+`func (o *ActionProposalInput) HasCursor() bool`
+
+HasCursor returns a boolean if a field has been set.
 
 ### GetActions
 
@@ -154,6 +207,31 @@ SetAccountId sets AccountId field to given value.
 `func (o *ActionProposalInput) HasAccountId() bool`
 
 HasAccountId returns a boolean if a field has been set.
+
+### GetWorkspaceId
+
+`func (o *ActionProposalInput) GetWorkspaceId() int32`
+
+GetWorkspaceId returns the WorkspaceId field if non-nil, zero value otherwise.
+
+### GetWorkspaceIdOk
+
+`func (o *ActionProposalInput) GetWorkspaceIdOk() (*int32, bool)`
+
+GetWorkspaceIdOk returns a tuple with the WorkspaceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkspaceId
+
+`func (o *ActionProposalInput) SetWorkspaceId(v int32)`
+
+SetWorkspaceId sets WorkspaceId field to given value.
+
+### HasWorkspaceId
+
+`func (o *ActionProposalInput) HasWorkspaceId() bool`
+
+HasWorkspaceId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

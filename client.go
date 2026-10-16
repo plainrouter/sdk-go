@@ -39,6 +39,7 @@ func New(token string, options ...Option) *Client {
 		option(configuration)
 	}
 
+	guardConfiguration(configuration)
 	generated := openapi.NewAPIClient(configuration)
 	return &Client{
 		Events:     generated.EventAPI,
@@ -53,7 +54,9 @@ func New(token string, options ...Option) *Client {
 // Deprecated: use [New] with [WithBaseURL], [WithHTTPClient], or
 // [WithUserAgent].
 func NewConfiguration() *openapi.Configuration {
-	return openapi.NewConfiguration()
+	configuration := openapi.NewConfiguration()
+	guardConfiguration(configuration)
+	return configuration
 }
 
 // NewAPIClient creates the complete generated client.
@@ -61,6 +64,7 @@ func NewConfiguration() *openapi.Configuration {
 // Deprecated: use [New] for the curated entry point or import the
 // github.com/plainrouter/sdk-go/openapi package directly.
 func NewAPIClient(configuration *openapi.Configuration) *openapi.APIClient {
+	guardConfiguration(configuration)
 	return openapi.NewAPIClient(configuration)
 }
 

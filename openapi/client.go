@@ -31,6 +31,8 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -54,9 +56,25 @@ type APIClient struct {
 
 	ActionReadApiAPI *ActionReadApiAPIService
 
+	ActionRuleApiAPI *ActionRuleApiAPIService
+
+	AdTestApiAPI *AdTestApiAPIService
+
+	AgentContextAPI *AgentContextAPIService
+
+	CookieDeclarationAPI *CookieDeclarationAPIService
+
+	CreativeAPI *CreativeAPIService
+
 	DeploymentPlanAPI *DeploymentPlanAPIService
 
+	DraftBatchFileImportAPI *DraftBatchFileImportAPIService
+
 	EventAPI *EventAPIService
+
+	LaunchPolicyAPI *LaunchPolicyAPIService
+
+	MetaInventoryExposureAPI *MetaInventoryExposureAPIService
 
 	OperationsAPI *OperationsAPIService
 
@@ -82,8 +100,16 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.ActionDryRunApiAPI = (*ActionDryRunApiAPIService)(&c.common)
 	c.ActionProposalApiAPI = (*ActionProposalApiAPIService)(&c.common)
 	c.ActionReadApiAPI = (*ActionReadApiAPIService)(&c.common)
+	c.ActionRuleApiAPI = (*ActionRuleApiAPIService)(&c.common)
+	c.AdTestApiAPI = (*AdTestApiAPIService)(&c.common)
+	c.AgentContextAPI = (*AgentContextAPIService)(&c.common)
+	c.CookieDeclarationAPI = (*CookieDeclarationAPIService)(&c.common)
+	c.CreativeAPI = (*CreativeAPIService)(&c.common)
 	c.DeploymentPlanAPI = (*DeploymentPlanAPIService)(&c.common)
+	c.DraftBatchFileImportAPI = (*DraftBatchFileImportAPIService)(&c.common)
 	c.EventAPI = (*EventAPIService)(&c.common)
+	c.LaunchPolicyAPI = (*LaunchPolicyAPIService)(&c.common)
+	c.MetaInventoryExposureAPI = (*MetaInventoryExposureAPIService)(&c.common)
 	c.OperationsAPI = (*OperationsAPIService)(&c.common)
 	c.SandboxAPI = (*SandboxAPIService)(&c.common)
 
@@ -434,6 +460,17 @@ func (c *APIClient) prepareRequest(
 		localVarRequest = localVarRequest.WithContext(ctx)
 
 		// Walk through any authentication.
+
+		// OAuth2 authentication
+		if tok, ok := ctx.Value(ContextOAuth2).(oauth2.TokenSource); ok {
+			// We were able to grab an oauth2 token from the context
+			var latestToken *oauth2.Token
+			if latestToken, err = tok.Token(); err != nil {
+				return nil, err
+			}
+
+			latestToken.SetAuthHeader(localVarRequest)
+		}
 
 		// AccessToken Authentication
 		if auth, ok := ctx.Value(ContextAccessToken).(string); ok {

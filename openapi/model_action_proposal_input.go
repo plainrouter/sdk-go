@@ -20,12 +20,17 @@ var _ MappedNullable = &ActionProposalInput{}
 
 // ActionProposalInput struct for ActionProposalInput
 type ActionProposalInput struct {
+	// Maximum complete result actions; the shared JSON byte budget can return fewer.
+	Limit *int32 `json:"limit,omitempty"`
+	// Continue using next_cursor. Read saved proposal actions with get_action_batch to avoid another write; dry runs repeat the same inputs.
+	Cursor               *int32                             `json:"cursor,omitempty"`
 	Actions              []ActionProposalInputActionsInner  `json:"actions"`
 	Rationale            string                             `json:"rationale"`
 	IdempotencyKey       string                             `json:"idempotency_key"`
 	Evidence             []ActionProposalInputEvidenceInner `json:"evidence"`
 	TargetSource         string                             `json:"target_source"`
 	AccountId            *int32                             `json:"account_id,omitempty"`
+	WorkspaceId          *int32                             `json:"workspace_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -37,6 +42,8 @@ type _ActionProposalInput ActionProposalInput
 // will change when the set of required properties is changed
 func NewActionProposalInput(actions []ActionProposalInputActionsInner, rationale string, idempotencyKey string, evidence []ActionProposalInputEvidenceInner, targetSource string) *ActionProposalInput {
 	this := ActionProposalInput{}
+	var limit int32 = 25
+	this.Limit = &limit
 	this.Actions = actions
 	this.Rationale = rationale
 	this.IdempotencyKey = idempotencyKey
@@ -50,7 +57,73 @@ func NewActionProposalInput(actions []ActionProposalInputActionsInner, rationale
 // but it doesn't guarantee that properties required by API are set
 func NewActionProposalInputWithDefaults() *ActionProposalInput {
 	this := ActionProposalInput{}
+	var limit int32 = 25
+	this.Limit = &limit
 	return &this
+}
+
+// GetLimit returns the Limit field value if set, zero value otherwise.
+func (o *ActionProposalInput) GetLimit() int32 {
+	if o == nil || IsNil(o.Limit) {
+		var ret int32
+		return ret
+	}
+	return *o.Limit
+}
+
+// GetLimitOk returns a tuple with the Limit field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionProposalInput) GetLimitOk() (*int32, bool) {
+	if o == nil || IsNil(o.Limit) {
+		return nil, false
+	}
+	return o.Limit, true
+}
+
+// HasLimit returns a boolean if a field has been set.
+func (o *ActionProposalInput) HasLimit() bool {
+	if o != nil && !IsNil(o.Limit) {
+		return true
+	}
+
+	return false
+}
+
+// SetLimit gets a reference to the given int32 and assigns it to the Limit field.
+func (o *ActionProposalInput) SetLimit(v int32) {
+	o.Limit = &v
+}
+
+// GetCursor returns the Cursor field value if set, zero value otherwise.
+func (o *ActionProposalInput) GetCursor() int32 {
+	if o == nil || IsNil(o.Cursor) {
+		var ret int32
+		return ret
+	}
+	return *o.Cursor
+}
+
+// GetCursorOk returns a tuple with the Cursor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionProposalInput) GetCursorOk() (*int32, bool) {
+	if o == nil || IsNil(o.Cursor) {
+		return nil, false
+	}
+	return o.Cursor, true
+}
+
+// HasCursor returns a boolean if a field has been set.
+func (o *ActionProposalInput) HasCursor() bool {
+	if o != nil && !IsNil(o.Cursor) {
+		return true
+	}
+
+	return false
+}
+
+// SetCursor gets a reference to the given int32 and assigns it to the Cursor field.
+func (o *ActionProposalInput) SetCursor(v int32) {
+	o.Cursor = &v
 }
 
 // GetActions returns the Actions field value
@@ -205,6 +278,38 @@ func (o *ActionProposalInput) SetAccountId(v int32) {
 	o.AccountId = &v
 }
 
+// GetWorkspaceId returns the WorkspaceId field value if set, zero value otherwise.
+func (o *ActionProposalInput) GetWorkspaceId() int32 {
+	if o == nil || IsNil(o.WorkspaceId) {
+		var ret int32
+		return ret
+	}
+	return *o.WorkspaceId
+}
+
+// GetWorkspaceIdOk returns a tuple with the WorkspaceId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ActionProposalInput) GetWorkspaceIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.WorkspaceId) {
+		return nil, false
+	}
+	return o.WorkspaceId, true
+}
+
+// HasWorkspaceId returns a boolean if a field has been set.
+func (o *ActionProposalInput) HasWorkspaceId() bool {
+	if o != nil && !IsNil(o.WorkspaceId) {
+		return true
+	}
+
+	return false
+}
+
+// SetWorkspaceId gets a reference to the given int32 and assigns it to the WorkspaceId field.
+func (o *ActionProposalInput) SetWorkspaceId(v int32) {
+	o.WorkspaceId = &v
+}
+
 func (o ActionProposalInput) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -215,6 +320,12 @@ func (o ActionProposalInput) MarshalJSON() ([]byte, error) {
 
 func (o ActionProposalInput) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Limit) {
+		toSerialize["limit"] = o.Limit
+	}
+	if !IsNil(o.Cursor) {
+		toSerialize["cursor"] = o.Cursor
+	}
 	toSerialize["actions"] = o.Actions
 	toSerialize["rationale"] = o.Rationale
 	toSerialize["idempotency_key"] = o.IdempotencyKey
@@ -222,6 +333,9 @@ func (o ActionProposalInput) ToMap() (map[string]interface{}, error) {
 	toSerialize["target_source"] = o.TargetSource
 	if !IsNil(o.AccountId) {
 		toSerialize["account_id"] = o.AccountId
+	}
+	if !IsNil(o.WorkspaceId) {
+		toSerialize["workspace_id"] = o.WorkspaceId
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -270,12 +384,15 @@ func (o *ActionProposalInput) UnmarshalJSON(data []byte) (err error) {
 	additionalProperties := make(map[string]interface{})
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "limit")
+		delete(additionalProperties, "cursor")
 		delete(additionalProperties, "actions")
 		delete(additionalProperties, "rationale")
 		delete(additionalProperties, "idempotency_key")
 		delete(additionalProperties, "evidence")
 		delete(additionalProperties, "target_source")
 		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "workspace_id")
 		o.AdditionalProperties = additionalProperties
 	}
 

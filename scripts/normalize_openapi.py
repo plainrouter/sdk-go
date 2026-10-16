@@ -3,7 +3,7 @@
 
 OpenAPI Generator 7.25.0 emits invalid Go identifiers for OAS 3.1 schemas whose
 value may be an object, an array, or null, and for free-form object-or-array
-unions. Those fields intentionally represent arbitrary JSON. Replacing only those
+unions (including an empty-array branch). Those fields intentionally represent arbitrary JSON. Replacing only those
 exact unions with an unconstrained schema makes the generated type `interface{}`
 without narrowing accepted input. It also emits the invalid type `nil` for a
 schema that is only ever null, which receives the same replacement.
@@ -29,7 +29,8 @@ def is_free_form_container(variants: list[Any]) -> bool:
         by_type["object"].get("additionalProperties") in ({}, True)
         and set(by_type["object"]) <= {"type", "additionalProperties"}
         and by_type["array"].get("items", {}) == {}
-        and set(by_type["array"]) <= {"type", "items"}
+        and set(by_type["array"]) <= {"type", "items", "maxItems"}
+        and by_type["array"].get("maxItems", 0) == 0
     )
 
 
@@ -68,6 +69,56 @@ def main() -> None:
 
     document = json.loads(args.source.read_text(encoding="utf-8"))
     changed = normalize(document)
+
+    # Go defaults unformatted integers to int32, even when a bound exceeds it.
+    # Optional query defaults otherwise generate an explicit page=1 fallback.
+    for item in document["paths"].values():
+        for operation in item.values():
+            if not isinstance(operation, dict):
+                continue
+            for parameter in operation.get("parameters", []):
+                schema = parameter.get("schema", {})
+                if parameter.get("name") == "page" and schema.get("type") == "integer":
+                    schema["format"] = "int64"
+                    schema.pop("default", None)
+
+    # Inline-model deduplication loses additionalProperties:false on the store
+    # definitions when identical update variants exist. Explicit shared refs
+    # preserve closure on both operations before the generator flattens them.
+    rule_definitions: dict[str, str] = {}
+    for item in document["paths"].values():
+        for operation in item.values():
+            if not isinstance(operation, dict) or operation.get("operationId") not in {"actions.rules.store", "actions.rules.update"}:
+                continue
+            definition = operation["requestBody"]["content"]["application/json"]["schema"]["properties"]["definition"]
+            for index, variant in enumerate(definition["anyOf"]):
+                signature = json.dumps(variant, sort_keys=True)
+                if signature not in rule_definitions:
+                    name = f"ActionRuleDefinitionVariant{len(rule_definitions) + 1}"
+                    document["components"]["schemas"][name] = variant
+                    rule_definitions[signature] = name
+                definition["anyOf"][index] = {"$ref": "#/components/schemas/" + rule_definitions[signature]}
+
+    # An empty closed object is otherwise emitted as map[string]interface{}.
+    # Schema mapping plus the supporting template makes it a Go struct{}, which can
+    # neither retain nor serialize unknown keys. The generation checker audits
+    # all closed objects, including nonempty inline union variants.
+    def close_empty(value: Any) -> None:
+        if isinstance(value, dict):
+            if value.get("type") == "object" and value.get("additionalProperties") is False and not value.get("properties"):
+                value.clear()
+                value["$ref"] = "#/components/schemas/EmptyClosedObject"
+            else:
+                for child in value.values():
+                    close_empty(child)
+        elif isinstance(value, list):
+            for child in value:
+                close_empty(child)
+
+    close_empty(document)
+    document["components"]["schemas"]["EmptyClosedObject"] = {
+        "type": "object", "additionalProperties": False, "properties": {}
+    }
     if changed == 0:
         raise SystemExit("expected at least one free-form object/array/null union")
 

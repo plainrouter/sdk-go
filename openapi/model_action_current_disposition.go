@@ -21,13 +21,14 @@ var _ MappedNullable = &ActionCurrentDisposition{}
 
 // ActionCurrentDisposition struct for ActionCurrentDisposition
 type ActionCurrentDisposition struct {
-	ReceiptStatus          NullableString `json:"receipt_status"`
-	OutcomeStatus          NullableString `json:"outcome_status"`
-	OutcomeReasonCode      NullableString `json:"outcome_reason_code"`
-	OutcomeCheckedAt       NullableTime   `json:"outcome_checked_at"`
-	CompensationReasonCode NullableString `json:"compensation_reason_code"`
-	RecoveryDisposition    NullableString `json:"recovery_disposition"`
-	LateRestored           bool           `json:"late_restored"`
+	ReceiptStatus          NullableString                                 `json:"receipt_status"`
+	OutcomePayload         NullableActionCurrentDispositionOutcomePayload `json:"outcome_payload"`
+	OutcomeStatus          NullableString                                 `json:"outcome_status"`
+	OutcomeReasonCode      NullableString                                 `json:"outcome_reason_code"`
+	OutcomeCheckedAt       NullableTime                                   `json:"outcome_checked_at"`
+	CompensationReasonCode NullableString                                 `json:"compensation_reason_code"`
+	RecoveryDisposition    NullableString                                 `json:"recovery_disposition"`
+	LateRestored           bool                                           `json:"late_restored"`
 	AdditionalProperties   map[string]interface{}
 }
 
@@ -37,9 +38,10 @@ type _ActionCurrentDisposition ActionCurrentDisposition
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewActionCurrentDisposition(receiptStatus NullableString, outcomeStatus NullableString, outcomeReasonCode NullableString, outcomeCheckedAt NullableTime, compensationReasonCode NullableString, recoveryDisposition NullableString, lateRestored bool) *ActionCurrentDisposition {
+func NewActionCurrentDisposition(receiptStatus NullableString, outcomePayload NullableActionCurrentDispositionOutcomePayload, outcomeStatus NullableString, outcomeReasonCode NullableString, outcomeCheckedAt NullableTime, compensationReasonCode NullableString, recoveryDisposition NullableString, lateRestored bool) *ActionCurrentDisposition {
 	this := ActionCurrentDisposition{}
 	this.ReceiptStatus = receiptStatus
+	this.OutcomePayload = outcomePayload
 	this.OutcomeStatus = outcomeStatus
 	this.OutcomeReasonCode = outcomeReasonCode
 	this.OutcomeCheckedAt = outcomeCheckedAt
@@ -81,6 +83,32 @@ func (o *ActionCurrentDisposition) GetReceiptStatusOk() (*string, bool) {
 // SetReceiptStatus sets field value
 func (o *ActionCurrentDisposition) SetReceiptStatus(v string) {
 	o.ReceiptStatus.Set(&v)
+}
+
+// GetOutcomePayload returns the OutcomePayload field value
+// If the value is explicit nil, the zero value for ActionCurrentDispositionOutcomePayload will be returned
+func (o *ActionCurrentDisposition) GetOutcomePayload() ActionCurrentDispositionOutcomePayload {
+	if o == nil || o.OutcomePayload.Get() == nil {
+		var ret ActionCurrentDispositionOutcomePayload
+		return ret
+	}
+
+	return *o.OutcomePayload.Get()
+}
+
+// GetOutcomePayloadOk returns a tuple with the OutcomePayload field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ActionCurrentDisposition) GetOutcomePayloadOk() (*ActionCurrentDispositionOutcomePayload, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.OutcomePayload.Get(), o.OutcomePayload.IsSet()
+}
+
+// SetOutcomePayload sets field value
+func (o *ActionCurrentDisposition) SetOutcomePayload(v ActionCurrentDispositionOutcomePayload) {
+	o.OutcomePayload.Set(&v)
 }
 
 // GetOutcomeStatus returns the OutcomeStatus field value
@@ -248,6 +276,7 @@ func (o ActionCurrentDisposition) MarshalJSON() ([]byte, error) {
 func (o ActionCurrentDisposition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["receipt_status"] = o.ReceiptStatus.Get()
+	toSerialize["outcome_payload"] = o.OutcomePayload.Get()
 	toSerialize["outcome_status"] = o.OutcomeStatus.Get()
 	toSerialize["outcome_reason_code"] = o.OutcomeReasonCode.Get()
 	toSerialize["outcome_checked_at"] = o.OutcomeCheckedAt.Get()
@@ -268,6 +297,7 @@ func (o *ActionCurrentDisposition) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"receipt_status",
+		"outcome_payload",
 		"outcome_status",
 		"outcome_reason_code",
 		"outcome_checked_at",
@@ -304,6 +334,7 @@ func (o *ActionCurrentDisposition) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "receipt_status")
+		delete(additionalProperties, "outcome_payload")
 		delete(additionalProperties, "outcome_status")
 		delete(additionalProperties, "outcome_reason_code")
 		delete(additionalProperties, "outcome_checked_at")
