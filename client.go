@@ -75,10 +75,19 @@ func (client *Client) OpenAPI() *openapi.APIClient {
 
 // WithBaseURL overrides the default Plainrouter API base URL. It is intended
 // for tests, proxies, and self-hosted compatible endpoints.
+// Launcher import uses this URL with a trailing /api/v1 removed.
 func WithBaseURL(baseURL string) Option {
 	return func(configuration *openapi.Configuration) {
+		baseURL := strings.TrimRight(baseURL, "/")
 		configuration.Servers = openapi.ServerConfigurations{{
-			URL:         strings.TrimRight(baseURL, "/"),
+			URL:         baseURL,
+			Description: "Custom",
+		}}
+		if configuration.OperationServers == nil {
+			configuration.OperationServers = make(map[string]openapi.ServerConfigurations)
+		}
+		configuration.OperationServers["DraftBatchFileImportAPIService.LauncherFileImport"] = openapi.ServerConfigurations{{
+			URL:         strings.TrimSuffix(baseURL, "/api/v1"),
 			Description: "Custom",
 		}}
 	}
