@@ -412,7 +412,7 @@ func (a *MetaInventoryExposureAPIService) GetInventoryMetricsExecute(r ApiGetInv
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ErrorMessage
+			var v ActionsTestsApiIndex404Response
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
