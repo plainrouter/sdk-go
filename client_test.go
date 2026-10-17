@@ -155,18 +155,39 @@ func TestContractWireValidation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	localHTTPClient := &http.Client{Transport: roundTripFunc(func(request *http.Request) (*http.Response, error) {
-		if request.URL.Scheme != "http" || request.URL.Host != localURL.Host {
-			return nil, fmt.Errorf("refusing non-local test request to %s", request.URL)
-		}
-		return http.DefaultTransport.RoundTrip(request)
-	})}
-	launcherServer := openapi.ServerConfigurations{{URL: server.URL}}
-	client := New("", WithBaseURL(server.URL), WithHTTPClient(localHTTPClient), func(configuration *openapi.Configuration) {
-		configuration.OperationServers["DraftBatchFileImportAPIService.LauncherFileImport"] = launcherServer
-	})
+	loopbackOnly := func(next http.RoundTripper) http.RoundTripper {
+		return roundTripFunc(func(request *http.Request) (*http.Response, error) {
+			if request.URL.Scheme != "http" || request.URL.Host != localURL.Host {
+				return nil, fmt.Errorf("refusing non-local test request to %s", request.URL)
+			}
+			return next.RoundTrip(request)
+		})
+	}
+	originalDefault := http.DefaultTransport
+	http.DefaultTransport = loopbackOnly(originalDefault)
+	t.Cleanup(func() { http.DefaultTransport = originalDefault })
+	client := New("", WithBaseURL(server.URL))
 	api := client.OpenAPI()
 	ctx := context.Background()
+
+	t.Run("loopback-guard/non-loopback", func(t *testing.T) {
+		var networkCalls atomic.Int32
+		network := roundTripFunc(func(request *http.Request) (*http.Response, error) {
+			networkCalls.Add(1)
+			return nil, errors.New("unexpected network delegation")
+		})
+		request, err := http.NewRequest(http.MethodPost, "https://plainrouter.com/mcp/launcher/import", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		response, err := loopbackOnly(network).RoundTrip(request)
+		if response != nil || err == nil || !strings.Contains(err.Error(), "refusing non-local test request") {
+			t.Errorf("expected non-loopback refusal, got response=%v err=%v", response, err)
+		}
+		if networkCalls.Load() != 0 {
+			t.Errorf("non-loopback request reached the network transport %d times", networkCalls.Load())
+		}
+	})
 
 	// These rows cover constructor/client identity and full-path selection in
 	// addition to the existing scalar/closed-object wire cases below.
@@ -373,8 +394,6 @@ func TestContractWireValidation(t *testing.T) {
 	// Exercise all root entry points, including the deprecated raw constructor.
 	configuration := NewConfiguration()
 	configuration.Servers = openapi.ServerConfigurations{{URL: server.URL}}
-	configuration.OperationServers["DraftBatchFileImportAPIService.LauncherFileImport"] = launcherServer
-	configuration.HTTPClient = localHTTPClient
 	raw := NewAPIClient(configuration)
 	clients := []*openapi.APIClient{api, raw}
 	for i, candidate := range clients {
@@ -620,6 +639,11 @@ func TestContractWireValidation(t *testing.T) {
 			t.Run(fmt.Sprintf("workspace-404/client=%d/%s", clientIndex, operation.name), func(t *testing.T) {
 				var file *os.File
 				if operation.name == "POST /mcp/launcher/import" {
+					configuration := candidate.GetConfig()
+					const key = "DraftBatchFileImportAPIService.LauncherFileImport"
+					originalServers := configuration.OperationServers[key]
+					configuration.OperationServers[key] = openapi.ServerConfigurations{{URL: server.URL}}
+					t.Cleanup(func() { configuration.OperationServers[key] = originalServers })
 					var err error
 					file, err = os.CreateTemp(t.TempDir(), "launcher-*.csv")
 					if err != nil {
