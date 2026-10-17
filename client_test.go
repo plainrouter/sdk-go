@@ -3,6 +3,7 @@ package plainrouter
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http/httptest"
 	"net/url"
@@ -134,12 +135,59 @@ func TestContractWireValidation(t *testing.T) {
 		captured.Store(r.URL.RawQuery)
 		body, _ := io.ReadAll(r.Body)
 		capturedBody.Store(body)
+		if r.URL.Path == "/agent/context" || r.URL.Path == "/mcp/launcher/import" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotFound)
+			_ = json.NewEncoder(w).Encode(openapi.ApiRouteNotFound{
+				Error: openapi.ApiRouteNotFoundError{
+					Code: "api_route_not_found", Message: "Workspace is nonexistent, inaccessible or noncanonical.",
+					Resolution: "Check the workspace identifier and access.",
+				},
+				Request:   openapi.ApiRouteNotFoundRequest{Method: r.Method, Path: r.URL.Path},
+				Resources: openapi.ApiRouteNotFoundResources{Documentation: "https://plainrouter.com/docs/errors/api-route-not-found", Openapi: "https://plainrouter.com/openapi.json"},
+			})
+			return
+		}
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	defer server.Close()
+	localURL, err := url.Parse(server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	loopbackOnly := func(next http.RoundTripper) http.RoundTripper {
+		return roundTripFunc(func(request *http.Request) (*http.Response, error) {
+			if request.URL.Scheme != "http" || request.URL.Host != localURL.Host {
+				return nil, fmt.Errorf("refusing non-local test request to %s", request.URL)
+			}
+			return next.RoundTrip(request)
+		})
+	}
+	originalDefault := http.DefaultTransport
+	http.DefaultTransport = loopbackOnly(originalDefault)
+	t.Cleanup(func() { http.DefaultTransport = originalDefault })
 	client := New("", WithBaseURL(server.URL))
 	api := client.OpenAPI()
 	ctx := context.Background()
+
+	t.Run("loopback-guard/non-loopback", func(t *testing.T) {
+		var networkCalls atomic.Int32
+		network := roundTripFunc(func(request *http.Request) (*http.Response, error) {
+			networkCalls.Add(1)
+			return nil, errors.New("unexpected network delegation")
+		})
+		request, err := http.NewRequest(http.MethodPost, "https://plainrouter.com/mcp/launcher/import", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		response, err := loopbackOnly(network).RoundTrip(request)
+		if response != nil || err == nil || !strings.Contains(err.Error(), "refusing non-local test request") {
+			t.Errorf("expected non-loopback refusal, got response=%v err=%v", response, err)
+		}
+		if networkCalls.Load() != 0 {
+			t.Errorf("non-loopback request reached the network transport %d times", networkCalls.Load())
+		}
+	})
 
 	// These rows cover constructor/client identity and full-path selection in
 	// addition to the existing scalar/closed-object wire cases below.
@@ -568,4 +616,64 @@ func TestContractWireValidation(t *testing.T) {
 			}
 		}
 	})
+	workspace404Operations := []struct {
+		name string
+		call func(*openapi.APIClient, *os.File) (*http.Response, error)
+	}{
+		{"GET /agent/context", func(candidate *openapi.APIClient, _ *os.File) (*http.Response, error) {
+			_, response, err := candidate.AgentContextAPI.AgentContext(ctx).Execute()
+			return response, err
+		}},
+		{"POST /mcp/launcher/import", func(candidate *openapi.APIClient, file *os.File) (*http.Response, error) {
+			_, response, err := candidate.DraftBatchFileImportAPI.LauncherFileImport(ctx).
+				File(file).
+				SourceAdsetId("source-adset").
+				SourceAdId("source-ad").
+				Mode(openapi.DRAFTBATCHMODE_DUPLICATE_ADSET).
+				Execute()
+			return response, err
+		}},
+	}
+	for clientIndex, candidate := range clients {
+		for _, operation := range workspace404Operations {
+			t.Run(fmt.Sprintf("workspace-404/client=%d/%s", clientIndex, operation.name), func(t *testing.T) {
+				var file *os.File
+				if operation.name == "POST /mcp/launcher/import" {
+					configuration := candidate.GetConfig()
+					const key = "DraftBatchFileImportAPIService.LauncherFileImport"
+					originalServers := configuration.OperationServers[key]
+					configuration.OperationServers[key] = openapi.ServerConfigurations{{URL: server.URL}}
+					t.Cleanup(func() { configuration.OperationServers[key] = originalServers })
+					var err error
+					file, err = os.CreateTemp(t.TempDir(), "launcher-*.csv")
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err := file.WriteString("id,name\n1,fixture\n"); err != nil {
+						t.Fatal(err)
+					}
+					if _, err := file.Seek(0, io.SeekStart); err != nil {
+						t.Fatal(err)
+					}
+					defer file.Close()
+				}
+				before := requests.Load()
+				response, err := operation.call(candidate, file)
+				if response == nil || response.StatusCode != http.StatusNotFound {
+					t.Fatalf("expected captured 404 response, got response=%v err=%v", response, err)
+				}
+				if requests.Load() != before+1 {
+					t.Fatal("expected exactly one captured request")
+				}
+				var apiError *openapi.GenericOpenAPIError
+				if !errors.As(err, &apiError) {
+					t.Fatalf("expected GenericOpenAPIError, got %T: %v", err, err)
+				}
+				model, ok := apiError.Model().(openapi.ApiRouteNotFound)
+				if !ok || model.Error.Code != "api_route_not_found" {
+					t.Fatalf("expected ApiRouteNotFound model, got %T: %#v", apiError.Model(), apiError.Model())
+				}
+			})
+		}
+	}
 }

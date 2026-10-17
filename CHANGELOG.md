@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.1 (Unreleased)
+
+### Stricter workspace handling of the existing contract
+
+- A live credential addressing a foreign, inaccessible same-team, or missing workspace, or a resource in one, now receives `404 api_route_not_found`. Callers that branched on `401`, `403`, `400`, or `302` for a foreign or missing workspace now receive this 404.
+- Noncanonical workspace IDs in a path, including leading zeros, signs, spaces, decimals, and literal `true` or `false` in any case, receive the same 404 even for the caller's own workspace. Earlier behavior could reach the workspace with `200` or `204`, or return `422` or `500`.
+- Unauthenticated requests receive the same response for existing and missing workspaces.
+- A `workspace_id` selector is checked only on routes whose code reads it. Missing, foreign, and noncanonical values use the canonical-missing response on those routes; the selector has no effect elsewhere.
+- Foreign or noncanonical entries in `workspace_ids` receive the same `422` as a nonexistent entry.
+- The contract now documents `404 ApiRouteNotFound` responses for `GET /agent/context` and `POST /mcp/launcher/import`. The `GET /agent/context` `403` description now describes an unauthorized accessible scope or operation, or an omitted ambiguous workspace selection; its `422` description now covers invalid account IDs, mismatched account bindings, and ambiguous active accounts.
+
 ## 0.7.0 (2026-10-16)
 
 ### Go source compatibility breaks

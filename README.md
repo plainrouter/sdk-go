@@ -46,7 +46,7 @@ The generated contract moved from the root package to `github.com/plainrouter/sd
 
 ## Contract and generation
 
-- API contract: signed OpenAPI `0.5.0` (core main `2d15dc970d92ca22e00d369ab544c113c8cdde77`)
+- API contract: signed OpenAPI `0.5.0` (core main `4e2af005e84e21e599189b7965556cbdde08f09f`)
 - Generator: OpenAPI Generator `7.25.0`, checksum-pinned by `scripts/generate.sh`
 - Module path: `github.com/plainrouter/sdk-go`
 - Documentation: [plainrouter.com/docs](https://plainrouter.com/docs)
