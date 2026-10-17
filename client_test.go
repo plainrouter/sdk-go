@@ -137,9 +137,13 @@ func TestContractWireValidation(t *testing.T) {
 		captured.Store(r.URL.RawQuery)
 		body, _ := io.ReadAll(r.Body)
 		capturedBody.Store(body)
-		if r.URL.Path == "/agent/context" || r.URL.Path == "/mcp/launcher/import" {
+		if r.URL.Path == "/agent/context" || r.URL.Path == "/mcp/launcher/import" || strings.Contains(r.URL.Path, "/inventory") {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
+			if strings.Contains(r.URL.Path, "/ad-accounts/missing/") {
+				_, _ = io.WriteString(w, `{"message":"Account not found."}`)
+				return
+			}
 			_ = json.NewEncoder(w).Encode(openapi.ApiRouteNotFound{
 				Error: openapi.ApiRouteNotFoundError{
 					Code: "api_route_not_found", Message: "Workspace is nonexistent, inaccessible or noncanonical.",
@@ -679,10 +683,11 @@ func TestContractWireValidation(t *testing.T) {
 			}
 		}
 	})
-	workspace404Operations := []struct {
+	type workspace404Operation struct {
 		name string
 		call func(*openapi.APIClient, *os.File) (*http.Response, error)
-	}{
+	}
+	workspace404Operations := []workspace404Operation{
 		{"GET /agent/context", func(candidate *openapi.APIClient, _ *os.File) (*http.Response, error) {
 			_, response, err := candidate.AgentContextAPI.AgentContext(ctx).Execute()
 			return response, err
@@ -696,6 +701,18 @@ func TestContractWireValidation(t *testing.T) {
 				Execute()
 			return response, err
 		}},
+	}
+	for _, account := range []string{"fixture", "missing"} {
+		workspace404Operations = append(workspace404Operations,
+			workspace404Operation{"GET inventory/account=" + account, func(candidate *openapi.APIClient, _ *os.File) (*http.Response, error) {
+				_, response, err := candidate.MetaInventoryExposureAPI.GetAccountInventory(ctx, 1, account).Execute()
+				return response, err
+			}},
+			workspace404Operation{"GET inventory/metrics/account=" + account, func(candidate *openapi.APIClient, _ *os.File) (*http.Response, error) {
+				_, response, err := candidate.MetaInventoryExposureAPI.GetInventoryMetrics(ctx, 1, account).Execute()
+				return response, err
+			}},
+		)
 	}
 	for clientIndex, candidate := range clients {
 		for _, operation := range workspace404Operations {
@@ -732,7 +749,33 @@ func TestContractWireValidation(t *testing.T) {
 				if !errors.As(err, &apiError) {
 					t.Fatalf("expected GenericOpenAPIError, got %T: %v", err, err)
 				}
-				model, ok := apiError.Model().(openapi.ApiRouteNotFound)
+				modelValue := apiError.Model()
+				switch model := modelValue.(type) {
+				case openapi.GetAccountInventory404Response:
+					if strings.HasSuffix(operation.name, "account=missing") {
+						if model.GetAccountInventory404ResponseAnyOf == nil || model.GetAccountInventory404ResponseAnyOf.Message != "Account not found." {
+							t.Fatalf("account message was lost: %#v", model)
+						}
+						return
+					}
+					if model.ApiRouteNotFound != nil {
+						modelValue = *model.ApiRouteNotFound
+					}
+				case openapi.ActionsTestsApiIndex404Response:
+					if strings.HasSuffix(operation.name, "account=missing") {
+						if model.ErrorMessage == nil || model.ErrorMessage.Message != "Account not found." {
+							t.Fatalf("account message was lost: %#v", model)
+						}
+						return
+					}
+					if model.ApiRouteNotFound != nil {
+						modelValue = *model.ApiRouteNotFound
+					}
+				}
+				if strings.HasSuffix(operation.name, "account=missing") {
+					t.Fatalf("expected an account-not-found model, got %T", modelValue)
+				}
+				model, ok := modelValue.(openapi.ApiRouteNotFound)
 				if !ok || model.Error.Code != "api_route_not_found" {
 					t.Fatalf("expected ApiRouteNotFound model, got %T: %#v", apiError.Model(), apiError.Model())
 				}

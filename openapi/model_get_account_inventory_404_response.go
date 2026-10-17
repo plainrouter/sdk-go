@@ -15,118 +15,55 @@ import (
 	"fmt"
 )
 
-// checks if the GetAccountInventory404Response type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &GetAccountInventory404Response{}
-
 // GetAccountInventory404Response struct for GetAccountInventory404Response
 type GetAccountInventory404Response struct {
-	Message              string `json:"message"`
-	AdditionalProperties map[string]interface{}
+	ApiRouteNotFound                    *ApiRouteNotFound
+	GetAccountInventory404ResponseAnyOf *GetAccountInventory404ResponseAnyOf
 }
 
-type _GetAccountInventory404Response GetAccountInventory404Response
-
-// NewGetAccountInventory404Response instantiates a new GetAccountInventory404Response object
-// This constructor will assign default values to properties that have it defined,
-// and makes sure properties required by API are set, but the set of arguments
-// will change when the set of required properties is changed
-func NewGetAccountInventory404Response(message string) *GetAccountInventory404Response {
-	this := GetAccountInventory404Response{}
-	this.Message = message
-	return &this
-}
-
-// NewGetAccountInventory404ResponseWithDefaults instantiates a new GetAccountInventory404Response object
-// This constructor will only assign default values to properties that have it defined,
-// but it doesn't guarantee that properties required by API are set
-func NewGetAccountInventory404ResponseWithDefaults() *GetAccountInventory404Response {
-	this := GetAccountInventory404Response{}
-	return &this
-}
-
-// GetMessage returns the Message field value
-func (o *GetAccountInventory404Response) GetMessage() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Message
-}
-
-// GetMessageOk returns a tuple with the Message field value
-// and a boolean to check if the value has been set.
-func (o *GetAccountInventory404Response) GetMessageOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Message, true
-}
-
-// SetMessage sets field value
-func (o *GetAccountInventory404Response) SetMessage(v string) {
-	o.Message = v
-}
-
-func (o GetAccountInventory404Response) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
-	if err != nil {
-		return []byte{}, err
-	}
-	return json.Marshal(toSerialize)
-}
-
-func (o GetAccountInventory404Response) ToMap() (map[string]interface{}, error) {
-	toSerialize := map[string]interface{}{}
-	toSerialize["message"] = o.Message
-
-	for key, value := range o.AdditionalProperties {
-		toSerialize[key] = value
-	}
-
-	return toSerialize, nil
-}
-
-func (o *GetAccountInventory404Response) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"message",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err
-	}
-
-	for _, requiredProperty := range requiredProperties {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
+// Unmarshal JSON data into any of the pointers in the struct
+func (dst *GetAccountInventory404Response) UnmarshalJSON(data []byte) error {
+	var err error
+	// try to unmarshal JSON data into ApiRouteNotFound
+	err = json.Unmarshal(data, &dst.ApiRouteNotFound)
+	if err == nil {
+		jsonApiRouteNotFound, _ := json.Marshal(dst.ApiRouteNotFound)
+		if string(jsonApiRouteNotFound) == "{}" { // empty struct
+			dst.ApiRouteNotFound = nil
+		} else {
+			return nil // data stored in dst.ApiRouteNotFound, return on the first match
 		}
+	} else {
+		dst.ApiRouteNotFound = nil
 	}
 
-	varGetAccountInventory404Response := _GetAccountInventory404Response{}
-
-	err = json.Unmarshal(data, &varGetAccountInventory404Response)
-
-	if err != nil {
-		return err
+	// try to unmarshal JSON data into GetAccountInventory404ResponseAnyOf
+	err = json.Unmarshal(data, &dst.GetAccountInventory404ResponseAnyOf)
+	if err == nil {
+		jsonGetAccountInventory404ResponseAnyOf, _ := json.Marshal(dst.GetAccountInventory404ResponseAnyOf)
+		if string(jsonGetAccountInventory404ResponseAnyOf) == "{}" { // empty struct
+			dst.GetAccountInventory404ResponseAnyOf = nil
+		} else {
+			return nil // data stored in dst.GetAccountInventory404ResponseAnyOf, return on the first match
+		}
+	} else {
+		dst.GetAccountInventory404ResponseAnyOf = nil
 	}
 
-	*o = GetAccountInventory404Response(varGetAccountInventory404Response)
+	return fmt.Errorf("data failed to match schemas in anyOf(GetAccountInventory404Response)")
+}
 
-	additionalProperties := make(map[string]interface{})
-
-	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "message")
-		o.AdditionalProperties = additionalProperties
+// Marshal data from the first non-nil pointers in the struct to JSON
+func (src GetAccountInventory404Response) MarshalJSON() ([]byte, error) {
+	if src.ApiRouteNotFound != nil {
+		return json.Marshal(&src.ApiRouteNotFound)
 	}
 
-	return err
+	if src.GetAccountInventory404ResponseAnyOf != nil {
+		return json.Marshal(&src.GetAccountInventory404ResponseAnyOf)
+	}
+
+	return nil, nil // no data in anyOf schemas
 }
 
 type NullableGetAccountInventory404Response struct {
