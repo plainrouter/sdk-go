@@ -2,8 +2,7 @@
 
 ## 0.7.1 (Unreleased)
 
-- Both inventory routes now document the workspace `404`, which decodes as `ApiRouteNotFound`; account-not-found responses retain their message. Compatibility: `GetAccountInventory404Response` changes from a message model to a union of `ApiRouteNotFound` and `GetAccountInventory404ResponseAnyOf` (move `.Message` to `.GetAccountInventory404ResponseAnyOf.Message`); the metrics 404 model changes from `ErrorMessage` to `ActionsTestsApiIndex404Response`, with `.ApiRouteNotFound` or `.ErrorMessage`.
-
+- Both inventory routes now document the workspace `404`, which decodes as `ApiRouteNotFound`; account-not-found responses retain their message. Compatibility: `GetAccountInventory404Response` changes from a message model to a union of `ApiRouteNotFound` and `GetAccountInventory404ResponseAnyOf` (move `.Message` to `.GetAccountInventory404ResponseAnyOf.Message`); the metrics 404 decoded model changes from `openapi.ErrorMessage` to `ActionsTestsApiIndex404Response`; an existing comma-ok `e.Model().(openapi.ErrorMessage)` assertion still compiles but now returns `ok=false`, so callers must switch to `openapi.ActionsTestsApiIndex404Response` (`.ApiRouteNotFound` or `.ErrorMessage`).
 - Launcher import now follows `WithBaseURL`, removing a trailing `/api/v1` before `/mcp/launcher/import`.
 
 ### Stricter workspace handling of the existing contract
