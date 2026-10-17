@@ -2,6 +2,8 @@
 
 ## 0.7.1 (Unreleased)
 
+- Launcher import now follows `WithBaseURL`, removing a trailing `/api/v1` before `/mcp/launcher/import`.
+
 ### Stricter workspace handling of the existing contract
 
 - A live credential addressing a foreign, inaccessible same-team, or missing workspace, or a resource in one, now receives `404 api_route_not_found`. Callers that branched on `401`, `403`, `400`, or `302` for a foreign or missing workspace now receive this 404.

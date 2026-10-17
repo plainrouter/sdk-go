@@ -130,8 +130,10 @@ func TestContractWireValidation(t *testing.T) {
 	var requests atomic.Int32
 	var captured atomic.Value
 	var capturedBody atomic.Value
+	var capturedPath atomic.Value
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requests.Add(1)
+		capturedPath.Store(r.URL.Path)
 		captured.Store(r.URL.RawQuery)
 		body, _ := io.ReadAll(r.Body)
 		capturedBody.Store(body)
@@ -169,6 +171,54 @@ func TestContractWireValidation(t *testing.T) {
 	client := New("", WithBaseURL(server.URL))
 	api := client.OpenAPI()
 	ctx := context.Background()
+
+	for _, row := range []struct {
+		name, baseURL, path string
+	}{
+		{"default", "", "/mcp/launcher/import"},
+		{"api-v1", server.URL + "/api/v1", "/mcp/launcher/import"},
+		{"prefixed", server.URL + "/proxy/api/v1/", "/proxy/mcp/launcher/import"},
+		{"bare", server.URL, "/mcp/launcher/import"},
+	} {
+		t.Run("launcher-base-url/"+row.name, func(t *testing.T) {
+			options := []Option{}
+			if row.baseURL != "" {
+				options = append(options, WithBaseURL(row.baseURL))
+			} else {
+				// Capture the default destination before forwarding only to the
+				// loopback fixture. The test-scoped network guard remains active.
+				options = append(options, WithHTTPClient(&http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
+					if r.URL.String() != "https://plainrouter.com/mcp/launcher/import" {
+						t.Fatalf("unexpected default launcher URL: %s", r.URL)
+					}
+					local := r.Clone(r.Context())
+					local.URL.Scheme, local.URL.Host = localURL.Scheme, localURL.Host
+					return http.DefaultTransport.RoundTrip(local)
+				})}))
+			}
+			file, err := os.CreateTemp(t.TempDir(), "launcher-*.csv")
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer file.Close()
+			if _, err := file.WriteString("id,name\n1,fixture\n"); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := file.Seek(0, io.SeekStart); err != nil {
+				t.Fatal(err)
+			}
+			before := requests.Load()
+			_, response, err := New("", options...).OpenAPI().DraftBatchFileImportAPI.LauncherFileImport(ctx).
+				File(file).SourceAdsetId("123").SourceAdId("456").Mode(openapi.DRAFTBATCHMODE_DUPLICATE_ADSET).Execute()
+			if response == nil || requests.Load() != before+1 {
+				t.Fatalf("expected exactly one loopback capture, response=%v err=%v", response, err)
+			}
+			defer response.Body.Close()
+			if got := capturedPath.Load().(string); got != row.path {
+				t.Fatalf("launcher path = %q, want %q", got, row.path)
+			}
+		})
+	}
 
 	t.Run("loopback-guard/non-loopback", func(t *testing.T) {
 		var networkCalls atomic.Int32
