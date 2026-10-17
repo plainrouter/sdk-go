@@ -83,6 +83,9 @@ func WithBaseURL(baseURL string) Option {
 			URL:         baseURL,
 			Description: "Custom",
 		}}
+		if configuration.OperationServers == nil {
+			configuration.OperationServers = make(map[string]openapi.ServerConfigurations)
+		}
 		configuration.OperationServers["DraftBatchFileImportAPIService.LauncherFileImport"] = openapi.ServerConfigurations{{
 			URL:         strings.TrimSuffix(baseURL, "/api/v1"),
 			Description: "Custom",

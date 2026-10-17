@@ -173,28 +173,41 @@ func TestContractWireValidation(t *testing.T) {
 	ctx := context.Background()
 
 	for _, row := range []struct {
-		name, baseURL, path string
+		name, baseURL, path, destination string
+		nilOperationServers              bool
 	}{
-		{"default", "", "/mcp/launcher/import"},
-		{"api-v1", server.URL + "/api/v1", "/mcp/launcher/import"},
-		{"prefixed", server.URL + "/proxy/api/v1/", "/proxy/mcp/launcher/import"},
-		{"bare", server.URL, "/mcp/launcher/import"},
+		{name: "default", path: "/mcp/launcher/import", destination: "https://plainrouter.com/mcp/launcher/import"},
+		{name: "api-v1", baseURL: server.URL + "/api/v1", path: "/mcp/launcher/import"},
+		{name: "prefixed", baseURL: server.URL + "/proxy/api/v1/", path: "/proxy/mcp/launcher/import"},
+		{name: "bare", baseURL: server.URL, path: "/mcp/launcher/import"},
+		{name: "nil-operation-servers", baseURL: server.URL + "/api/v1", path: "/mcp/launcher/import", nilOperationServers: true},
+		{name: "api-v1beta", baseURL: "https://proxy.example/api/v1beta", path: "/api/v1beta/mcp/launcher/import", destination: "https://proxy.example/api/v1beta/mcp/launcher/import"},
+		{name: "inner-api-v1", baseURL: "https://proxy.example/api/v1/api/v1", path: "/api/v1/mcp/launcher/import", destination: "https://proxy.example/api/v1/mcp/launcher/import"},
 	} {
 		t.Run("launcher-base-url/"+row.name, func(t *testing.T) {
 			options := []Option{}
 			if row.baseURL != "" {
 				options = append(options, WithBaseURL(row.baseURL))
-			} else {
-				// Capture the default destination before forwarding only to the
+			}
+			if row.destination != "" {
+				// Capture the selected destination before forwarding only to the
 				// loopback fixture. The test-scoped network guard remains active.
 				options = append(options, WithHTTPClient(&http.Client{Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
-					if r.URL.String() != "https://plainrouter.com/mcp/launcher/import" {
-						t.Fatalf("unexpected default launcher URL: %s", r.URL)
+					if r.URL.String() != row.destination {
+						t.Fatalf("launcher URL = %q, want %q", r.URL, row.destination)
 					}
 					local := r.Clone(r.Context())
 					local.URL.Scheme, local.URL.Host = localURL.Scheme, localURL.Host
 					return http.DefaultTransport.RoundTrip(local)
 				})}))
+			}
+			var candidate *openapi.APIClient
+			if row.nilOperationServers {
+				configuration := &openapi.Configuration{}
+				WithBaseURL(row.baseURL)(configuration)
+				candidate = NewAPIClient(configuration)
+			} else {
+				candidate = New("", options...).OpenAPI()
 			}
 			file, err := os.CreateTemp(t.TempDir(), "launcher-*.csv")
 			if err != nil {
@@ -208,7 +221,7 @@ func TestContractWireValidation(t *testing.T) {
 				t.Fatal(err)
 			}
 			before := requests.Load()
-			_, response, err := New("", options...).OpenAPI().DraftBatchFileImportAPI.LauncherFileImport(ctx).
+			_, response, err := candidate.DraftBatchFileImportAPI.LauncherFileImport(ctx).
 				File(file).SourceAdsetId("123").SourceAdId("456").Mode(openapi.DRAFTBATCHMODE_DUPLICATE_ADSET).Execute()
 			if response == nil || requests.Load() != before+1 {
 				t.Fatalf("expected exactly one loopback capture, response=%v err=%v", response, err)
