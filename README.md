@@ -7,7 +7,7 @@ Plainrouter is the paid ads platform for developers and agents. Its hosted [Meta
 ## Install
 
 ```bash
-go get github.com/plainrouter/sdk-go@v0.7.0
+go get github.com/plainrouter/sdk-go@v0.7.1
 ```
 
 ## Authenticate
